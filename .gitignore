@@ -12,6 +12,8 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+# agent context
+.github/copilot-instructions.md
 
 # environment variables
 .env
