@@ -31,13 +31,19 @@ const { Content } = await render(entry);
 		<div class="stack gap-15">
 			<header>
 				<div class="wrapper stack gap-2">
-					<a class="back-link" href="/work/"><Icon icon="arrow-left" /> Work</a>
+					<a class="back-link" href="/work/"><Icon icon="arrow-left" /> Retour aux projets</a>
 					<Hero title={entry.data.title} align="start">
 						<div class="details">
 							<div class="tags">
 								{entry.data.tags.map((t) => <Pill>{t}</Pill>)}
 							</div>
 							<p class="description">{entry.data.description}</p>
+							{entry.data.githubUrl && (
+								<a class="github-link" href={entry.data.githubUrl} target="_blank" rel="noopener noreferrer">
+									<Icon icon="github-logo" />
+									Voir sur GitHub
+								</a>
+							)}
 						</div>
 					</Hero>
 				</div>
@@ -62,7 +68,25 @@ const { Content } = await render(entry);
 	}
 
 	.back-link {
-		display: none;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.5rem 1rem;
+		background: var(--gray-999);
+		border: 1px solid var(--gray-800);
+		border-radius: 0.5rem;
+		color: var(--gray-300);
+		text-decoration: none;
+		font-size: var(--text-sm);
+		font-weight: 500;
+		align-self: flex-start;
+		transition: border-color var(--theme-transition), color var(--theme-transition);
+	}
+
+	.back-link:hover,
+	.back-link:focus {
+		color: var(--accent-regular);
+		border-color: var(--accent-regular);
 	}
 
 	.details {
@@ -76,7 +100,34 @@ const { Content } = await render(entry);
 
 	.tags {
 		display: flex;
+		flex-wrap: wrap;
 		gap: 0.5rem;
+	}
+
+	.github-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.5rem 1.25rem;
+		background: var(--gray-999);
+		color: var(--gray-200);
+		border: 1px solid var(--gray-800);
+		border-radius: 0.5rem;
+		text-decoration: none;
+		font-size: var(--text-sm);
+		font-weight: 500;
+		transition: border-color var(--theme-transition), color var(--theme-transition);
+	}
+
+	.github-link:hover,
+	.github-link:focus {
+		color: var(--accent-regular);
+		border-color: var(--accent-regular);
+	}
+
+	.github-link :global(svg) {
+		width: 1.2em;
+		height: 1.2em;
 	}
 
 	.description {
@@ -87,6 +138,16 @@ const { Content } = await render(entry);
 	.content {
 		max-width: 65ch;
 		margin-inline: auto;
+		overflow-x: hidden;
+		word-break: break-word;
+		overflow-wrap: break-word;
+	}
+
+	.content :global(table) {
+		display: block;
+		overflow-x: auto;
+		white-space: nowrap;
+		max-width: 100%;
 	}
 
 	.content > :global(* + *) {
@@ -118,26 +179,18 @@ const { Content } = await render(entry);
 		color: var(--gray-0);
 	}
 
-	.back-link,
 	.content :global(a) {
 		text-decoration: 1px solid underline transparent;
 		text-underline-offset: 0.25em;
 		transition: text-decoration-color var(--theme-transition);
 	}
 
-	.back-link:hover,
-	.back-link:focus,
 	.content :global(a:hover),
 	.content :global(a:focus) {
 		text-decoration-color: currentColor;
 	}
 
 	@media (min-width: 50em) {
-		.back-link {
-			display: block;
-			align-self: flex-start;
-		}
-
 		.details {
 			flex-direction: row;
 			gap: 2.5rem;

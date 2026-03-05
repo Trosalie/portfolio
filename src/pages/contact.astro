@@ -1,0 +1,240 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+---
+
+<BaseLayout
+	title="Me contacter | Thibault Rosalie"
+	description="Envoyez-moi un message pour toute proposition de collaboration ou question."
+>
+	<main class="wrapper stack gap-12">
+		<div class="contact-header stack gap-2">
+			<h1 class="contact-title">Me contacter</h1>
+			<p class="contact-subtitle">
+				Une question, une opportunité, un projet ? N'hésitez pas à m'écrire, je vous répondrai dans les plus brefs délais.
+			</p>
+		</div>
+
+		<div class="contact-layout">
+			<!-- Formulaire -->
+			<!-- Remplacez l'action par votre endpoint Formspree : https://formspree.io/f/VOTRE_ID -->
+			<form
+				class="contact-form"
+				action="https://formspree.io/f/maqdrkgr"
+				method="POST"
+			>
+				<div class="field">
+					<label for="name">Nom</label>
+					<input type="text" id="name" name="name" placeholder="Jean Dupont" required />
+				</div>
+
+				<div class="field">
+					<label for="email">Adresse e-mail</label>
+					<input type="email" id="email" name="email" placeholder="jean.dupont@email.com" required />
+				</div>
+
+				<div class="field">
+					<label for="subject">Sujet</label>
+					<input type="text" id="subject" name="subject" placeholder="Proposition de stage, collaboration..." required />
+				</div>
+
+				<div class="field">
+					<label for="message">Message</label>
+					<textarea id="message" name="message" rows="6" placeholder="Décrivez votre demande..." required></textarea>
+				</div>
+
+				<button type="submit" class="submit-btn">
+					Envoyer le message
+					<Icon icon="paper-plane-tilt" size="1.2em" />
+				</button>
+			</form>
+
+			<!-- Infos de contact -->
+			<aside class="contact-info stack gap-6">
+				<div class="info-block">
+					<h2>Coordonnées</h2>
+					<ul class="info-list">
+						<li>
+							<Icon icon="paper-plane-tilt" size="1.1em" />
+							<a href="mailto:thibaultrosaliepro@gmail.com">thibaultrosaliepro@gmail.com</a>
+						</li>
+						<li>
+							<Icon icon="github-logo" size="1.1em" />
+							<a href="https://github.com/trosalie" target="_blank" rel="noopener noreferrer">github.com/trosalie</a>
+						</li>
+						<li>
+							<Icon icon="linkedin-logo" size="1.1em" />
+							<a href="https://linkedin.com/in/thibaultrosalie" target="_blank" rel="noopener noreferrer">linkedin.com/in/thibaultrosalie</a>
+						</li>
+					</ul>
+				</div>
+
+				<div class="info-block">
+					<h2>Disponibilité</h2>
+					<p>Actuellement en BUT 3 Informatique à l'IUT de Bayonne. Ouvert aux opportunités de stage et d'alternance.</p>
+				</div>
+			</aside>
+		</div>
+	</main>
+</BaseLayout>
+
+<style>
+	main {
+		padding-block: 4rem;
+	}
+
+	.contact-header {
+		max-width: 50ch;
+	}
+
+	.contact-title {
+		font-size: var(--text-4xl);
+		font-family: var(--font-brand);
+		color: var(--gray-0);
+	}
+
+	.contact-subtitle {
+		font-size: var(--text-lg);
+		color: var(--gray-400);
+	}
+
+	.contact-layout {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 3rem;
+	}
+
+	/* Formulaire */
+	.contact-form {
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+	}
+
+	.field {
+		display: flex;
+		flex-direction: column;
+		gap: 0.4rem;
+	}
+
+	label {
+		font-size: var(--text-sm);
+		font-weight: 600;
+		color: var(--gray-200);
+	}
+
+	input,
+	textarea {
+		padding: 0.65rem 1rem;
+		background: var(--gray-999);
+		border: 1px solid var(--gray-800);
+		border-radius: 0.5rem;
+		color: var(--gray-200);
+		font-family: var(--font-body);
+		font-size: var(--text-md, 1rem);
+		resize: vertical;
+		transition: border-color var(--theme-transition);
+	}
+
+	input:focus,
+	textarea:focus {
+		outline: none;
+		border-color: var(--accent-regular);
+	}
+
+	input::placeholder,
+	textarea::placeholder {
+		color: var(--gray-600);
+	}
+
+	.submit-btn {
+		align-self: flex-start;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.6rem;
+		padding: 0.65rem 2rem;
+		background: var(--gradient-accent-orange);
+		color: var(--accent-text-over);
+		border: none;
+		border-radius: 999rem;
+		font-family: var(--font-brand);
+		font-size: var(--text-lg);
+		font-weight: 600;
+		cursor: pointer;
+		box-shadow: var(--shadow-md);
+		transition: opacity var(--theme-transition);
+	}
+
+	.submit-btn:hover,
+	.submit-btn:focus {
+		opacity: 0.85;
+	}
+
+	/* Infos de contact */
+	.contact-info {
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+	}
+
+	.info-block {
+		padding: 1.5rem;
+		background: var(--gray-999);
+		border: 1px solid var(--gray-800);
+		border-radius: 1rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+
+	.info-block h2 {
+		font-size: var(--text-lg);
+		font-family: var(--font-brand);
+		color: var(--gray-0);
+	}
+
+	.info-block p {
+		font-size: var(--text-sm);
+		color: var(--gray-400);
+		line-height: 1.6;
+	}
+
+	.info-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+
+	.info-list li {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		font-size: var(--text-sm);
+		color: var(--gray-300);
+	}
+
+	.info-list a {
+		color: var(--gray-300);
+		text-decoration: none;
+		transition: color var(--theme-transition);
+	}
+
+	.info-list a:hover,
+	.info-list a:focus {
+		color: var(--accent-regular);
+	}
+
+	@media (min-width: 50em) {
+		.contact-layout {
+			grid-template-columns: 1fr 340px;
+			align-items: start;
+		}
+
+		.contact-title {
+			font-size: var(--text-5xl);
+		}
+	}
+</style>

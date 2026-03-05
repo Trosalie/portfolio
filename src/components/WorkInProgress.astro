@@ -1,0 +1,86 @@
+---
+interface Props {
+	title?: string;
+}
+
+const { title = 'Cette page' } = Astro.props;
+---
+
+<div class="wip-wrapper">
+	<div class="wip-card">
+		<div class="wip-icon" aria-hidden="true">🚧</div>
+		<h1 class="wip-title">{title}</h1>
+		<p class="wip-subtitle">Cette page est en cours de construction.</p>
+		<p class="wip-text">Je travaille activement dessus. Revenez bientôt !</p>
+		<a class="wip-back" href="/">← Retour à l'accueil</a>
+	</div>
+</div>
+
+<style>
+	.wip-wrapper {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 60vh;
+		padding: 2rem;
+	}
+
+	.wip-card {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 1rem;
+		max-width: 36rem;
+		width: 100%;
+		padding: 2.5rem 2rem;
+		background: var(--gray-999);
+		border: 1px solid var(--gray-800);
+		border-radius: 1.5rem;
+		box-shadow: var(--shadow-md);
+		text-align: center;
+	}
+
+	.wip-icon {
+		font-size: 3.5rem;
+		line-height: 1;
+	}
+
+	.wip-title {
+		font-family: var(--font-brand);
+		font-size: var(--text-2xl);
+		font-weight: 600;
+		color: var(--gray-0);
+		margin: 0;
+	}
+
+	.wip-subtitle {
+		font-size: var(--text-lg);
+		font-weight: 500;
+		color: var(--accent-regular);
+		margin: 0;
+	}
+
+	.wip-text {
+		font-size: var(--text-md);
+		color: var(--gray-400);
+		margin: 0;
+	}
+
+	.wip-back {
+		margin-top: 0.5rem;
+		padding: 0.6rem 1.5rem;
+		background: var(--gradient-accent-orange);
+		color: var(--accent-text-over);
+		border-radius: 999px;
+		text-decoration: none;
+		font-family: var(--font-brand);
+		font-size: var(--text-sm);
+		font-weight: 600;
+		transition: opacity var(--theme-transition);
+	}
+
+	.wip-back:hover,
+	.wip-back:focus {
+		opacity: 0.85;
+	}
+</style>
