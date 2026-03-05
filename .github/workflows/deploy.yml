@@ -38,17 +38,16 @@ jobs:
         env:
           PUPPETEER_EXECUTABLE_PATH: /usr/bin/chromium-browser
 
-      # 6. Configure la clé SSH pour le déploiement
-      - name: Configurer la clé SSH
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          known_hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
+      # 6. Installe sshpass pour l'authentification par mot de passe
+      - name: Installer sshpass
+        run: sudo apt-get install -y sshpass
 
-      # 7. Déploie le dossier dist/ vers Alwaysdata via rsync
+      # 7. Déploie le dossier dist/ vers Alwaysdata via rsync + mot de passe
       - name: Déployer via rsync
+        env:
+          SSHPASS: ${{ secrets.SSH_PASSWORD }}
         run: |
-          rsync -avz --delete \
+          sshpass -e rsync -avz --delete \
             -e "ssh -o StrictHostKeyChecking=no -p 22" \
             dist/ \
             ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:${{ secrets.REMOTE_PATH }}
