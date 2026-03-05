@@ -35,6 +35,12 @@ const projects = (await getCollection('work'))
 						<Pill><Icon icon="code" size="1.33em" /> Développeur</Pill>
 						<Pill><Icon icon="pencil-line" size="1.33em" /> Étudiant</Pill>
 					</div>
+					<div class="hero-cta">
+						<CallToAction href="/cv/">
+							Voir mon CV
+							<Icon icon="arrow-right" size="1.2em" />
+						</CallToAction>
+					</div>
 				</Hero>
 
 				<img
@@ -113,6 +119,11 @@ const projects = (await getCollection('work'))
 		display: none;
 	}
 
+	.hero-cta {
+		display: flex;
+		justify-content: center;
+	}
+
 	.hero img {
 		aspect-ratio: 5 / 4;
 		object-fit: cover;
@@ -133,6 +144,11 @@ const projects = (await getCollection('work'))
 			margin-top: 0.5rem;
 			display: flex;
 			gap: 0.5rem;
+		}
+
+		.hero-cta {
+			justify-content: flex-start;
+			margin-top: 0.5rem;
 		}
 
 		.hero img {

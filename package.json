@@ -6,9 +6,14 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "generate-pdf": "node scripts/generate-cv-pdf.mjs",
+    "build:full": "astro build && node scripts/generate-cv-pdf.mjs"
   },
   "dependencies": {
     "astro": "^5.17.1"
+  },
+  "devDependencies": {
+    "puppeteer": "^24.38.0"
   }
 }

@@ -1,0 +1,54 @@
+name: Déploiement vers Alwaysdata
+
+on:
+  push:
+    branches:
+      - release
+
+jobs:
+  build-and-deploy:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Récupère le code source
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. Configure Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      # 3. Installe Chromium système pour Puppeteer (génération PDF)
+      - name: Installer Chromium
+        run: sudo apt-get install -y chromium-browser
+
+      # 4. Installe les dépendances npm (sans télécharger Chrome via Puppeteer)
+      - name: Installer les dépendances
+        run: npm ci
+        env:
+          PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
+
+      # 5. Build Astro + génération du PDF
+      - name: Build (Astro + PDF)
+        run: npm run build:full
+        env:
+          PUPPETEER_EXECUTABLE_PATH: /usr/bin/chromium-browser
+
+      # 6. Configure la clé SSH pour le déploiement
+      - name: Configurer la clé SSH
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
+
+      # 7. Déploie le dossier dist/ vers Alwaysdata via rsync
+      - name: Déployer via rsync
+        run: |
+          rsync -avz --delete \
+            -e "ssh -o StrictHostKeyChecking=no -p 22" \
+            dist/ \
+            ${{ secrets.REMOTE_USER }}@${{ secrets.REMOTE_HOST }}:${{ secrets.REMOTE_PATH }}
