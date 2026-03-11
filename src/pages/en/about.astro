@@ -1,7 +1,7 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import WorkInProgress from '../components/WorkInProgress.astro';
-import { getLangFromUrl, useTranslations } from '../i18n/ui';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import WorkInProgress from '../../components/WorkInProgress.astro';
+import { getLangFromUrl, useTranslations } from '../../i18n/ui';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);

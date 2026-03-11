@@ -1,18 +1,25 @@
 ---
+import { getLangFromUrl, useTranslations } from '../i18n/ui';
+
 interface Props {
 	title?: string;
 }
 
-const { title = 'Cette page' } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const prefix = lang === 'en' ? '/en' : '';
+
+const defaultTitle = lang === 'en' ? 'This page' : 'Cette page';
+const { title = defaultTitle } = Astro.props;
 ---
 
 <div class="wip-wrapper">
 	<div class="wip-card">
 		<div class="wip-icon" aria-hidden="true">🚧</div>
 		<h1 class="wip-title">{title}</h1>
-		<p class="wip-subtitle">Cette page est en cours de construction.</p>
-		<p class="wip-text">Je travaille activement dessus. Revenez bientôt !</p>
-		<a class="wip-back" href="/">← Retour à l'accueil</a>
+		<p class="wip-subtitle">{t('wip.subtitle')}</p>
+		<p class="wip-text">{t('wip.text')}</p>
+		<a class="wip-back" href={prefix + '/'}>{t('wip.back')}</a>
 	</div>
 </div>
 

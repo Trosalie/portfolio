@@ -2,13 +2,15 @@
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
-	project: CollectionEntry<'work'>;
+	project: CollectionEntry<'work'> | CollectionEntry<'work-en'>;
+	basePath?: string;
 }
 
 const { data, id } = Astro.props.project;
+const basePath = Astro.props.basePath ?? '/work/';
 ---
 
-<a class="card" href={`/work/${id}`} style={`background: ${data.gradient ?? 'var(--gradient-subtle)'}`}>
+<a class="card" href={`${basePath}${id}`} style={`background: ${data.gradient ?? 'var(--gradient-subtle)'}`}>
 	{data.img && <img src={data.img} alt={data.img_alt || ''} loading="lazy" decoding="async" />}
 	<span class="title">{data.title}</span>
 	<div class="bottom">

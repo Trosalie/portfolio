@@ -1,9 +1,9 @@
 /**
- * Génère le PDF du CV à partir de la page /cv/ du site compilé.
+ * Génère les PDFs du CV FR et EN à partir des pages /cv-print/ et /en/cv-print/ du site compilé.
  * Utilise un serveur HTTP local + Puppeteer pour produire un rendu fidèle.
  *
  * Utilisation :
- *   npm run generate-pdf   →  astro build + génération du PDF
+ *   npm run generate-pdf   →  astro build + génération des PDFs
  */
 
 import { createServer } from 'http';
@@ -15,7 +15,21 @@ import puppeteer from 'puppeteer';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const distDir   = join(__dirname, '..', 'dist');
-const outputPdf = join(__dirname, '..', 'public', 'assets', 'pdf', 'CV_Thibault_Rosalie.pdf');
+
+const CV_TARGETS = [
+	{
+		label    : 'FR',
+		url      : '/cv-print/',
+		distPath : 'cv-print',
+		output   : join(__dirname, '..', 'public', 'assets', 'pdf', 'CV_Thibault_Rosalie_FR.pdf'),
+	},
+	{
+		label    : 'EN',
+		url      : '/en/cv-print/',
+		distPath : join('en', 'cv-print'),
+		output   : join(__dirname, '..', 'public', 'assets', 'pdf', 'CV_Thibault_Rosalie_EN.pdf'),
+	},
+];
 
 /* ── Types MIME pour le serveur statique ── */
 const MIME = {
@@ -72,12 +86,14 @@ function startServer(port) {
 /* ── Principale ── */
 (async () => {
 	const PORT = 4174;
-	console.log('📄 Génération du CV en PDF...');
+	console.log('📄 Génération des CVs en PDF (FR + EN)...');
 
-	// Vérifier que le build existe
-	if (!existsSync(join(distDir, 'cv-print', 'index.html'))) {
-		console.error('❌ Le dossier dist/ est absent ou la page cv-print n\'existe pas. Lance d\'abord : npm run build');
-		process.exit(1);
+	// Vérifier que les builds existent
+	for (const target of CV_TARGETS) {
+		if (!existsSync(join(distDir, target.distPath, 'index.html'))) {
+			console.error(`❌ La page ${target.url} est absente du dossier dist/. Lance d'abord : npm run build`);
+			process.exit(1);
+		}
 	}
 
 	// Démarrer le serveur
@@ -87,27 +103,29 @@ function startServer(port) {
 	let browser;
 	try {
 		browser = await puppeteer.launch({ headless: true });
-		const page = await browser.newPage();
 
-		// Charger la page d'impression (sans header/footer/toolbar du site)
-		await page.goto(`http://127.0.0.1:${PORT}/cv-print/`, { waitUntil: 'networkidle0', timeout: 30000 });
+		for (const target of CV_TARGETS) {
+			const page = await browser.newPage();
 
-		// Injecter le thème sombre si besoin (optionnel – commenter pour thème clair)
-		// await page.evaluate(() => document.documentElement.classList.add('theme-dark'));
+			// Charger la page d'impression (sans header/footer/toolbar du site)
+			await page.goto(`http://127.0.0.1:${PORT}${target.url}`, { waitUntil: 'networkidle0', timeout: 30000 });
 
-		// Masquer la toolbar (pas utile dans le PDF)
-		await page.addStyleTag({ content: '.print-toolbar { display: none !important; } .cv-page-wrapper { padding-top: 0 !important; }' });
+			// Masquer la toolbar (pas utile dans le PDF)
+			await page.addStyleTag({ content: '.print-toolbar { display: none !important; } .cv-page-wrapper { padding-top: 0 !important; }' });
 
-		// Générer le PDF
-		const pdfBuffer = await page.pdf({
-			format         : 'A4',
-			printBackground: true,        // Conserver les couleurs et fonds
-			margin         : { top: '0', right: '0', bottom: '0', left: '0' },
-			preferCSSPageSize: false,
-		});
+			// Générer le PDF
+			const pdfBuffer = await page.pdf({
+				format          : 'A4',
+				printBackground : true,
+				margin          : { top: '0', right: '0', bottom: '0', left: '0' },
+				preferCSSPageSize: false,
+			});
 
-		writeFileSync(outputPdf, pdfBuffer);
-		console.log(`✅ PDF généré : ${outputPdf}`);
+			writeFileSync(target.output, pdfBuffer);
+			console.log(`✅ PDF ${target.label} généré : ${target.output}`);
+
+			await page.close();
+		}
 
 	} finally {
 		if (browser) await browser.close();

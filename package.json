@@ -11,7 +11,8 @@
     "build:full": "astro build && node scripts/generate-cv-pdf.mjs"
   },
   "dependencies": {
-    "astro": "^5.17.1"
+    "astro": "^5.17.1",
+    "astro-i18n": "^2.2.4"
   },
   "devDependencies": {
     "puppeteer": "^24.38.0"

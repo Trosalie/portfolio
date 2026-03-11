@@ -1,0 +1,681 @@
+---
+// Page dedicated to printing/saving the English CV as PDF.
+// No BaseLayout: no header, footer or navigation displayed.
+// Opened in a new tab from en/cv.astro, it automatically triggers
+// the browser's print dialog.
+---
+
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width" />
+	<meta name="robots" content="noindex, nofollow" />
+	<title>Resume – Thibault Rosalie (print)</title>
+
+	<!-- Same fonts as the site -->
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	<link
+		href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;700&family=Rubik:wght@300;500;700&display=swap"
+		rel="stylesheet"
+	/>
+
+	<style>
+		/* ══════════════════════════════════════
+		   RESET & BASE
+		   ══════════════════════════════════════ */
+		*, *::before, *::after { box-sizing: border-box; }
+
+		body {
+			margin: 0;
+			padding: 0;
+			background: #e8e8e8;
+			font-family: 'Public Sans', system-ui, sans-serif;
+			font-size: 14px;
+			color: #090b11;
+		}
+
+		/* ══════════════════════════════════════
+		   TOOLBAR (hidden when printing)
+		   ══════════════════════════════════════ */
+		.print-toolbar {
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			z-index: 100;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 0.6rem 1.5rem;
+			background: #1c0056;
+			color: #fff;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+		}
+
+		.print-toolbar-title {
+			font-family: 'Rubik', sans-serif;
+			font-size: 0.9rem;
+			font-weight: 500;
+			letter-spacing: 0.04em;
+			opacity: 0.85;
+		}
+
+		.print-toolbar-actions {
+			display: flex;
+			gap: 0.75rem;
+		}
+
+		.btn-print {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.4rem;
+			background: linear-gradient(150deg, #c561f6, #7611a6);
+			color: #fff;
+			border: none;
+			border-radius: 999px;
+			padding: 0.45rem 1.1rem;
+			font-size: 0.82rem;
+			font-weight: 700;
+			cursor: pointer;
+			letter-spacing: 0.03em;
+			transition: opacity 0.15s;
+		}
+
+		.btn-print:hover { opacity: 0.85; }
+
+		.btn-back {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.4rem;
+			background: transparent;
+			color: rgba(255,255,255,0.7);
+			border: 1px solid rgba(255,255,255,0.25);
+			border-radius: 999px;
+			padding: 0.45rem 1rem;
+			font-size: 0.82rem;
+			cursor: pointer;
+			text-decoration: none;
+			transition: color 0.15s, border-color 0.15s;
+		}
+
+		.btn-back:hover {
+			color: #fff;
+			border-color: rgba(255,255,255,0.6);
+		}
+
+		/* ══════════════════════════════════════
+		   A4 PREVIEW (screen)
+		   ══════════════════════════════════════ */
+		.cv-page-wrapper {
+			padding-top: calc(44px + 1.5rem);
+			padding-bottom: 2rem;
+			display: flex;
+			justify-content: center;
+		}
+
+		.cv {
+			width: 210mm;
+			min-height: 297mm;
+			background: #fff;
+			box-shadow: 0 4px 32px rgba(0,0,0,0.22);
+			overflow: hidden;
+			display: flex;
+			flex-direction: column;
+		}
+
+		/* ══════════════════════════════════════
+		   CV STRUCTURE
+		   ══════════════════════════════════════ */
+
+		/* Header */
+		.cv-header {
+			background: linear-gradient(150deg, #c561f6, #7611a6, #1c0056);
+			color: #fff;
+			padding: 1.6rem 2rem;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 0.75rem;
+		}
+
+		.cv-header-identity {
+			display: flex;
+			align-items: baseline;
+			gap: 0.75rem;
+		}
+
+		.cv-name {
+			font-family: 'Rubik', sans-serif;
+			font-size: 2rem;
+			font-weight: 700;
+			margin: 0;
+			letter-spacing: 0.02em;
+		}
+
+		.cv-name span { font-weight: 300; }
+
+		.cv-age {
+			font-size: 0.8rem;
+			opacity: 0.8;
+			margin: 0;
+		}
+
+		.cv-title {
+			font-size: 0.95rem;
+			font-weight: 400;
+			letter-spacing: 0.14em;
+			text-transform: uppercase;
+			opacity: 0.9;
+			margin: 0;
+		}
+
+		/* Two-column body */
+		.cv-body {
+			display: grid;
+			grid-template-columns: 230px 1fr;
+			flex: 1;
+			align-items: stretch;
+		}
+
+		/* Sidebar */
+		.cv-sidebar {
+			background: #1c0056;
+			color: #fff;
+			padding: 1.4rem 1.2rem;
+			display: flex;
+			flex-direction: column;
+			gap: 1.4rem;
+			word-break: break-word;
+			overflow-wrap: break-word;
+		}
+
+		/* Right column */
+		.cv-main {
+			padding: 1.4rem 1.6rem;
+			display: flex;
+			flex-direction: column;
+			gap: 1.4rem;
+			background: #fff;
+		}
+
+		/* Sections */
+		.cv-section {
+			display: flex;
+			flex-direction: column;
+			gap: 0.6rem;
+			break-inside: avoid;
+			page-break-inside: avoid;
+		}
+
+		.cv-section-title {
+			font-family: 'Rubik', sans-serif;
+			font-size: 0.72rem;
+			font-weight: 700;
+			text-transform: uppercase;
+			letter-spacing: 0.13em;
+			color: #c561f6;
+			padding-bottom: 0.3rem;
+			border-bottom: 1px solid rgba(197, 97, 246, 0.4);
+			margin: 0;
+		}
+
+		.cv-section-title--main {
+			color: #7611a6;
+			border-bottom-color: hsla(280, 89%, 67%, 0.3);
+		}
+
+		/* Profile */
+		.cv-profile-text {
+			font-size: 0.8rem;
+			line-height: 1.6;
+			margin: 0;
+			opacity: 0.9;
+		}
+
+		/* Contact */
+		.cv-contact-list {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+			display: flex;
+			flex-direction: column;
+			gap: 0.5rem;
+		}
+
+		.cv-contact-list li {
+			display: flex;
+			align-items: flex-start;
+			gap: 0.45rem;
+			font-size: 0.78rem;
+			line-height: 1.45;
+		}
+
+		.cv-contact-icon {
+			flex-shrink: 0;
+			margin-top: 0.1rem;
+			opacity: 0.7;
+		}
+
+		.cv-contact-list a {
+			color: inherit;
+			text-decoration: underline;
+			text-underline-offset: 2px;
+		}
+
+		.cv-contact-list a[href^="mailto:"] {
+			font-size: 0.68rem;
+		}
+
+		/* Skills */
+		.cv-skills-list {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.35rem;
+		}
+
+		.cv-skill {
+			display: inline-block;
+			background: rgba(197, 97, 246, 0.18);
+			border: 1px solid rgba(197, 97, 246, 0.45);
+			color: #c561f6;
+			border-radius: 999px;
+			padding: 0.15rem 0.6rem;
+			font-size: 0.72rem;
+			font-weight: 600;
+			letter-spacing: 0.03em;
+		}
+
+		/* Languages */
+		.cv-lang-list {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+			display: flex;
+			flex-direction: column;
+			gap: 0.45rem;
+		}
+
+		.cv-lang-list li {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			font-size: 0.8rem;
+			gap: 0.4rem;
+		}
+
+		.cv-lang-name { font-weight: 600; }
+
+		.cv-lang-level {
+			font-size: 0.72rem;
+			opacity: 0.7;
+			background: rgba(197, 97, 246, 0.15);
+			border-radius: 999px;
+			padding: 0.12rem 0.5rem;
+		}
+
+		/* Hobbies */
+		.cv-hobbies-list {
+			list-style: none;
+			padding: 0;
+			margin: 0;
+			display: flex;
+			flex-direction: column;
+			gap: 0.35rem;
+		}
+
+		.cv-hobbies-list li {
+			font-size: 0.78rem;
+			line-height: 1.4;
+			padding-left: 0.85rem;
+			position: relative;
+		}
+
+		.cv-hobbies-list li::before {
+			content: '▸';
+			position: absolute;
+			left: 0;
+			color: rgba(197, 97, 246, 0.7);
+			font-size: 0.65rem;
+			top: 0.15rem;
+		}
+
+		/* Entries */
+		.cv-entry {
+			display: flex;
+			flex-direction: column;
+			gap: 0.4rem;
+			padding-left: 0.65rem;
+			border-left: 2.5px solid hsla(280, 89%, 67%, 0.35);
+			break-inside: avoid;
+			page-break-inside: avoid;
+		}
+
+		.cv-entry-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: flex-start;
+			gap: 0.5rem;
+		}
+
+		.cv-entry-title {
+			font-size: 0.9rem;
+			font-weight: 700;
+			color: #090b11;
+			margin: 0;
+			line-height: 1.3;
+		}
+
+		.cv-entry-subtitle {
+			font-size: 0.8rem;
+			font-weight: 600;
+			color: #7611a6;
+			margin: 0.08rem 0 0;
+		}
+
+		.cv-entry-place {
+			font-size: 0.78rem;
+			color: #6474a2;
+			margin: 0.1rem 0 0;
+			font-style: italic;
+		}
+
+		.cv-entry-date {
+			flex-shrink: 0;
+			font-size: 0.75rem;
+			font-weight: 700;
+			color: #7611a6;
+			background: hsla(280, 89%, 67%, 0.2);
+			padding: 0.15rem 0.55rem;
+			border-radius: 999px;
+			white-space: nowrap;
+		}
+
+		.cv-entry-list {
+			margin: 0;
+			padding-left: 1rem;
+			display: flex;
+			flex-direction: column;
+			gap: 0.2rem;
+		}
+
+		.cv-entry-list li {
+			font-size: 0.8rem;
+			color: #3d4663;
+			line-height: 1.5;
+		}
+
+		/* ══════════════════════════════════════
+		   @media print
+		   ══════════════════════════════════════ */
+		@media print {
+			@page {
+				size: A4 portrait;
+				margin: 0;
+			}
+
+			*, *::before, *::after {
+				-webkit-print-color-adjust: exact !important;
+				print-color-adjust: exact !important;
+			}
+
+			.print-toolbar { display: none !important; }
+
+			body {
+				background: none;
+				padding: 0;
+				margin: 0;
+			}
+
+			.cv-page-wrapper {
+				padding: 0;
+				display: block;
+			}
+
+			.cv {
+				width: 100%;
+				min-height: 297mm;
+				box-shadow: none;
+				page-break-inside: avoid;
+				display: flex;
+				flex-direction: column;
+			}
+		}
+	</style>
+</head>
+<body>
+	<!-- Toolbar (hidden when printing) -->
+	<div class="print-toolbar">
+		<span class="print-toolbar-title">Print preview — Resume of Thibault Rosalie</span>
+		<div class="print-toolbar-actions">
+			<a href="/en/cv/" class="btn-back">
+				<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+				Back
+			</a>
+			<button class="btn-print" onclick="window.print()">
+				<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+				Print / Save as PDF
+			</button>
+		</div>
+	</div>
+
+	<!-- A4 page -->
+	<div class="cv-page-wrapper">
+		<div class="cv" role="main" aria-label="Resume of Thibault Rosalie">
+
+			<header class="cv-header">
+				<div class="cv-header-identity">
+					<h1 class="cv-name">Thibault <span>Rosalie</span></h1>
+					<p class="cv-age">22 years old</p>
+				</div>
+				<p class="cv-title">Full Stack Developer</p>
+			</header>
+
+			<div class="cv-body">
+				<!-- LEFT COLUMN -->
+				<aside class="cv-sidebar" aria-label="Personal information">
+
+					<section class="cv-section">
+						<h2 class="cv-section-title">Profile</h2>
+						<p class="cv-profile-text">
+							Currently in the final year of a Bachelor's degree in Computer Science at IUT of Bayonne,
+							I am looking for a 14 to 16 week internship to put my skills into practice.
+						</p>
+						<p class="cv-profile-text">
+							Curious and rigorous, I wish to contribute to concrete and technical projects,
+							while strengthening my sense of teamwork.
+						</p>
+					</section>
+
+					<section class="cv-section">
+						<h2 class="cv-section-title">Contact Information</h2>
+						<ul class="cv-contact-list">
+							<li>
+								<span class="cv-contact-icon" aria-hidden="true">
+									<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+								</span>
+								<span>18 Avenue de Sainte-Croix<br />64100 Bayonne, France</span>
+							</li>
+							<li>
+								<span class="cv-contact-icon" aria-hidden="true">
+									<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.91 9c1.27 2.3 3.06 4.09 5.36 5.36l.94-.94a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 21 15.92v1z"/></svg>
+								</span>
+								<a href="tel:+33760299913">+33 07 60 29 99 13</a>
+							</li>
+							<li>
+								<span class="cv-contact-icon" aria-hidden="true">
+									<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+								</span>
+								<a href="mailto:thibaultrosaliepro@gmail.com">thibaultrosaliepro@gmail.com</a>
+							</li>
+							<li>
+								<span class="cv-contact-icon" aria-hidden="true">
+									<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+								</span>
+								<a href="https://linkedin.com/in/thibaultrosalie" target="_blank" rel="noopener noreferrer">thibaultrosalie</a>
+							</li>
+							<li>
+								<span class="cv-contact-icon" aria-hidden="true">
+									<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+								</span>
+								<a href="https://github.com/trosalie" target="_blank" rel="noopener noreferrer">github.com/trosalie</a>
+							</li>
+							<li>
+								<span class="cv-contact-icon" aria-hidden="true">
+									<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+								</span>
+								<a href="https://trosalie.alwaysdata.net" target="_blank" rel="noopener noreferrer">trosalie.alwaysdata.net</a>
+							</li>
+						</ul>
+					</section>
+
+					<section class="cv-section">
+						<h2 class="cv-section-title">Skills</h2>
+						<ul class="cv-skills-list">
+							<li><span class="cv-skill">PHP</span></li>
+							<li><span class="cv-skill">Laravel</span></li>
+							<li><span class="cv-skill">Angular</span></li>
+							<li><span class="cv-skill">Docker</span></li>
+							<li><span class="cv-skill">MySQL</span></li>
+							<li><span class="cv-skill">PHPUnit</span></li>
+							<li><span class="cv-skill">Python</span></li>
+							<li><span class="cv-skill">SCRUM</span></li>
+							<li><span class="cv-skill">Git / GitHub</span></li>
+							<li><span class="cv-skill">OOP</span></li>
+						</ul>
+					</section>
+
+					<section class="cv-section">
+						<h2 class="cv-section-title">Languages</h2>
+						<ul class="cv-lang-list">
+							<li>
+								<span class="cv-lang-name">English</span>
+								<span class="cv-lang-level">B2 Level</span>
+							</li>
+							<li>
+								<span class="cv-lang-name">Kreol Reyoné</span>
+								<span class="cv-lang-level">Native</span>
+							</li>
+						</ul>
+					</section>
+
+					<section class="cv-section">
+						<h2 class="cv-section-title">Hobbies</h2>
+						<ul class="cv-hobbies-list">
+							<li>Video Games</li>
+							<li>Hiking</li>
+							<li>Weight Training</li>
+							<li>Yoseikan Budo</li>
+						</ul>
+					</section>
+				</aside>
+
+				<!-- RIGHT COLUMN -->
+				<section class="cv-main" aria-label="Career path">
+
+					<section class="cv-section">
+						<h2 class="cv-section-title cv-section-title--main">Education</h2>
+
+						<article class="cv-entry">
+							<div class="cv-entry-header">
+								<div>
+									<h3 class="cv-entry-title">Bachelor's Degree in Computer Science</h3>
+									<p class="cv-entry-place">IUT of Bayonne and the Basque Country</p>
+								</div>
+								<time class="cv-entry-date">2023 – 2026</time>
+							</div>
+							<ul class="cv-entry-list">
+								<li>Software Development</li>
+								<li>Application Optimization</li>
+								<li>Management of Communication Systems</li>
+								<li>Design / Management / Administration / Exploitation of Databases</li>
+								<li>Agile Project Management</li>
+								<li>Teamwork in Computer Science</li>
+							</ul>
+						</article>
+
+						<article class="cv-entry">
+							<div class="cv-entry-header">
+								<div>
+									<h3 class="cv-entry-title">Bachelor's Degree in Electrical and Industrial Computing</h3>
+									<p class="cv-entry-place">IUT of Bordeaux Gradignan</p>
+								</div>
+								<time class="cv-entry-date">2021 – 2022</time>
+							</div>
+							<ul class="cv-entry-list">
+								<li>Prototype design based on comprehensive and precise specifications</li>
+								<li>Implementation of testing protocols and measurements</li>
+								<li>Design and verification of the electrical and computer parts of a system</li>
+							</ul>
+						</article>
+					</section>
+
+					<section class="cv-section">
+						<h2 class="cv-section-title cv-section-title--main">Study Projects</h2>
+
+						<article class="cv-entry">
+							<div class="cv-entry-header">
+								<div>
+									<h3 class="cv-entry-title">Responsive Web Application</h3>
+									<p class="cv-entry-subtitle">Laravel / Angular — SportPxl Dashboard</p>
+									<p class="cv-entry-place">IUT of Bayonne and the Basque Country</p>
+								</div>
+								<time class="cv-entry-date">2025 – 2026</time>
+							</div>
+							<ul class="cv-entry-list">
+								<li>Agile SCRUM Project Management</li>
+								<li>MVC Architecture — OOP</li>
+								<li>Docker Containerization</li>
+								<li>MySQL Database Management and Security</li>
+								<li>Unit Test Development</li>
+							</ul>
+						</article>
+
+						<article class="cv-entry">
+							<div class="cv-entry-header">
+								<div>
+									<h3 class="cv-entry-title">Car Sharing Web Application</h3>
+									<p class="cv-entry-subtitle">PHP / Twig / Bootstrap — Covoit'Étud</p>
+									<p class="cv-entry-place">IUT of Bayonne and the Basque Country</p>
+								</div>
+								<time class="cv-entry-date">2024 – 2025</time>
+							</div>
+							<ul class="cv-entry-list">
+								<li>Fullstack Development in a Team of 5 — MVC Architecture</li>
+								<li>Booking System for Drivers and Passengers</li>
+								<li>Integration of a Geocoding API for the Trip Map</li>
+								<li>Student Profile Management, Grading, and Badge System</li>
+								<li>Technical Documentation with Doxygen</li>
+							</ul>
+						</article>
+					</section>
+
+					<section class="cv-section">
+						<h2 class="cv-section-title cv-section-title--main">Professional Experience</h2>
+
+						<article class="cv-entry">
+							<div class="cv-entry-header">
+								<div>
+									<h3 class="cv-entry-title">Research and Development Intern</h3>
+									<p class="cv-entry-place">
+										LIUPPA — Computer Science Research Laboratory, University of Pau
+									</p>
+								</div>
+								<time class="cv-entry-date">May – July 2025</time>
+							</div>
+							<ul class="cv-entry-list">
+								<li>State of the art review of semantic classification tools</li>
+								<li>Data collection and analysis</li>
+								<li>Design and implementation of Python scripts for classification of structured and semi-structured data</li>
+							</ul>
+						</article>
+					</section>
+				</section>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

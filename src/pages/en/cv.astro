@@ -1,6 +1,6 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import { getLangFromUrl, useTranslations } from '../i18n/ui';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getLangFromUrl, useTranslations } from '../../i18n/ui';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -9,7 +9,7 @@ const t = useTranslations(lang);
 <BaseLayout title={t('cv.meta.title')} description={t('cv.meta.desc')}>
 	<main class="cv-wrapper">
 		<div class="cv-actions">
-			<a href="/cv-print/" target="_blank" rel="noopener" class="btn-download">
+			<a href="/en/cv-print/" target="_blank" rel="noopener" class="btn-download">
 				<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 					<path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>
 				</svg>
@@ -24,7 +24,7 @@ const t = useTranslations(lang);
 					<h1 class="cv-name">Thibault <span>Rosalie</span></h1>
 					<p class="cv-age">22 ans</p>
 				</div>
-				<p class="cv-title">Développeur FullStack</p>
+				<p class="cv-title">Full Stack Developer</p>
 			</header>
 
 			<div class="cv-body">
@@ -32,19 +32,17 @@ const t = useTranslations(lang);
 				<aside class="cv-sidebar" aria-label="Informations personnelles">
 
 					<section class="cv-section">
-						<h2 class="cv-section-title">Profil</h2>
+						<h2 class="cv-section-title">Profile</h2>
 						<p class="cv-profile-text">
-							Actuellement en BUT 3 Informatique, je recherche un stage de 14 à 16 semaines
-							pour mettre en pratique mes compétences.
+							Currently studiying in the final year of a Bachelor's degree in Computer Science at UIT of Bayonne and Basque Country, I am passionate about software development and eager to apply my skills in real-world projects.
 						</p>
 						<p class="cv-profile-text">
-							Curieux et rigoureux, je souhaite contribuer à des projets concrets et techniques,
-							tout en consolidant mon sens du travail en équipe.
+							Curious and rigorous, I aim to contribute to concrete and technical projects, while strengthening my sense of teamwork.
 						</p>
 					</section>
 
 					<section class="cv-section">
-						<h2 class="cv-section-title">Coordonnées</h2>
+						<h2 class="cv-section-title">Contact Information</h2>
 						<ul class="cv-contact-list">
 							<li>
 								<span class="cv-contact-icon" aria-hidden="true">
@@ -56,7 +54,7 @@ const t = useTranslations(lang);
 								<span class="cv-contact-icon" aria-hidden="true">
 									<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.91 9c1.27 2.3 3.06 4.09 5.36 5.36l.94-.94a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 21 15.92v1z"/></svg>
 								</span>
-								<a href="tel:+33760299913">07 60 29 99 13</a>
+								<a href="tel:+33760299913">+33 07 60 29 99 13</a>
 							</li>
 							<li>
 								<span class="cv-contact-icon" aria-hidden="true">
@@ -86,7 +84,7 @@ const t = useTranslations(lang);
 					</section>
 
 					<section class="cv-section">
-						<h2 class="cv-section-title">Compétences</h2>
+						<h2 class="cv-section-title">Skills</h2>
 						<ul class="cv-skills-list">
 							<li><span class="cv-skill">PHP</span></li>
 							<li><span class="cv-skill">Laravel</span></li>
@@ -102,25 +100,25 @@ const t = useTranslations(lang);
 					</section>
 
 					<section class="cv-section">
-						<h2 class="cv-section-title">Langues</h2>
+						<h2 class="cv-section-title">Languages</h2>
 						<ul class="cv-lang-list">
 							<li>
-								<span class="cv-lang-name">Anglais</span>
-								<span class="cv-lang-level">Niveau B2</span>
+								<span class="cv-lang-name">English</span>
+								<span class="cv-lang-level">B2 Level</span>
 							</li>
 							<li>
-								<span class="cv-lang-name">Créole Réunionnais</span>
-								<span class="cv-lang-level">Natif</span>
+								<span class="cv-lang-name">Kreol Reyoné</span>
+								<span class="cv-lang-level">Native</span>
 							</li>
 						</ul>
 					</section>
 
 					<section class="cv-section">
-						<h2 class="cv-section-title">Loisirs</h2>
+						<h2 class="cv-section-title">Hobbies</h2>
 						<ul class="cv-hobbies-list">
-							<li>Jeux vidéo</li>
-							<li>Randonnée</li>
-							<li>Musculation</li>
+							<li>Video Games</li>
+							<li>Hiking</li>
+							<li>Weight Training</li>
 							<li>Yoseikan Budo</li>
 						</ul>
 					</section>
@@ -135,94 +133,94 @@ const t = useTranslations(lang);
 						<article class="cv-entry">
 							<div class="cv-entry-header">
 								<div>
-									<h3 class="cv-entry-title">BUT Informatique</h3>
-									<p class="cv-entry-place">IUT de Bayonne et du Pays Basque</p>
+									<h3 class="cv-entry-title">Bachelor's Degree in Computer Science</h3>
+									<p class="cv-entry-place">UIT of Bayonne and the Basque Country</p>
 								</div>
 								<time class="cv-entry-date">2023 – 2026</time>
 							</div>
 							<ul class="cv-entry-list">
-								<li>Développement informatique</li>
-								<li>Optimisation d'applications</li>
-								<li>Administration de systèmes communicants</li>
-								<li>Conception / Gestion / Administration / Exploitation de base de données</li>
-								<li>Gestion de projet agile</li>
-								<li>Travail en équipe informatique</li>
+								<li>Software Development</li>
+								<li>Application Optimization</li>
+								<li>Management of Communication Systems</li>
+								<li>Design / Management / Administration / Exploitation of Databases</li>
+								<li>Agile Project Management</li>
+								<li>Teamwork in Computer Science</li>
 							</ul>
 						</article>
 
 						<article class="cv-entry">
 							<div class="cv-entry-header">
 								<div>
-									<h3 class="cv-entry-title">BUT Génie Électrique et Informatique Industrielle</h3>
-									<p class="cv-entry-place">IUT de Bordeaux Gradignan</p>
+									<h3 class="cv-entry-title">Bachelor's Degree in Electrical and Industrial Computing</h3>
+									<p class="cv-entry-place">UIT of Bordeaux Gradignan</p>
 								</div>
 								<time class="cv-entry-date">2021 – 2022</time>
 							</div>
 							<ul class="cv-entry-list">
-								<li>Conception de prototype à partir de cahier des charges complet et précis</li>
-								<li>Mise en place de protocoles de tests et de mesures</li>
-								<li>Conception et vérification de la partie électrique et informatique d'un système</li>
+								<li>Prototype design based on comprehensive and precise specifications</li>
+								<li>Implementation of testing protocols and measurements</li>
+								<li>Design and verification of the electrical and computer parts of a system</li>
 							</ul>
 						</article>
 					</section>
 
 					<section class="cv-section">
-						<h2 class="cv-section-title cv-section-title--main">Projets d'étude</h2>
+						<h2 class="cv-section-title cv-section-title--main">Study Projects</h2>
 
 						<article class="cv-entry">
 							<div class="cv-entry-header">
 								<div>
-									<h3 class="cv-entry-title">Application Web Responsive</h3>
+									<h3 class="cv-entry-title">Responsive Web Application</h3>
 									<p class="cv-entry-subtitle">Laravel / Angular — SportPxl Dashboard</p>
-									<p class="cv-entry-place">IUT de Bayonne et du Pays Basque</p>
+									<p class="cv-entry-place">UIT of Bayonne and the Basque Country</p>
 								</div>
 								<time class="cv-entry-date">2025 – 2026</time>
 							</div>
 							<ul class="cv-entry-list">
-								<li>Gestion de projet agile SCRUM</li>
-								<li>Architecture MVC — POO</li>
-								<li>Conteneurisation Docker</li>
-								<li>Gestion et sécurisation de base de données MySQL</li>
-								<li>Rédaction de tests unitaires</li>
+								<li>Agile Project Management</li>
+								<li>MVC Architecture — OOP</li>
+								<li>Docker Containerization</li>
+								<li>Database Management and Security</li>
+								<li>Unit Test Development</li>
 							</ul>
 						</article>
 
 						<article class="cv-entry">
 							<div class="cv-entry-header">
 								<div>
-									<h3 class="cv-entry-title">Application Web de Covoiturage</h3>
+									<h3 class="cv-entry-title">Car Sharing Web Application</h3>
 									<p class="cv-entry-subtitle">PHP / Twig / Bootstrap — Covoit'Étud</p>
-									<p class="cv-entry-place">IUT de Bayonne et du Pays Basque</p>
+									<p class="cv-entry-place">UIT of Bayonne and the Basque Country</p>
 								</div>
 								<time class="cv-entry-date">2024 – 2025</time>
 							</div>
 							<ul class="cv-entry-list">
-								<li>Développement fullstack en équipe de 5 — Architecture MVC</li>
-								<li>Système de réservation de trajets conducteur / passager</li>
-								<li>Intégration d'une API de géocodage pour la carte des trajets</li>
-								<li>Gestion de profils étudiants, notation et système de badges</li>
-								<li>Documentation technique avec Doxygen</li>
+								<li>Fullstack Development in a Team of 5 — MVC Architecture</li>
+								<li>Booking System for Drivers and Passengers</li>
+								<li>Integration of a Geocoding API for the Trip Map</li>
+								<li>Student Profile Management, Grading, and Badge System</li>
+								<li>Technical Documentation with Doxygen</li>
 							</ul>
 						</article>
 					</section>
 
 					<section class="cv-section">
-						<h2 class="cv-section-title cv-section-title--main">Expérience professionnelle</h2>
+						<h2 class="cv-section-title cv-section-title--main">Professional Experience</h2>
 
 						<article class="cv-entry">
 							<div class="cv-entry-header">
 								<div>
-									<h3 class="cv-entry-title">Stagiaire en Recherche et Développement</h3>
+									<h3 class="cv-entry-title">Intern in Research and Development</h3>
 									<p class="cv-entry-place">
-										LIUPPA — Laboratoire Informatique de l'UPPA
+										LIUPPA — Computer Science Research Laboratory of the UPPA
 									</p>
 								</div>
-								<time class="cv-entry-date">Mai – Juil. 2025</time>
+								<time class="cv-entry-date">May – July 2025</time>
 							</div>
 							<ul class="cv-entry-list">
-								<li>État de l'art des outils de classification sémantique</li>
-								<li>Collecte et analyse de données</li>
-								<li>Conception et réalisation de scripts Python de classification de données structurées et semi-structurées</li>
+								<li>State of the art of semantic classification tools</li>
+								<li>Data collection and analysis</li>
+								<li>Design and implementation of Python scripts for classification of structured and semi-structured data</li>
 							</ul>
 						</article>
 					</section>

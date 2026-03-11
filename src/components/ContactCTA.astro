@@ -1,12 +1,17 @@
 ---
 import CallToAction from './CallToAction.astro';
 import Icon from './Icon.astro';
+import { getLangFromUrl, useTranslations } from '../i18n/ui';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const prefix = lang === 'en' ? '/en' : '';
 ---
 
 <aside>
-	<h2>Intéressé par une collaboration ?</h2>
-	<CallToAction href="/contact/">
-		Envoyez-moi un message
+	<h2>{t('contactcta.title')}</h2>
+	<CallToAction href={prefix + '/contact/'}>
+		{t('contactcta.cta')}
 		<Icon icon="paper-plane-tilt" size="1.2em" />
 	</CallToAction>
 </aside>

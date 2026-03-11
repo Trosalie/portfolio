@@ -1,18 +1,18 @@
 ---
 import { getCollection } from 'astro:content';
 // Component Imports
-import CallToAction from '../components/CallToAction.astro';
+import CallToAction from '../../components/CallToAction.astro';
 // Page section components
-import ContactCTA from '../components/ContactCTA.astro';
-import Grid from '../components/Grid.astro';
-import Hero from '../components/Hero.astro';
-import Icon from '../components/Icon.astro';
-import Pill from '../components/Pill.astro';
-import PortfolioPreview from '../components/PortfolioPreview.astro';
-import Skills from '../components/Skills.astro';
+import ContactCTA from '../../components/ContactCTA.astro';
+import Grid from '../../components/Grid.astro';
+import Hero from '../../components/Hero.astro';
+import Icon from '../../components/Icon.astro';
+import Pill from '../../components/Pill.astro';
+import PortfolioPreview from '../../components/PortfolioPreview.astro';
+import Skills from '../../components/Skills.astro';
 // Layout import — provides basic page elements: <head>, <nav>, <footer> etc.
-import BaseLayout from '../layouts/BaseLayout.astro';
-import { getLangFromUrl, useTranslations } from '../i18n/ui';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getLangFromUrl, useTranslations } from '../../i18n/ui';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);

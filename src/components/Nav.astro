@@ -1,15 +1,21 @@
 ---
 import Icon from './Icon.astro';
 import type { iconPaths } from './IconPaths';
+import LangToggle from './LangToggle.astro';
 import ThemeToggle from './ThemeToggle.astro';
+import { getLangFromUrl, useTranslations } from '../i18n/ui';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const prefix = lang === 'en' ? '/en' : '';
 
 /** Main menu items */
 const textLinks: { label: string; href: string }[] = [
-	{ label: 'Accueil', href: '/' },
-	{ label: 'Projets', href: '/work/' },
-	{ label: 'À propos', href: '/about/' },
-	{ label: 'CV', href: '/cv/' },
-	{ label: 'Me contacter', href: '/contact/' },
+	{ label: t('nav.home'), href: prefix + '/' },
+	{ label: t('nav.work'), href: prefix + '/work/' },
+	{ label: t('nav.about'), href: prefix + '/about/' },
+	{ label: t('nav.cv'), href: prefix + '/cv/' },
+	{ label: t('nav.contact'), href: prefix + '/contact/' },
 ];
 
 /** Icon links to social media — edit these with links to your profiles! */
@@ -23,7 +29,9 @@ const isCurrentPage = (href: string) => {
 	let pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL, '');
 	if (pathname.at(0) !== '/') pathname = '/' + pathname;
 	if (pathname.at(-1) !== '/') pathname += '/';
-	return pathname === href || (href !== '/' && pathname.startsWith(href));
+	// La racine locale (/ ou /en/) ne doit pas matcher toutes les sous-pages
+	const isLocaleRoot = href === '/' || /^\/[a-z]{2}\/$/.test(href);
+	return pathname === href || (!isLocaleRoot && pathname.startsWith(href));
 };
 ---
 
@@ -94,6 +102,7 @@ const isCurrentPage = (href: string) => {
 			</div>
 
 			<div class="theme-toggle">
+				<LangToggle />
 				<ThemeToggle />
 			</div>
 		</div>
@@ -259,6 +268,7 @@ const isCurrentPage = (href: string) => {
 	.theme-toggle {
 		display: flex;
 		align-items: center;
+		gap: 0.5rem;
 		height: calc(var(--icon-size) + 2 * var(--icon-padding));
 	}
 
