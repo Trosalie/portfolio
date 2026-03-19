@@ -22,9 +22,10 @@ jobs:
           node-version: 20
           cache: npm
 
-      # 3. Installe Chromium système pour Puppeteer (génération PDF)
-      - name: Installer Chromium
-        run: sudo apt-get install -y chromium-browser
+      # 3. Installe Chrome sans Snap (plus rapide/stable sur GitHub Actions)
+      - name: Installer Chrome
+        id: chrome
+        uses: browser-actions/setup-chrome@v1
 
       # 4. Installe les dépendances npm (sans télécharger Chrome via Puppeteer)
       - name: Installer les dépendances
@@ -36,7 +37,7 @@ jobs:
       - name: Build (Astro + PDF)
         run: npm run build:full
         env:
-          PUPPETEER_EXECUTABLE_PATH: /usr/bin/chromium-browser
+          PUPPETEER_EXECUTABLE_PATH: ${{ steps.chrome.outputs.chrome-path }}
 
       # 6. Installe sshpass pour l'authentification par mot de passe
       - name: Installer sshpass
