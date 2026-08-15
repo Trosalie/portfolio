@@ -1,13 +1,16 @@
 ---
 import Icon from './Icon.astro';
+import { getLangFromUrl, useTranslations } from '../i18n/ui';
 
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 const currentYear = new Date().getFullYear();
 ---
 
 <footer>
 	<div class="group">
 		<p>
-			Créé avec <a href="https://astro.build/">Astro</a>
+			{t('footer.madeWith')} <a href="https://astro.build/">Astro</a>
 			<Icon icon="rocket-launch" size="1.2em" />
 		</p>
 		<p>&copy; {currentYear} Thibault Rosalie</p>

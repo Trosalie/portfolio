@@ -1,22 +1,26 @@
 ---
 import Icon from './Icon.astro';
+import { getLangFromUrl, useTranslations } from '../i18n/ui';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <section class="box skills">
 	<div class="stack gap-2 lg:gap-4">
 		<Icon icon="terminal-window" color="var(--accent-regular)" size="2.5rem" gradient />
-		<h2>Back-end</h2>
-		<p>PHP, Laravel, Python — développement d'applications web robustes, tests unitaires avec PHPUnit et conception orientée objet.</p>
+		<h2>{t('index.skills.backend')}</h2>
+		<p>{t('skills.backend.text')}</p>
 	</div>
 	<div class="stack gap-2 lg:gap-4">
 		<Icon icon="code" color="var(--accent-regular)" size="2.5rem" gradient />
-		<h2>Front-end</h2>
-		<p>Angular, HTML/CSS — création d'interfaces modernes et responsives, avec une approche mobile-first et un souci du détail.</p>
+		<h2>{t('index.skills.frontend')}</h2>
+		<p>{t('skills.frontend.text')}</p>
 	</div>
 	<div class="stack gap-2 lg:gap-4">
 		<Icon icon="strategy" color="var(--accent-regular)" size="2.5rem" gradient />
-		<h2>Outils & Méthodes</h2>
-		<p>Git, Docker, MySQL, SCRUM — environnements conteneurisés, versioning collaboratif et gestion de projet agile.</p>
+		<h2>{t('index.skills.tools')}</h2>
+		<p>{t('skills.tools.text')}</p>
 	</div>
 </section>
 

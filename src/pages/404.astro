@@ -1,8 +1,37 @@
 ---
 import Hero from '../components/Hero.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getLangFromUrl, useTranslations } from '../i18n/ui';
+
+// Un hebergement statique ne sert qu'une seule page d'erreur, a la racine :
+// c'est donc la langue par defaut du site qui s'applique ici.
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
-<BaseLayout title="Not Found" description="404 Error — this page was not found">
-	<Hero title="Page Not Found" tagline="Not found" />
+<BaseLayout title={t('404.meta.title')} description={t('404.meta.desc')}>
+	<main class="wrapper stack gap-8 not-found">
+		<Hero title={t('404.title')} tagline={t('404.tagline')} />
+		<a class="back-link" href="/">{t('404.back')}</a>
+	</main>
 </BaseLayout>
+
+<style>
+	.not-found {
+		padding-block: 4rem;
+		text-align: center;
+	}
+
+	.back-link {
+		align-self: center;
+		color: var(--accent-regular);
+		font-family: var(--font-brand);
+		font-weight: 500;
+		text-decoration: none;
+	}
+
+	.back-link:hover,
+	.back-link:focus {
+		text-decoration: underline;
+	}
+</style>

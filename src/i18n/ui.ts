@@ -23,6 +23,16 @@ export const ui = {
 		'contactcta.title': 'Intéressé par une collaboration ?',
 		'contactcta.cta': 'Envoyez-moi un message',
 
+		// Footer
+		'footer.madeWith': 'Créé avec',
+
+		// Page 404
+		'404.meta.title': 'Page introuvable | Thibault Rosalie',
+		'404.meta.desc': "Erreur 404 — cette page n'existe pas ou a été déplacée.",
+		'404.title': 'Page introuvable',
+		'404.tagline': "Cette page n'existe pas ou a été déplacée.",
+		'404.back': "← Retour à l'accueil",
+
 		// WorkInProgress
 		'wip.subtitle': 'Cette page est en cours de construction.',
 		'wip.text': 'Je travaille activement dessus. Revenez bientôt !',
@@ -44,6 +54,14 @@ export const ui = {
 		'index.skills.backend': 'Back-end',
 		'index.skills.frontend': 'Front-end',
 		'index.skills.tools': 'Outils & Méthodes',
+
+		// Encart compétences (composant Skills)
+		'skills.backend.text':
+			"PHP, Laravel, Python — développement d'applications web robustes, tests unitaires avec PHPUnit et conception orientée objet.",
+		'skills.frontend.text':
+			"Angular, HTML/CSS — création d'interfaces modernes et responsives, avec une approche mobile-first et un souci du détail.",
+		'skills.tools.text':
+			'Git, Docker, MySQL, SCRUM — environnements conteneurisés, versioning collaboratif et gestion de projet agile.',
 
 		// Projets
 		'work.title': 'Mes Projets',
@@ -114,6 +132,16 @@ export const ui = {
 		'contactcta.title': 'Interested in collaborating?',
 		'contactcta.cta': 'Send me a message',
 
+		// Footer
+		'footer.madeWith': 'Built with',
+
+		// Page 404
+		'404.meta.title': 'Page not found | Thibault Rosalie',
+		'404.meta.desc': '404 error — this page does not exist or has been moved.',
+		'404.title': 'Page not found',
+		'404.tagline': 'This page does not exist or has been moved.',
+		'404.back': '← Back to home',
+
 		// WorkInProgress
 		'wip.subtitle': 'This page is under construction.',
 		'wip.text': 'I am actively working on it. Come back soon!',
@@ -135,6 +163,14 @@ export const ui = {
 		'index.skills.backend': 'Back-end',
 		'index.skills.frontend': 'Front-end',
 		'index.skills.tools': 'Tools & Methods',
+
+		// Skills box (Skills component)
+		'skills.backend.text':
+			'PHP, Laravel, Python — building robust web applications, unit testing with PHPUnit and object-oriented design.',
+		'skills.frontend.text':
+			'Angular, HTML/CSS — building modern, responsive interfaces with a mobile-first approach and an eye for detail.',
+		'skills.tools.text':
+			'Git, Docker, MySQL, SCRUM — containerised environments, collaborative versioning and agile project management.',
 
 		// Projects
 		'work.title': 'My Projects',
