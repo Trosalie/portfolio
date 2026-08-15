@@ -195,16 +195,34 @@ export function useTranslations(lang: Lang) {
 	};
 }
 
-/** Retourne le chemin vers la page équivalente dans l'autre langue */
+/**
+ * Segments de route dont le nom change d'une langue à l'autre.
+ * Toutes les autres routes (/, /work/, /about/, /cv/, /contact/, /cv-print/
+ * et les slugs de projets) sont identiques en FR et en EN.
+ */
+const routeSegments = {
+	lettre: 'letter',
+	'lettre-print': 'letter-print',
+} as const;
+
+const frToEn: Record<string, string> = routeSegments;
+const enToFr: Record<string, string> = Object.fromEntries(
+	Object.entries(routeSegments).map(([fr, en]) => [en, fr]),
+);
+
+/**
+ * Retourne le chemin vers la page équivalente dans l'autre langue.
+ * Seul le premier segment est traduit : c'est le seul qui porte le nom de la
+ * route, les suivants sont des slugs de contenu communs aux deux langues.
+ */
 export function getAlternateLangPath(url: URL): string {
-	const pathname = url.pathname;
-	if (pathname === '/en' || pathname.startsWith('/en/')) {
-		// Retirer le préfixe /en
-		const rest = pathname.slice(3);
-		return rest || '/';
-	} else {
-		// Ajouter le préfixe /en
-		const clean = pathname.endsWith('/') ? pathname.slice(0, -1) : pathname;
-		return '/en' + clean + '/';
-	}
+	const isEn = url.pathname === '/en' || url.pathname.startsWith('/en/');
+	const source = isEn ? url.pathname.slice(3) : url.pathname;
+	const map = isEn ? enToFr : frToEn;
+
+	const segments = source.split('/').filter(Boolean);
+	if (segments.length > 0) segments[0] = map[segments[0]!] ?? segments[0]!;
+
+	const path = segments.length > 0 ? `/${segments.join('/')}/` : '/';
+	return isEn ? path : `/en${path}`;
 }
