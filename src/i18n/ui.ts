@@ -71,6 +71,7 @@ export const ui = {
 
 		// CV
 		'cv.save': 'Sauvegarder en PDF',
+		'cv.download': 'Télécharger le PDF',
 		'cv.meta.title': 'CV | Thibault Rosalie',
 		'cv.meta.desc': 'Curriculum Vitae de Thibault Rosalie - Développeur FullStack, étudiant en BUT 3 Informatique',
 
@@ -156,6 +157,7 @@ export const ui = {
 
 		// Resume
 		'cv.save': 'Save as PDF',
+		'cv.download': 'Download the PDF',
 		'cv.meta.title': 'Resume | Thibault Rosalie',
 		'cv.meta.desc': 'Curriculum Vitae of Thibault Rosalie - FullStack Developer, 3rd year Computer Science student',
 

@@ -7,7 +7,7 @@
  */
 
 import { createServer } from 'http';
-import { readFileSync, existsSync, writeFileSync } from 'fs';
+import { readFileSync, existsSync, writeFileSync, mkdirSync } from 'fs';
 import { join, extname } from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -16,18 +16,23 @@ import puppeteer from 'puppeteer';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const distDir   = join(__dirname, '..', 'dist');
 
+// Les PDFs sont ecrits DANS dist/, pas dans public/ : `astro build` a deja
+// copie public/ vers dist/ quand ce script s'execute. Ecrire dans public/
+// revenait a produire des fichiers que le build en cours ne voyait jamais.
+const pdfOutDir = join(distDir, 'assets', 'pdf');
+
 const CV_TARGETS = [
 	{
 		label    : 'FR',
 		url      : '/cv-print/',
 		distPath : 'cv-print',
-		output   : join(__dirname, '..', 'public', 'assets', 'pdf', 'CV_Thibault_Rosalie_FR.pdf'),
+		output   : join(pdfOutDir, 'CV_Thibault_Rosalie_FR.pdf'),
 	},
 	{
 		label    : 'EN',
 		url      : '/en/cv-print/',
 		distPath : join('en', 'cv-print'),
-		output   : join(__dirname, '..', 'public', 'assets', 'pdf', 'CV_Thibault_Rosalie_EN.pdf'),
+		output   : join(pdfOutDir, 'CV_Thibault_Rosalie_EN.pdf'),
 	},
 ];
 
@@ -95,6 +100,9 @@ function startServer(port) {
 			process.exit(1);
 		}
 	}
+
+	// S'assurer que le dossier de sortie existe dans dist/
+	mkdirSync(pdfOutDir, { recursive: true });
 
 	// Démarrer le serveur
 	const server = await startServer(PORT);

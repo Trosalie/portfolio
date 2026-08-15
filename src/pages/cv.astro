@@ -9,6 +9,12 @@ const t = useTranslations(lang);
 <BaseLayout title={t('cv.meta.title')} description={t('cv.meta.desc')}>
 	<main class="cv-wrapper">
 		<div class="cv-actions">
+			<a href="/assets/pdf/CV_Thibault_Rosalie_FR.pdf" download class="btn-download btn-secondary">
+				<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+				</svg>
+				{t('cv.download')}
+			</a>
 			<a href="/cv-print/" target="_blank" rel="noopener" class="btn-download">
 				<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 					<path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>
@@ -243,7 +249,9 @@ const t = useTranslations(lang);
 	/* ── Bouton téléchargement ── */
 	.cv-actions {
 		display: flex;
+		flex-wrap: wrap;
 		justify-content: flex-end;
+		gap: 0.75rem;
 		margin-bottom: 1.25rem;
 	}
 
@@ -265,6 +273,17 @@ const t = useTranslations(lang);
 	.btn-download:hover {
 		opacity: 0.85;
 		box-shadow: var(--shadow-lg);
+	}
+
+	/* Variante secondaire : telechargement direct du PDF pre-genere */
+	.btn-secondary {
+		background: var(--gray-999);
+		color: var(--accent-regular);
+		box-shadow: inset 0 0 0 1px var(--accent-regular);
+	}
+
+	.btn-secondary:hover {
+		box-shadow: inset 0 0 0 1px var(--accent-regular), var(--shadow-md);
 	}
 
 	/* ── CV Card ── */
