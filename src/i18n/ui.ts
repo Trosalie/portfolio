@@ -267,6 +267,11 @@ export function getAlternateLangPath(url: URL): string {
 	const map = isEn ? enToFr : frToEn;
 
 	const segments = source.split('/').filter(Boolean);
+
+	// Une page d'erreur n'a pas d'equivalent dans l'autre langue : on renvoie
+	// vers l'accueil de cette langue plutot que vers une URL inexistante.
+	if (segments[0] === '404') return isEn ? '/' : '/en/';
+
 	if (segments.length > 0) segments[0] = map[segments[0]!] ?? segments[0]!;
 
 	const path = segments.length > 0 ? `/${segments.join('/')}/` : '/';

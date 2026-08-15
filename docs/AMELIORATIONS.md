@@ -96,7 +96,15 @@ justifie l'intervention, et l'action proposée.
 
 - [ ] **Pas de page 404 par langue.** Un hébergement statique ne sert qu'une seule page
   d'erreur : `/en/404` ne serait jamais atteinte sans configuration serveur côté Alwaysdata.
-  À traiter avec une règle `ErrorDocument` si le besoin se confirme.
+  En attendant, le sélecteur de langue de la page 404 renvoie vers l'accueil de l'autre langue,
+  une page d'erreur n'ayant pas d'équivalent traduit. À traiter avec une règle `ErrorDocument`
+  si le besoin se confirme.
+
+- [ ] **`npm run build` seul produit deux liens de téléchargement morts.** Les PDF ne sont
+  générés que par `npm run build:full`. Le workflow de déploiement utilise bien `build:full`,
+  donc la production est correcte — mais un déploiement manuel lancé depuis `npm run build`
+  livrerait un `/cv/` dont le bouton de téléchargement renvoie sur du vide. À sécuriser en
+  fusionnant les deux scripts, ou en documentant la commande de déploiement.
 
 - [ ] **« À propos » affiche « 🚧 en construction »** alors que la page est dans le menu
   principal. Sur un portfolio de recherche de stage, une entrée de menu menant à une page vide
