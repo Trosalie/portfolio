@@ -26,6 +26,7 @@ export const ui = {
 		// Page d'accueil
 		'index.hero.title': "Bonjour, je m'appelle Thibault Rosalie",
 		'index.hero.tagline': "Je suis étudiant en BUT 3 Informatique, passionné par le développement web et les nouvelles technologies.",
+		'index.hero.portrait.alt': 'Photo de profil de Thibault Rosalie',
 		'index.hero.role.dev': 'Développeur',
 		'index.hero.role.student': 'Étudiant',
 		'index.hero.cta': 'Voir mon CV',
@@ -110,6 +111,7 @@ export const ui = {
 		// Page d'accueil
 		'index.hero.title': "Hello, my name is Thibault Rosalie",
 		'index.hero.tagline': "I am a 3rd year Computer Science student, passionate about web development and new technologies.",
+		'index.hero.portrait.alt': 'Profile picture of Thibault Rosalie',
 		'index.hero.role.dev': 'Developer',
 		'index.hero.role.student': 'Student',
 		'index.hero.cta': 'View my Resume',

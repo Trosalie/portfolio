@@ -1,5 +1,7 @@
 ---
+import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
+import portrait from '../../assets/portrait.jpg';
 // Component Imports
 import CallToAction from '../../components/CallToAction.astro';
 // Page section components
@@ -52,11 +54,16 @@ const projects = (await getCollection('work'))
 					</div>
 				</Hero>
 
-				<img
-					alt="Photo de profil de Thibault Rosalie"
-					width="480"
-					height="620"
-					src="/assets/portrait.jpg"
+				<Image
+					src={portrait}
+					alt={t('index.hero.portrait.alt')}
+					width={480}
+					height={620}
+					widths={[480, 720, 960]}
+					sizes="(min-width: 50em) 40vw, 100vw"
+					format="webp"
+					loading="eager"
+					fetchpriority="high"
 				/>
 			</header>
 
