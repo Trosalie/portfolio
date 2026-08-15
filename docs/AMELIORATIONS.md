@@ -64,6 +64,16 @@ justifie l'intervention, et l'action proposée.
   → Extraire les données du CV dans un fichier de données par langue et n'avoir qu'un seul
   composant de rendu. **C'est le chantier prioritaire restant.**
 
+  **La dérive s'est déjà produite.** Au moment de rendre l'âge automatique, les cinq copies
+  affichaient quatre valeurs différentes : `22 ans` sur la page FR, `23 ans` dans le PDF FR,
+  `22 ans` — en français — sur la page EN, et `22 years old` dans le PDF EN. Seul le PDF
+  français était juste. C'est exactement le scénario décrit ci-dessus, et il concernait la
+  donnée la plus visible du CV.
+
+  `src/data/profile.ts` a été créé à cette occasion : c'est l'amorce du fichier de données
+  visé par cette refacto. Les prochaines données extraites (coordonnées, formation,
+  expériences) ont vocation à l'y rejoindre.
+
 - [ ] **Pages FR/EN dupliquées.** `cv.astro` vs `en/cv.astro` : ~170 lignes de différence sur
   ~700, soit 75 % identiques. `lettre.astro` vs `en/letter.astro` : 34 lignes sur 386, soit
   **91 % identiques**, CSS et logique JavaScript compris.

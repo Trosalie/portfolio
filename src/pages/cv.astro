@@ -1,9 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getLangFromUrl, useTranslations } from '../i18n/ui';
+import { getAge } from '../data/profile';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+const age = getAge();
 ---
 
 <BaseLayout title={t('cv.meta.title')} description={t('cv.meta.desc')}>
@@ -28,7 +30,7 @@ const t = useTranslations(lang);
 			<header class="cv-header">
 				<div class="cv-header-identity">
 					<h1 class="cv-name">Thibault <span>Rosalie</span></h1>
-					<p class="cv-age">22 ans</p>
+					<p class="cv-age">{age} {t('cv.age.unit')}</p>
 				</div>
 				<p class="cv-title">Développeur FullStack</p>
 			</header>

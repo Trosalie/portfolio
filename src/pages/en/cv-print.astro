@@ -3,6 +3,9 @@
 // No BaseLayout: no header, footer or navigation displayed.
 // Opened in a new tab from en/cv.astro, it automatically triggers
 // the browser's print dialog.
+import { getAge } from '../../data/profile';
+
+const age = getAge();
 ---
 
 <html lang="en">
@@ -469,7 +472,7 @@
 			<header class="cv-header">
 				<div class="cv-header-identity">
 					<h1 class="cv-name">Thibault <span>Rosalie</span></h1>
-					<p class="cv-age">22 years old</p>
+					<p class="cv-age">{age} years old</p>
 				</div>
 				<p class="cv-title">Full Stack Developer</p>
 			</header>

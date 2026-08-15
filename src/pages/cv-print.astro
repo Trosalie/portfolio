@@ -3,6 +3,9 @@
 // Pas de BaseLayout : aucun header, footer ou navigation ne s'affiche.
 // Ouverte dans un nouvel onglet depuis cv.astro, elle déclenche
 // automatiquement la boîte de dialogue d'impression du navigateur.
+import { getAge } from '../data/profile';
+
+const age = getAge();
 ---
 
 <html lang="fr">
@@ -477,7 +480,7 @@
 			<header class="cv-header">
 				<div class="cv-header-identity">
 					<h1 class="cv-name">Thibault <span>Rosalie</span></h1>
-					<p class="cv-age">22 ans</p>
+					<p class="cv-age">{age} ans</p>
 				</div>
 				<p class="cv-title">Développeur FullStack</p>
 			</header>
@@ -604,21 +607,6 @@
 								<li>Travail en équipe informatique</li>
 							</ul>
 						</article>
-
-						<article class="cv-entry">
-							<div class="cv-entry-header">
-								<div>
-									<h3 class="cv-entry-title">BUT Génie Électrique et Informatique Industrielle</h3>
-									<p class="cv-entry-place">IUT de Bordeaux Gradignan</p>
-								</div>
-								<time class="cv-entry-date">2021 – 2022</time>
-							</div>
-							<ul class="cv-entry-list">
-								<li>Conception de prototype à partir de cahier des charges complet et précis</li>
-								<li>Mise en place de protocoles de tests et de mesures</li>
-								<li>Conception et vérification de la partie électrique et informatique d'un système</li>
-							</ul>
-						</article>
 					</section>
 
 					<section class="cv-section">
@@ -664,6 +652,22 @@
 				<section class="cv-section">
 					<h2 class="cv-section-title cv-section-title--main">Expérience professionnelle</h2>
 
+					<article class="cv-entry">
+						<div class="cv-entry-header">
+							<div>
+								<h3 class="cv-entry-title">Stagiaire en Recherche et Développement</h3>
+								<p class="cv-entry-place">
+									LIUPPA — Laboratoire Informatique de l'Université de Pau et des Pays de l'Adour
+								</p>
+							</div>
+							<time class="cv-entry-date">Mai – Juil. 2025</time>
+						</div>
+						<ul class="cv-entry-list">
+							<li>État de l'art des outils de classification sémantique</li>
+							<li>Collecte et analyse de données</li>
+							<li>Conception et réalisation de scripts Python de classification de données structurées et semi-structurées</li>
+						</ul>
+					</article>
 					<article class="cv-entry">
 						<div class="cv-entry-header">
 							<div>

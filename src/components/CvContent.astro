@@ -1,6 +1,11 @@
 ---
 // Composant pur : contenu du CV uniquement, sans layout ni boutons.
-// Utilisé à la fois par cv.astro (avec layout) et cv-print.astro (page impression).
+// ATTENTION : ce composant n'est importé nulle part. La refacto qu'annonce le
+// commentaire d'origine n'a jamais été terminée — cv.astro et cv-print.astro
+// embarquent chacun leur propre copie du CV. Voir docs/AMELIORATIONS.md (P2).
+import { getAge } from '../data/profile';
+
+const age = getAge();
 ---
 
 <article class="cv" aria-label="Curriculum Vitae de Thibault Rosalie">
@@ -8,7 +13,7 @@
 	<header class="cv-header">
 		<div class="cv-header-identity">
 			<h1 class="cv-name">Thibault <span>Rosalie</span></h1>
-			<p class="cv-age">22 ans</p>
+			<p class="cv-age">{age} ans</p>
 		</div>
 		<p class="cv-title">Développeur FullStack</p>
 	</header>
