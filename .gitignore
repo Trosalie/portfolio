@@ -26,6 +26,3 @@ pnpm-debug.log*
 .idea/
 
 .venv/
-
-# page locale non versionnee
-src/pages/lettre-motivation-local.astro

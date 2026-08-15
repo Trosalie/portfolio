@@ -45,6 +45,10 @@ const projects = (await getCollection('work'))
 							{t('index.hero.cta')}
 							<Icon icon="arrow-right" size="1.2em" />
 						</CallToAction>
+						<CallToAction href={prefix + '/lettre/'}>
+							{t('index.hero.letterCta')}
+							<Icon icon="arrow-right" size="1.2em" />
+						</CallToAction>
 					</div>
 				</Hero>
 
@@ -142,6 +146,8 @@ const projects = (await getCollection('work'))
 	.hero-cta {
 		display: flex;
 		justify-content: center;
+		gap: 0.75rem;
+		flex-wrap: wrap;
 	}
 
 	.hero img {

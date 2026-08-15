@@ -29,6 +29,7 @@ export const ui = {
 		'index.hero.role.dev': 'Développeur',
 		'index.hero.role.student': 'Étudiant',
 		'index.hero.cta': 'Voir mon CV',
+		'index.hero.letterCta': 'Rédiger ma lettre',
 		'index.projects.title': 'Projets sélectionnés',
 		'index.projects.desc': 'Découvrez ci-dessous une sélection de mes projets récents réalisés dans le cadre de mes études et de mes projets personnels.',
 		'index.projects.cta': 'Voir tous les projets',
@@ -71,6 +72,23 @@ export const ui = {
 		'cv.save': 'Sauvegarder en PDF',
 		'cv.meta.title': 'CV | Thibault Rosalie',
 		'cv.meta.desc': 'Curriculum Vitae de Thibault Rosalie - Développeur FullStack, étudiant en BUT 3 Informatique',
+
+		// Lettre de motivation
+		'letter.meta.title': 'Lettre de motivation | Thibault Rosalie',
+		'letter.meta.desc': 'Rédaction et impression PDF de la lettre de motivation de Thibault Rosalie.',
+		'letter.page.title': 'Lettre de motivation',
+		'letter.page.subtitle': 'Rédigez votre lettre puis ouvrez la page d\'impression pour la sauvegarder en PDF, comme pour le CV.',
+		'letter.form.label': 'Contenu de la lettre',
+		'letter.form.placeholder': 'Saisissez votre lettre de motivation ici...\n\nUtilisez une ligne vide entre deux paragraphes pour une meilleure mise en page.',
+		'letter.form.cta': 'Ouvrir la version PDF',
+		'letter.form.date': 'Date',
+		'letter.form.company': 'Nom de l\'entreprise',
+		'letter.form.address': 'Adresse de l\'entreprise',
+		'letter.form.title': 'Titre de la lettre',
+		'letter.form.company.placeholder': 'Ex: Alwaysdata',
+		'letter.form.address.placeholder': 'Ex: 62 rue Tiquetonne, 75002 Paris',
+		'letter.form.title.placeholder': 'Ex: Candidature pour un stage de developpement web',
+		'letter.preview.header': 'Lettre de motivation',
 	},
 	en: {
 		// Navigation
@@ -95,6 +113,7 @@ export const ui = {
 		'index.hero.role.dev': 'Developer',
 		'index.hero.role.student': 'Student',
 		'index.hero.cta': 'View my Resume',
+		'index.hero.letterCta': 'Write my Cover Letter',
 		'index.projects.title': 'Selected Projects',
 		'index.projects.desc': 'Discover below a selection of my recent projects completed as part of my studies and personal projects.',
 		'index.projects.cta': 'View all projects',
@@ -137,6 +156,23 @@ export const ui = {
 		'cv.save': 'Save as PDF',
 		'cv.meta.title': 'Resume | Thibault Rosalie',
 		'cv.meta.desc': 'Curriculum Vitae of Thibault Rosalie - FullStack Developer, 3rd year Computer Science student',
+
+		// Cover letter
+		'letter.meta.title': 'Cover Letter | Thibault Rosalie',
+		'letter.meta.desc': 'Write and print the PDF cover letter of Thibault Rosalie.',
+		'letter.page.title': 'Cover Letter',
+		'letter.page.subtitle': 'Write your letter, then open the print page to save it as PDF with the same flow as the resume.',
+		'letter.form.label': 'Letter content',
+		'letter.form.placeholder': 'Write your cover letter here...\n\nUse an empty line between paragraphs for cleaner layout.',
+		'letter.form.cta': 'Open PDF version',
+		'letter.form.date': 'Date',
+		'letter.form.company': 'Company name',
+		'letter.form.address': 'Company address',
+		'letter.form.title': 'Letter title',
+		'letter.form.company.placeholder': 'E.g. Alwaysdata',
+		'letter.form.address.placeholder': 'E.g. 62 rue Tiquetonne, 75002 Paris',
+		'letter.form.title.placeholder': 'E.g. Application for a web development internship',
+		'letter.preview.header': 'Cover Letter',
 	},
 } as const;
 
