@@ -11,6 +11,7 @@
     "build:full": "astro build && node scripts/generate-cv-pdf.mjs"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.3",
     "astro": "^5.17.1",
     "astro-i18n": "^2.2.4"
   },

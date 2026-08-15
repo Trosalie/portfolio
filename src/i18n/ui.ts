@@ -7,6 +7,11 @@ export const defaultLang = 'fr';
 
 export const ui = {
 	fr: {
+		// Métadonnées par défaut (pages sans title/description explicites)
+		'meta.default.title': 'Thibault Rosalie - Portfolio',
+		'meta.default.description':
+			'Portfolio de Thibault Rosalie, étudiant en BUT 3 Informatique et développeur web full stack.',
+
 		// Navigation
 		'nav.home': 'Accueil',
 		'nav.work': 'Projets',
@@ -93,6 +98,11 @@ export const ui = {
 		'letter.preview.header': 'Lettre de motivation',
 	},
 	en: {
+		// Métadonnées par défaut (pages sans title/description explicites)
+		'meta.default.title': 'Thibault Rosalie - Portfolio',
+		'meta.default.description':
+			'Portfolio of Thibault Rosalie, Computer Science student and full stack web developer.',
+
 		// Navigation
 		'nav.home': 'Home',
 		'nav.work': 'Projects',

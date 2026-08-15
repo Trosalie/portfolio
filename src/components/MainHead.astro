@@ -1,22 +1,57 @@
 ---
 import '../styles/global.css';
+import { getAlternateLangPath, getLangFromUrl, useTranslations } from '../i18n/ui';
 
 interface Props {
 	title?: string | undefined;
 	description?: string | undefined;
 }
 
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
 const {
-	title = 'Thibault Rosalie - Portfolio',
-	description = 'Portfolio de Thibault Rosalie, étudiant en BUT 3 Informatique',
+	title = t('meta.default.title'),
+	description = t('meta.default.description'),
 } = Astro.props;
+
+// URLs absolues, construites depuis la cle `site` de astro.config.mjs.
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const alternate = new URL(getAlternateLangPath(Astro.url), Astro.site);
+const ogImage = new URL('/og.jpg', Astro.site);
+
+// Le site n'existe qu'en deux langues : la page courante est l'une, la page
+// alternee est l'autre.
+const frUrl = lang === 'fr' ? canonical : alternate;
+const enUrl = lang === 'en' ? canonical : alternate;
 ---
 
 <meta charset="UTF-8" />
-<meta name="description" property="og:description" content={description} />
+<meta name="description" content={description} />
 <meta name="viewport" content="width=device-width" />
 <meta name="generator" content={Astro.generator} />
 <title>{title}</title>
+
+<link rel="canonical" href={canonical} />
+<link rel="alternate" hreflang="fr" href={frUrl} />
+<link rel="alternate" hreflang="en" href={enUrl} />
+<link rel="alternate" hreflang="x-default" href={frUrl} />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Thibault Rosalie" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:locale" content={lang === 'en' ? 'en_US' : 'fr_FR'} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content={t('index.hero.portrait.alt')} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
 
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />

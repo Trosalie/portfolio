@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://trosalie.alwaysdata.net/sitemap-index.xml
