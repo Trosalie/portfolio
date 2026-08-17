@@ -1,22 +1,24 @@
 ---
 import { Image } from 'astro:assets';
-import { type CollectionEntry, getCollection, render } from 'astro:content';
+import { type CollectionEntry, render } from 'astro:content';
 
 import ContactCTA from '../../components/ContactCTA.astro';
 import Hero from '../../components/Hero.astro';
 import Icon from '../../components/Icon.astro';
 import Pill from '../../components/Pill.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getWorkCollection } from '../../data/work';
 
 interface Props {
 	entry: CollectionEntry<'work'>;
 }
 
-// This is a dynamic route that generates a page for every Markdown file in src/content/
-// Read more about dynamic routes and this `getStaticPaths` function in the Astro docs:
+// Une page par fichier Markdown de src/content/work/. Le chargement passe par
+// getWorkCollection, qui echoue si les deux langues n'ont pas les memes slugs :
+// c'est ici que la generation des routes le rendrait visible en premier.
 // https://docs.astro.build/en/guides/routing/#dynamic-routes
 export async function getStaticPaths() {
-	const work = await getCollection('work');
+	const work = await getWorkCollection('fr');
 	return work.map((entry) => ({
 		params: { slug: entry.id },
 		props: { entry },

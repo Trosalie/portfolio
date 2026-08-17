@@ -1,6 +1,5 @@
 ---
 import { Image } from 'astro:assets';
-import { getCollection } from 'astro:content';
 import portrait from '../../assets/portrait.jpg';
 // Component Imports
 import CallToAction from '../../components/CallToAction.astro';
@@ -14,16 +13,16 @@ import PortfolioPreview from '../../components/PortfolioPreview.astro';
 import Skills from '../../components/Skills.astro';
 // Layout import — provides basic page elements: <head>, <nav>, <footer> etc.
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getWorkCollection, workBasePath } from '../../data/work';
 import { getLangFromUrl, useTranslations } from '../../i18n/ui';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const prefix = lang === 'en' ? '/en' : '';
 
-// Content Fetching: List four most recent work projects
-const projects = (await getCollection('work'))
-	.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
-	.slice(0, 4);
+// Les quatre projets les plus recents, dans la langue de la page. Le tri et le
+// controle de parite FR/EN vivent dans src/data/work.ts.
+const projects = (await getWorkCollection(lang)).slice(0, 4);
 
 // Full Astro Component Syntax:
 // https://docs.astro.build/basics/astro-components/
@@ -86,7 +85,7 @@ const projects = (await getCollection('work'))
 							{
 								projects.map((project) => (
 									<li>
-										<PortfolioPreview project={project} />
+										<PortfolioPreview project={project} basePath={workBasePath(lang)} />
 									</li>
 								))
 							}

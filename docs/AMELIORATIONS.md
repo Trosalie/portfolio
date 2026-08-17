@@ -78,9 +78,19 @@ justifie l'intervention, et l'action proposée.
   `src/pages/` ne déclarent plus que leur route. La barre des pages d'impression est
   mutualisée dans `PrintToolbar.astro`. **−2 188 lignes au total sur les deux chantiers.**
 
-- [ ] **Deux collections de contenu parallèles** (`work` / `work-en`, mêmes slugs). Rien ne
+- [x] **Deux collections de contenu parallèles** (`work` / `work-en`, mêmes slugs). Rien ne
   garantit leur synchronisation : un projet ajouté en FR et oublié en EN casse le sélecteur de
   langue en silence, sans erreur de build.
+  → **La dérive s'était déjà produite**, dans une autre variante que celle redoutée :
+  `en/index.astro` chargeait la collection `work` — la française — et ne passait pas de
+  `basePath` à `PortfolioPreview`. L'accueil anglais affichait donc les trois projets décrits
+  en français, avec des cartes renvoyant vers `/work/<slug>` au lieu de `/en/work/<slug>`.
+
+  Les deux collections passent maintenant par `getWorkCollection(lang)`
+  (`src/data/work.ts`), seul point d'entrée. Il charge toujours **les deux**, compare les jeux
+  de slugs et interrompt le build en nommant les orphelins de chaque côté. Vérifié : en
+  retirant un projet anglais, le build sort en code 1 avec le slug en cause. Il expose aussi
+  `workBasePath(lang)`, jusqu'ici recopié à la main sur chaque appel.
 
 ## P3 — Cohérence linguistique et navigation
 

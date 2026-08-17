@@ -1,19 +1,20 @@
 ---
 import { Image } from 'astro:assets';
-import { type CollectionEntry, getCollection, render } from 'astro:content';
+import { type CollectionEntry, render } from 'astro:content';
 
 import ContactCTA from '../../../components/ContactCTA.astro';
 import Hero from '../../../components/Hero.astro';
 import Icon from '../../../components/Icon.astro';
 import Pill from '../../../components/Pill.astro';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getWorkCollection } from '../../../data/work';
 
 interface Props {
 	entry: CollectionEntry<'work-en'>;
 }
 
 export async function getStaticPaths() {
-	const work = await getCollection('work-en');
+	const work = await getWorkCollection('en');
 	return work.map((entry) => ({
 		params: { slug: entry.id },
 		props: { entry },
