@@ -50,10 +50,16 @@ const projects = (await getWorkCollection(lang)).slice(0, 4);
 								{t('index.hero.cta')}
 								<Icon icon="arrow-right" size="1.2em" />
 							</CallToAction>
-							<CallToAction href={prefix + '/letter/'}>
-								{t('index.hero.letterCta')}
-								<Icon icon="arrow-right" size="1.2em" />
-							</CallToAction>
+							{/* L'editeur de lettre n'est branche qu'en dev
+							    (astro.config.mjs) : sans cette condition, le
+							    bouton partirait en production vers une page
+							    absente. */}
+							{import.meta.env.DEV && (
+								<CallToAction href={prefix + '/letter/'}>
+									{t('index.hero.letterCta')}
+									<Icon icon="arrow-right" size="1.2em" />
+								</CallToAction>
+							)}
 						</div>
 					</Hero>
 

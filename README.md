@@ -1,8 +1,9 @@
 # Portfolio — Thibault Rosalie
 
 Site personnel bilingue (français / anglais) d'un développeur full stack au terme d'un BUT
-Informatique, en recherche de poste : projets, CV consultable et téléchargeable en PDF, et un
-éditeur de lettre de motivation.
+Informatique, en recherche de poste : projets, CV consultable et téléchargeable en PDF. Le
+dépôt embarque aussi un éditeur de lettre de motivation, outil personnel qui ne part pas en
+production (voir plus bas).
 
 **En ligne :** <https://trosalie.alwaysdata.net>
 
@@ -39,7 +40,8 @@ src/
 ├── components/    Composants, dont le CV et la lettre (voir ci-dessous)
 ├── content/       Collections des projets : work/ (FR) et work-en/ (EN)
 ├── layouts/       BaseLayout : head, nav, footer, fonds de page
-├── pages/         Routes. Les pages EN vivent sous pages/en/
+├── pages/         Routes publiées. Les pages EN vivent sous pages/en/
+├── routes-dev/    Routes servies en dev seulement (éditeur de lettre)
 └── styles/        global.css + les feuilles du CV et de la lettre
 scripts/
 └── generate-cv-pdf.mjs   Sert dist/ en local et imprime les pages A4 du CV
@@ -61,6 +63,24 @@ incomplète.
 Cette structure remplace un état où le CV existait en cinq copies, qui avaient déjà divergé —
 la page anglaise et le PDF anglais ne disaient pas la même chose en douze endroits. L'historique
 est dans `docs/AMELIORATIONS.md`.
+
+### L'éditeur de lettre ne va pas en ligne
+
+L'éditeur de lettre de motivation est un outil personnel, pas une page du portfolio : il sert à
+rédiger une lettre puis à l'enregistrer en PDF, et n'a aucune raison d'être public.
+
+Ses quatre routes vivent donc dans **`src/routes-dev/`** et non dans `src/pages/`, où tout
+fichier deviendrait une page. Une petite intégration d'`astro.config.mjs` les rebranche
+uniquement quand Astro tourne en mode `dev`. Le bouton « Rédiger ma lettre » du hero suit le
+même signal, via `import.meta.env.DEV`, sans quoi il resterait en production en pointant vers
+une page absente.
+
+Conséquence : **aucun build ne peut publier ces pages**, pas même un `npm run build` lancé à la
+main. Pour écrire une lettre, `npm run dev` puis `/lettre/` ou `/en/letter/`.
+
+Le reste de la fonctionnalité — `src/data/letter.ts`, `LetterEditorPage.astro`,
+`LetterPrintPage.astro`, `letter-{editor,print}.css`, les clés `letter.*` — reste en place et
+continue d'être vérifié par `npm run check`.
 
 ### Ajouter un projet
 
