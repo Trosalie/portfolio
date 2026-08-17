@@ -20,7 +20,7 @@ const projects = (await getCollection('work-en')).sort(
 	description={t('work.meta.desc')}
 >
 	<div class="stack gap-20">
-		<main class="wrapper stack gap-8">
+		<main id="main-content" class="wrapper stack gap-8">
 			<Hero
 				title={t('work.title')}
 				tagline={t('work.tagline')}

@@ -31,107 +31,112 @@ const projects = (await getCollection('work'))
 
 <BaseLayout>
 	<div class="stack gap-20 lg:gap-48">
-		<div class="wrapper stack gap-8 lg:gap-20">
-			<header class="hero">
-				<Hero
-					title={t('index.hero.title')}
-					tagline={t('index.hero.tagline')}
-					align="start"
-				>
-					<div class="roles">
-						<Pill><Icon icon="code" size="1.33em" /> {t('index.hero.role.dev')}</Pill>
-						<Pill><Icon icon="pencil-line" size="1.33em" /> {t('index.hero.role.fullstack')}</Pill>
+		{/* Le <main> englobe desormais le hero : le <h1> etait en dehors, dans un
+		    <header> qui revendiquait un repere `banner` sans contenir la
+		    navigation. Le <main> commencait apres, donc sans aucun titre. */}
+		<main id="main-content" class="stack gap-20 lg:gap-48">
+			<div class="wrapper stack gap-8 lg:gap-20">
+				<div class="hero">
+					<Hero
+						title={t('index.hero.title')}
+						tagline={t('index.hero.tagline')}
+						align="start"
+					>
+						<div class="roles">
+							<Pill><Icon icon="code" size="1.33em" /> {t('index.hero.role.dev')}</Pill>
+							<Pill><Icon icon="pencil-line" size="1.33em" /> {t('index.hero.role.fullstack')}</Pill>
+						</div>
+						<div class="hero-cta">
+							<CallToAction href={prefix + '/cv/'}>
+								{t('index.hero.cta')}
+								<Icon icon="arrow-right" size="1.2em" />
+							</CallToAction>
+							<CallToAction href={prefix + '/lettre/'}>
+								{t('index.hero.letterCta')}
+								<Icon icon="arrow-right" size="1.2em" />
+							</CallToAction>
+						</div>
+					</Hero>
+
+					<Image
+						src={portrait}
+						alt={t('index.hero.portrait.alt')}
+						width={480}
+						height={620}
+						widths={[480, 720, 960]}
+						sizes="(min-width: 50em) 40vw, 100vw"
+						format="webp"
+						loading="eager"
+						fetchpriority="high"
+					/>
+				</div>
+
+				<Skills />
+			</div>
+
+			<div class="wrapper stack gap-20 lg:gap-48">
+				<section class="section with-background with-cta">
+					<header class="section-header stack gap-2 lg:gap-4">
+						<h2>{t('index.projects.title')}</h2>
+						<p>{t('index.projects.desc')}</p>
+					</header>
+
+					<div class="gallery">
+						<Grid variant="offset">
+							{
+								projects.map((project) => (
+									<li>
+										<PortfolioPreview project={project} />
+									</li>
+								))
+							}
+						</Grid>
 					</div>
-					<div class="hero-cta">
-						<CallToAction href={prefix + '/cv/'}>
-							{t('index.hero.cta')}
+
+					<div class="cta">
+						<CallToAction href={prefix + '/work/'}>
+							{t('index.projects.cta')}
 							<Icon icon="arrow-right" size="1.2em" />
 						</CallToAction>
-						<CallToAction href={prefix + '/lettre/'}>
-							{t('index.hero.letterCta')}
-							<Icon icon="arrow-right" size="1.2em" />
-						</CallToAction>
 					</div>
-				</Hero>
+				</section>
 
-				<Image
-					src={portrait}
-					alt={t('index.hero.portrait.alt')}
-					width={480}
-					height={620}
-					widths={[480, 720, 960]}
-					sizes="(min-width: 50em) 40vw, 100vw"
-					format="webp"
-					loading="eager"
-					fetchpriority="high"
-				/>
-			</header>
+				<section class="section with-background bg-variant">
+					<header class="section-header stack gap-2 lg:gap-4">
+						<h2>{t('index.skills.title')}</h2>
+						<p>{t('index.skills.desc')}</p>
+					</header>
 
-			<Skills />
-		</div>
-
-		<main class="wrapper stack gap-20 lg:gap-48">
-			<section class="section with-background with-cta">
-				<header class="section-header stack gap-2 lg:gap-4">
-					<h3>{t('index.projects.title')}</h3>
-					<p>{t('index.projects.desc')}</p>
-				</header>
-
-				<div class="gallery">
-					<Grid variant="offset">
-						{
-							projects.map((project) => (
-								<li>
-									<PortfolioPreview project={project} />
-								</li>
-							))
-						}
-					</Grid>
-				</div>
-
-				<div class="cta">
-					<CallToAction href={prefix + '/work/'}>
-						{t('index.projects.cta')}
-						<Icon icon="arrow-right" size="1.2em" />
-					</CallToAction>
-				</div>
-			</section>
-
-			<section class="section with-background bg-variant">
-				<header class="section-header stack gap-2 lg:gap-4">
-					<h3>{t('index.skills.title')}</h3>
-					<p>{t('index.skills.desc')}</p>
-				</header>
-
-				<div class="gallery">
-					<div class="skills-grid">
-						<div class="skill-group">
-							<h4 class="skill-group-title">{t('index.skills.backend')}</h4>
-							<ul class="skill-list">
-								{['PHP', 'Laravel', 'Python', 'PHPUnit', 'POO'].map((s) => (
-									<li class="mention-card"><p>{s}</p></li>
-								))}
-							</ul>
-						</div>
-						<div class="skill-group">
-							<h4 class="skill-group-title">{t('index.skills.frontend')}</h4>
-							<ul class="skill-list">
-								{['Angular', 'HTML / CSS', 'Astro'].map((s) => (
-									<li class="mention-card"><p>{s}</p></li>
-								))}
-							</ul>
-						</div>
-						<div class="skill-group">
-							<h4 class="skill-group-title">{t('index.skills.tools')}</h4>
-							<ul class="skill-list">
-								{['Git / GitHub', 'Docker', 'MySQL', 'SCRUM'].map((s) => (
-									<li class="mention-card"><p>{s}</p></li>
-								))}
-							</ul>
+					<div class="gallery">
+						<div class="skills-grid">
+							<div class="skill-group">
+								<h3 class="skill-group-title">{t('index.skills.backend')}</h3>
+								<ul class="skill-list">
+									{['PHP', 'Laravel', 'Python', 'PHPUnit', 'POO'].map((s) => (
+										<li class="mention-card"><p>{s}</p></li>
+									))}
+								</ul>
+							</div>
+							<div class="skill-group">
+								<h3 class="skill-group-title">{t('index.skills.frontend')}</h3>
+								<ul class="skill-list">
+									{['Angular', 'HTML / CSS', 'Astro'].map((s) => (
+										<li class="mention-card"><p>{s}</p></li>
+									))}
+								</ul>
+							</div>
+							<div class="skill-group">
+								<h3 class="skill-group-title">{t('index.skills.tools')}</h3>
+								<ul class="skill-list">
+									{['Git / GitHub', 'Docker', 'MySQL', 'SCRUM'].map((s) => (
+										<li class="mention-card"><p>{s}</p></li>
+									))}
+								</ul>
+							</div>
 						</div>
 					</div>
-				</div>
-			</section>
+				</section>
+			</div>
 		</main>
 
 		<ContactCTA />
@@ -234,7 +239,7 @@ const projects = (await getCollection('work'))
 		color: var(--gray-300);
 	}
 
-	.section-header h3 {
+	.section-header h2 {
 		font-size: var(--text-2xl);
 	}
 
@@ -254,7 +259,7 @@ const projects = (await getCollection('work'))
 			font-size: var(--text-lg);
 		}
 
-		.section-header h3 {
+		.section-header h2 {
 			font-size: var(--text-4xl);
 		}
 

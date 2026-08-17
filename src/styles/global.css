@@ -197,6 +197,37 @@ h5 {
 	border-width: 0;
 }
 
+/*
+ * Lien d'evitement : premier element focusable de chaque page, invisible tant
+ * qu'il n'a pas le focus. Il ne peut pas reutiliser `.sr-only`, qui n'a pas de
+ * variante `:focus` et resterait donc invisible une fois atteint au clavier.
+ */
+.skip-link {
+	/* `fixed` et non `absolute` : le lien doit rester visible meme si le focus
+	   est repris apres un defilement. Le z-index passe au-dessus du menu, qui
+	   monte a 9999. */
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 10000;
+	/* Hors ecran plutot que `display: none`, qui le retirerait de l'ordre de
+	   tabulation et le rendrait inatteignable. */
+	transform: translateY(-100%);
+	padding: 0.75rem 1.5rem;
+	background: var(--gray-999);
+	color: var(--accent-regular);
+	border: 1px solid var(--accent-regular);
+	border-radius: 0 0 0.5rem 0;
+	font-family: var(--font-brand);
+	font-size: var(--text-sm);
+	font-weight: 600;
+	text-decoration: none;
+}
+
+.skip-link:focus {
+	transform: translateY(0);
+}
+
 .wrapper {
 	width: 100%;
 	max-width: 83rem;

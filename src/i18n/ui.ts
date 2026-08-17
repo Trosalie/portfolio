@@ -12,6 +12,9 @@ export const ui = {
 		'meta.default.description':
 			'Portfolio de Thibault Rosalie, développeur web full stack issu du BUT Informatique, en recherche de poste.',
 
+		// Accessibilite
+		'a11y.skipToContent': 'Aller au contenu',
+
 		// Navigation
 		'nav.home': 'Accueil',
 		'nav.work': 'Projets',
@@ -132,6 +135,9 @@ export const ui = {
 		'meta.default.title': 'Thibault Rosalie - Portfolio',
 		'meta.default.description':
 			'Portfolio of Thibault Rosalie, full stack web developer completing a Computer Science degree and looking for a position.',
+
+		// Accessibility
+		'a11y.skipToContent': 'Skip to content',
 
 		// Navigation
 		'nav.home': 'Home',

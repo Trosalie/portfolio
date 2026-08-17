@@ -154,9 +154,17 @@ justifie l'intervention, et l'action proposée.
 
 ## P5 — Accessibilité et UX
 
-- [ ] **Pas de lien d'évitement (« skip to content »)**, et dans `index.astro` le `<h1>` est
+- [x] **Pas de lien d'évitement (« skip to content »)**, et dans `index.astro` le `<h1>` est
   hors du `<main>` (le hero est dans un `<header>` qui précède `<main>`) : structure de
   landmarks incohérente pour la navigation au clavier et au lecteur d'écran.
+  → Lien d'évitement dans `BaseLayout.astro`, visible au focus, ciblant un `id="main-content"`
+  ajouté aux onze `<main>` du site. Le `<nav>` était nu : il rejoint un `<header>`, seul
+  `banner` du document. Les `<header>` de l'accueil et des pages projet, qui revendiquaient un
+  `banner` concurrent **sans** contenir la navigation, redeviennent des `<div>` et passent à
+  l'intérieur du `<main>` — le `<h1>` y entre avec eux. Les pages « À propos » étaient les
+  seules **sans `<main>` du tout** (`WorkInProgress.astro` n'émettait que des `<div>`).
+  Au passage, la hiérarchie des titres de l'accueil sautait de `h1` à `h3` : `h3`→`h2` et
+  `h4`→`h3`.
 
 - [ ] **Formulaire de contact** (`contact.astro`) : pas de honeypot ni de protection anti-spam,
   et pas de paramètre `_next` Formspree — après envoi, l'utilisateur est éjecté sur le domaine

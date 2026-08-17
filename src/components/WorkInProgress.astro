@@ -13,7 +13,10 @@ const defaultTitle = lang === 'en' ? 'This page' : 'Cette page';
 const { title = defaultTitle } = Astro.props;
 ---
 
-<div class="wip-wrapper">
+{/* Les pages « A propos » etaient les seules du site sans <main> : leur contenu
+    n'etait fait que de <div>, donc sans repere de contenu principal ni cible
+    pour le lien d'evitement. */}
+<main id="main-content" class="wip-wrapper">
 	<div class="wip-card">
 		<div class="wip-icon" aria-hidden="true">🚧</div>
 		<h1 class="wip-title">{title}</h1>
@@ -21,7 +24,7 @@ const { title = defaultTitle } = Astro.props;
 		<p class="wip-text">{t('wip.text')}</p>
 		<a class="wip-back" href={prefix + '/'}>{t('wip.back')}</a>
 	</div>
-</div>
+</main>
 
 <style>
 	.wip-wrapper {

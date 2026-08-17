@@ -25,8 +25,10 @@ const { Content } = await render(entry);
 
 <BaseLayout title={entry.data.title} description={entry.data.description}>
 	<div class="stack gap-20">
-		<div class="stack gap-15">
-			<header>
+		{/* Le <h1> du projet vivait dans un <header> hors du <main>, qui se
+		    mappait sur un repere `banner` sans contenir la navigation. */}
+		<main id="main-content" class="stack gap-15">
+			<div class="project-header">
 				<div class="wrapper stack gap-2">
 					<a class="back-link" href="/en/work/"><Icon icon="arrow-left" /> Back to projects</a>
 					<Hero title={entry.data.title} align="start">
@@ -44,22 +46,22 @@ const { Content } = await render(entry);
 						</div>
 					</Hero>
 				</div>
-			</header>
-			<main class="wrapper">
+			</div>
+			<div class="wrapper">
 				<div class="stack gap-10 content">
 					{entry.data.img && <img src={entry.data.img} alt={entry.data.img_alt || ''} />}
 					<div class="content">
 						<Content />
 					</div>
 				</div>
-			</main>
-		</div>
+			</div>
+		</main>
 		<ContactCTA />
 	</div>
 </BaseLayout>
 
 <style>
-	header {
+	.project-header {
 		padding-bottom: 2.5rem;
 		border-bottom: 1px solid var(--gray-800);
 	}
