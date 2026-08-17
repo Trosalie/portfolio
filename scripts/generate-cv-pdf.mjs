@@ -111,7 +111,22 @@ function startServer(port) {
 
 	let browser;
 	try {
-		browser = await puppeteer.launch({ headless: true });
+		// Le bac a sable de Chrome repose sur les espaces de noms non privilegies,
+		// qu'AppArmor bloque sur les images ubuntu-latest depuis la 24.04 : le
+		// navigateur ne demarre pas du tout en CI (« No usable sandbox! »).
+		// On ne le desactive que la-bas. Le risque est nul dans ce contexte
+		// precis — Chrome n'ouvre que des pages du site qu'on vient de compiler,
+		// servies depuis 127.0.0.1 — mais il n'y a aucune raison d'y renoncer
+		// sur le poste de developpement, ou le bac a sable fonctionne.
+		const sansBacASable = Boolean(process.env.CI);
+		if (sansBacASable) {
+			console.log('🔓 CI detectee : bac a sable de Chrome desactive (contrainte AppArmor).');
+		}
+
+		browser = await puppeteer.launch({
+			headless: true,
+			args: sansBacASable ? ['--no-sandbox', '--disable-setuid-sandbox'] : [],
+		});
 
 		for (const target of CV_TARGETS) {
 			const page = await browser.newPage();
