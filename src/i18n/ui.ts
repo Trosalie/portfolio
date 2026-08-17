@@ -10,7 +10,7 @@ export const ui = {
 		// Métadonnées par défaut (pages sans title/description explicites)
 		'meta.default.title': 'Thibault Rosalie - Portfolio',
 		'meta.default.description':
-			'Portfolio de Thibault Rosalie, étudiant en BUT 3 Informatique et développeur web full stack.',
+			'Portfolio de Thibault Rosalie, développeur web full stack issu du BUT Informatique, en recherche de poste.',
 
 		// Navigation
 		'nav.home': 'Accueil',
@@ -40,17 +40,17 @@ export const ui = {
 
 		// Page d'accueil
 		'index.hero.title': "Bonjour, je m'appelle Thibault Rosalie",
-		'index.hero.tagline': "Je suis étudiant en BUT 3 Informatique, passionné par le développement web et les nouvelles technologies.",
+		'index.hero.tagline': "Développeur full stack au terme d'un BUT Informatique, je recherche un poste où mettre en pratique ce que j'ai appris.",
 		'index.hero.portrait.alt': 'Photo de profil de Thibault Rosalie',
 		'index.hero.role.dev': 'Développeur',
-		'index.hero.role.student': 'Étudiant',
+		'index.hero.role.fullstack': 'Full Stack',
 		'index.hero.cta': 'Voir mon CV',
 		'index.hero.letterCta': 'Rédiger ma lettre',
 		'index.projects.title': 'Projets sélectionnés',
 		'index.projects.desc': 'Découvrez ci-dessous une sélection de mes projets récents réalisés dans le cadre de mes études et de mes projets personnels.',
 		'index.projects.cta': 'Voir tous les projets',
 		'index.skills.title': 'Compétences',
-		'index.skills.desc': 'Actuellement en formation BUT Informatique, je développe mes compétences dans différents domaines du développement logiciel et web.',
+		'index.skills.desc': "Le BUT Informatique m'a permis de développer mes compétences dans différents domaines du développement logiciel et web.",
 		'index.skills.backend': 'Back-end',
 		'index.skills.frontend': 'Front-end',
 		'index.skills.tools': 'Outils & Méthodes',
@@ -78,18 +78,18 @@ export const ui = {
 		'contact.message': 'Message',
 		'contact.name.placeholder': 'Jean Dupont',
 		'contact.email.placeholder': 'jean.dupont@email.com',
-		'contact.subject.placeholder': 'Proposition de stage, collaboration...',
+		'contact.subject.placeholder': 'Proposition de poste, collaboration...',
 		'contact.message.placeholder': 'Décrivez votre demande...',
 		'contact.submit': 'Envoyer le message',
 		'contact.details': 'Coordonnées',
 		'contact.availability': 'Disponibilité',
-		'contact.availability.text': "Actuellement en BUT 3 Informatique à l'IUT de Bayonne. Ouvert aux opportunités de stage et d'alternance.",
+		'contact.availability.text': "Au terme de mon BUT Informatique à l'IUT de Bayonne. À la recherche d'un poste de développeur full stack.",
 		'contact.meta.title': 'Me contacter | Thibault Rosalie',
 		'contact.meta.desc': 'Envoyez-moi un message pour toute proposition de collaboration ou question.',
 
 		// À propos
 		'about.meta.title': 'À propos | Thibault Rosalie',
-		'about.meta.desc': 'À propos de Thibault Rosalie - Étudiant en BUT 3 Informatique',
+		'about.meta.desc': 'À propos de Thibault Rosalie - Développeur full stack issu du BUT Informatique',
 		'about.wip.title': 'À propos',
 
 		// Barre des pages d'impression (CV et lettre)
@@ -100,7 +100,7 @@ export const ui = {
 		'cv.save': 'Sauvegarder en PDF',
 		'cv.download': 'Télécharger le PDF',
 		'cv.meta.title': 'CV | Thibault Rosalie',
-		'cv.meta.desc': 'Curriculum Vitae de Thibault Rosalie - Développeur FullStack, étudiant en BUT 3 Informatique',
+		'cv.meta.desc': 'Curriculum Vitae de Thibault Rosalie - Développeur FullStack issu du BUT Informatique',
 		'cv.print.title': 'CV – Thibault Rosalie (impression)',
 		'cv.print.toolbar': 'Aperçu avant impression — CV Thibault Rosalie',
 
@@ -118,7 +118,7 @@ export const ui = {
 		'letter.form.title': 'Titre de la lettre',
 		'letter.form.company.placeholder': 'Ex: Alwaysdata',
 		'letter.form.address.placeholder': 'Ex: 62 rue Tiquetonne, 75002 Paris',
-		'letter.form.title.placeholder': 'Ex: Candidature pour un stage de developpement web',
+		'letter.form.title.placeholder': 'Ex: Candidature au poste de developpeur full stack',
 		'letter.preview.header': 'Lettre de motivation',
 		'letter.default.subject': 'Objet : Candidature',
 		'letter.editor.aria': 'Editeur de lettre de motivation',
@@ -131,7 +131,7 @@ export const ui = {
 		// Métadonnées par défaut (pages sans title/description explicites)
 		'meta.default.title': 'Thibault Rosalie - Portfolio',
 		'meta.default.description':
-			'Portfolio of Thibault Rosalie, Computer Science student and full stack web developer.',
+			'Portfolio of Thibault Rosalie, full stack web developer completing a Computer Science degree and looking for a position.',
 
 		// Navigation
 		'nav.home': 'Home',
@@ -161,17 +161,17 @@ export const ui = {
 
 		// Page d'accueil
 		'index.hero.title': "Hello, my name is Thibault Rosalie",
-		'index.hero.tagline': "I am a 3rd year Computer Science student, passionate about web development and new technologies.",
+		'index.hero.tagline': 'Full stack developer completing a Computer Science degree, I am looking for a position where I can put what I have learned into practice.',
 		'index.hero.portrait.alt': 'Profile picture of Thibault Rosalie',
 		'index.hero.role.dev': 'Developer',
-		'index.hero.role.student': 'Student',
+		'index.hero.role.fullstack': 'Full Stack',
 		'index.hero.cta': 'View my Resume',
 		'index.hero.letterCta': 'Write my Cover Letter',
 		'index.projects.title': 'Selected Projects',
 		'index.projects.desc': 'Discover below a selection of my recent projects completed as part of my studies and personal projects.',
 		'index.projects.cta': 'View all projects',
 		'index.skills.title': 'Skills',
-		'index.skills.desc': 'Currently studying Computer Science, I am developing my skills in various areas of software and web development.',
+		'index.skills.desc': 'My Computer Science degree let me develop my skills across various areas of software and web development.',
 		'index.skills.backend': 'Back-end',
 		'index.skills.frontend': 'Front-end',
 		'index.skills.tools': 'Tools & Methods',
@@ -199,18 +199,18 @@ export const ui = {
 		'contact.message': 'Message',
 		'contact.name.placeholder': 'John Doe',
 		'contact.email.placeholder': 'john.doe@email.com',
-		'contact.subject.placeholder': 'Internship proposal, collaboration...',
+		'contact.subject.placeholder': 'Job opportunity, collaboration...',
 		'contact.message.placeholder': 'Describe your request...',
 		'contact.submit': 'Send message',
 		'contact.details': 'Contact details',
 		'contact.availability': 'Availability',
-		'contact.availability.text': "Currently in 3rd year Computer Science at IUT de Bayonne. Open to internship and apprenticeship opportunities.",
+		'contact.availability.text': 'Completing my Computer Science degree at IUT de Bayonne. Looking for a full stack developer position.',
 		'contact.meta.title': 'Contact me | Thibault Rosalie',
 		'contact.meta.desc': 'Send me a message for any collaboration proposal or question.',
 
 		// About
 		'about.meta.title': 'About | Thibault Rosalie',
-		'about.meta.desc': 'About Thibault Rosalie - 3rd year Computer Science student',
+		'about.meta.desc': 'About Thibault Rosalie - Full stack developer with a Computer Science degree',
 		'about.wip.title': 'About',
 
 		// Print page toolbar (resume and cover letter)
@@ -221,7 +221,7 @@ export const ui = {
 		'cv.save': 'Save as PDF',
 		'cv.download': 'Download the PDF',
 		'cv.meta.title': 'Resume | Thibault Rosalie',
-		'cv.meta.desc': 'Curriculum Vitae of Thibault Rosalie - FullStack Developer, 3rd year Computer Science student',
+		'cv.meta.desc': 'Curriculum Vitae of Thibault Rosalie - FullStack Developer with a Computer Science degree',
 		'cv.print.title': 'Resume – Thibault Rosalie (print)',
 		'cv.print.toolbar': 'Print preview — Resume of Thibault Rosalie',
 
@@ -239,7 +239,7 @@ export const ui = {
 		'letter.form.title': 'Letter title',
 		'letter.form.company.placeholder': 'E.g. Alwaysdata',
 		'letter.form.address.placeholder': 'E.g. 62 rue Tiquetonne, 75002 Paris',
-		'letter.form.title.placeholder': 'E.g. Application for a web development internship',
+		'letter.form.title.placeholder': 'E.g. Application for a full stack developer position',
 		'letter.preview.header': 'Cover Letter',
 		'letter.default.subject': 'Subject: Application',
 		'letter.editor.aria': 'Cover letter editor',

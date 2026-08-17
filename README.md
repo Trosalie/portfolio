@@ -1,7 +1,8 @@
 # Portfolio — Thibault Rosalie
 
-Site personnel bilingue (français / anglais) d'un étudiant en BUT 3 Informatique : projets,
-CV consultable et téléchargeable en PDF, et un éditeur de lettre de motivation.
+Site personnel bilingue (français / anglais) d'un développeur full stack au terme d'un BUT
+Informatique, en recherche de poste : projets, CV consultable et téléchargeable en PDF, et un
+éditeur de lettre de motivation.
 
 **En ligne :** <https://trosalie.alwaysdata.net>
 

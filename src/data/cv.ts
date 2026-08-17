@@ -79,7 +79,7 @@ export const cv: Record<Lang, CvData> = {
 			experience: 'Expérience professionnelle',
 		},
 		profile: [
-			'Actuellement en BUT 3 Informatique, je recherche un stage de 14 à 16 semaines pour mettre en pratique mes compétences.',
+			'Au terme de mon BUT Informatique, je recherche un poste de développeur full stack pour mettre en pratique mes compétences.',
 			'Curieux et rigoureux, je souhaite contribuer à des projets concrets et techniques, tout en consolidant mon sens du travail en équipe.',
 		],
 		address: ['18 Avenue de Sainte-Croix', '64100 Bayonne'],
@@ -188,7 +188,7 @@ export const cv: Record<Lang, CvData> = {
 			experience: 'Professional Experience',
 		},
 		profile: [
-			"Currently in the final year of a Bachelor's degree in Computer Science at IUT of Bayonne, I am looking for a 14 to 16 week internship to put my skills into practice.",
+			"Completing a Bachelor's degree in Computer Science at IUT of Bayonne, I am looking for a full stack developer position to put my skills into practice.",
 			'Curious and rigorous, I wish to contribute to concrete and technical projects, while strengthening my sense of teamwork.',
 		],
 		address: ['18 Avenue de Sainte-Croix', '64100 Bayonne, France'],
