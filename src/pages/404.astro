@@ -10,7 +10,7 @@ const t = useTranslations(lang);
 ---
 
 <BaseLayout title={t('404.meta.title')} description={t('404.meta.desc')}>
-	<main id="main-content" class="wrapper stack gap-8 not-found">
+	<main id="main-content" tabindex="-1" class="wrapper stack gap-8 not-found">
 		<Hero title={t('404.title')} tagline={t('404.tagline')} />
 		<a class="back-link" href="/">{t('404.back')}</a>
 	</main>

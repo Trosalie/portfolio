@@ -32,7 +32,7 @@ const config = {
 ---
 
 <BaseLayout title={t('letter.meta.title')} description={t('letter.meta.desc')}>
-	<main id="main-content" class="letter-editor-page wrapper" data-config={JSON.stringify(config)}>
+	<main id="main-content" tabindex="-1" class="letter-editor-page wrapper" data-config={JSON.stringify(config)}>
 		<section class="editor-panel" aria-label={t('letter.editor.aria')}>
 			<header class="editor-head">
 				<h1>{t('letter.page.title')}</h1>

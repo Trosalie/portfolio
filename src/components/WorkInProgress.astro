@@ -16,7 +16,7 @@ const { title = defaultTitle } = Astro.props;
 {/* Les pages « A propos » etaient les seules du site sans <main> : leur contenu
     n'etait fait que de <div>, donc sans repere de contenu principal ni cible
     pour le lien d'evitement. */}
-<main id="main-content" class="wip-wrapper">
+<main id="main-content" tabindex="-1" class="wip-wrapper">
 	<div class="wip-card">
 		<div class="wip-icon" aria-hidden="true">🚧</div>
 		<h1 class="wip-title">{title}</h1>

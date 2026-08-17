@@ -34,7 +34,7 @@ const projects = (await getCollection('work'))
 		{/* Le <main> englobe desormais le hero : le <h1> etait en dehors, dans un
 		    <header> qui revendiquait un repere `banner` sans contenir la
 		    navigation. Le <main> commencait apres, donc sans aucun titre. */}
-		<main id="main-content" class="stack gap-20 lg:gap-48">
+		<main id="main-content" tabindex="-1" class="stack gap-20 lg:gap-48">
 			<div class="wrapper stack gap-8 lg:gap-20">
 				<div class="hero">
 					<Hero

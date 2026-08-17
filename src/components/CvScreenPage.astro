@@ -22,7 +22,7 @@ const printHref = lang === 'fr' ? '/cv-print/' : `/${lang}/cv-print/`;
 ---
 
 <BaseLayout title={t('cv.meta.title')} description={t('cv.meta.desc')}>
-	<main id="main-content" class="cv-wrapper">
+	<main id="main-content" tabindex="-1" class="cv-wrapper">
 		<div class="cv-actions">
 			<a href={pdfHref} download class="btn-download btn-secondary">
 				<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

@@ -89,6 +89,14 @@ export const ui = {
 		'contact.availability.text': "Au terme de mon BUT Informatique à l'IUT de Bayonne. À la recherche d'un poste de développeur full stack.",
 		'contact.meta.title': 'Me contacter | Thibault Rosalie',
 		'contact.meta.desc': 'Envoyez-moi un message pour toute proposition de collaboration ou question.',
+		// Sujet de l'e-mail que Formspree envoie : les deux langues partagent le
+		// meme endpoint, c'est lui qui distingue les demandes dans la boite mail.
+		'contact.mail.subject': 'Portfolio (FR) — nouveau message',
+		'contact.sent.title': 'Message envoyé',
+		'contact.sent.text': 'Merci, votre message est bien parti. Je vous réponds dès que possible.',
+		// Libelle du piege a robots. Le champ est masque et retire du parcours
+		// clavier, mais un lecteur d'ecran mal configure pourrait l'atteindre.
+		'contact.honeypot': 'Ne remplissez pas ce champ si vous êtes humain',
 
 		// À propos
 		'about.meta.title': 'À propos | Thibault Rosalie',
@@ -213,6 +221,10 @@ export const ui = {
 		'contact.availability.text': 'Completing my Computer Science degree at IUT de Bayonne. Looking for a full stack developer position.',
 		'contact.meta.title': 'Contact me | Thibault Rosalie',
 		'contact.meta.desc': 'Send me a message for any collaboration proposal or question.',
+		'contact.mail.subject': 'Portfolio (EN) — new message',
+		'contact.sent.title': 'Message sent',
+		'contact.sent.text': 'Thank you, your message is on its way. I will get back to you as soon as possible.',
+		'contact.honeypot': 'Leave this field empty if you are human',
 
 		// About
 		'about.meta.title': 'About | Thibault Rosalie',

@@ -166,10 +166,20 @@ justifie l'intervention, et l'action proposée.
   Au passage, la hiérarchie des titres de l'accueil sautait de `h1` à `h3` : `h3`→`h2` et
   `h4`→`h3`.
 
-- [ ] **Formulaire de contact** (`contact.astro`) : pas de honeypot ni de protection anti-spam,
+- [x] **Formulaire de contact** (`contact.astro`) : pas de honeypot ni de protection anti-spam,
   et pas de paramètre `_next` Formspree — après envoi, l'utilisateur est éjecté sur le domaine
   formspree.io au lieu de rester sur le site. Vérifier aussi la cohérence de l'adresse affichée
   (`thibaultrosaliepro@gmail.com`) avec celle du CV.
+  → Honeypot `_gotcha` (sorti de l'écran, hors parcours clavier et hors arbre d'accessibilité),
+  `_next` vers `/contact/?envoye=1` — le bandeau de confirmation se dévoile au retour puis
+  l'URL est nettoyée — et `_subject` traduit, les deux langues partageant le même endpoint.
+  Les coordonnées sont lues dans `src/data/profile.ts`, qui alimente déjà le CV : la cohérence
+  devient structurelle au lieu d'être vérifiée à l'œil. Ajout des `autocomplete`.
+
+  **Les deux pages étaient encore dupliquées**, à l'identique sur 255 lignes — le chantier P2
+  les avait manquées. Corriger deux fois et maintenir la synchronisation à la main aurait
+  rejoué la dérive du CV : rendu unique dans `ContactPage.astro`, les pages de `src/pages/`
+  ne déclarent plus que leur route.
 
 - [ ] **Images des pages projet sans dimensions ni `loading`** (`work/[...slug].astro` et son
   équivalent EN) → décalage de mise en page au chargement. `PortfolioPreview.astro` le fait

@@ -228,6 +228,18 @@ h5 {
 	transform: translateY(0);
 }
 
+/*
+ * Cible du lien d'evitement. Le `tabindex="-1"` la rend focusable par
+ * programme : sans lui, le navigateur deplace bien le point de depart de la
+ * tabulation mais laisse le focus sur <body>, et les lecteurs d'ecran
+ * continuent d'annoncer le haut de page. Le contour que le navigateur trace
+ * alors autour du contenu entier n'apporte rien — ce n'est pas une commande,
+ * et le visiteur vient lui-meme d'activer le lien.
+ */
+#main-content:focus {
+	outline: none;
+}
+
 .wrapper {
 	width: 100%;
 	max-width: 83rem;

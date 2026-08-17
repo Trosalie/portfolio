@@ -1,0 +1,353 @@
+---
+/**
+ * La page de contact, dans les deux langues.
+ *
+ * `src/pages/contact.astro` et `src/pages/en/contact.astro` portaient chacune
+ * les memes 255 lignes, aux chemins d'import pres : formulaire, coordonnees et
+ * feuille de style compris. Elles ne declarent plus que leur route.
+ * Voir docs/AMELIORATIONS.md (P2, P5).
+ */
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from './Icon.astro';
+import { contact } from '../data/profile';
+import { getLangFromUrl, useTranslations } from '../i18n/ui';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const prefix = lang === 'en' ? '/en' : '';
+
+// Sans `_next`, Formspree affiche sa propre page de remerciement sur
+// formspree.io : le visiteur quittait le site au moment ou il venait de
+// prendre contact. L'URL doit etre absolue, d'ou `Astro.site`
+// (astro.config.mjs), et le prefixe ramene l'anglophone sur /en/contact/.
+const successParam = 'envoye';
+const nextUrl = new URL(`${prefix}/contact/?${successParam}=1`, Astro.site).href;
+---
+
+<BaseLayout
+	title={t('contact.meta.title')}
+	description={t('contact.meta.desc')}
+>
+	<main id="main-content" tabindex="-1" class="wrapper stack gap-12">
+		<div class="contact-header stack gap-2">
+			<h1 class="contact-title">{t('contact.title')}</h1>
+			<p class="contact-subtitle">{t('contact.subtitle')}</p>
+		</div>
+
+		{/* Le bandeau est toujours dans le DOM et devoile au retour de Formspree :
+		    un `role="status"` insere apres coup n'est pas toujours annonce. */}
+		<div id="contact-sent" class="sent-banner" role="status" hidden>
+			<Icon icon="paper-plane-tilt" size="1.4em" />
+			<div>
+				<p class="sent-title">{t('contact.sent.title')}</p>
+				<p class="sent-text">{t('contact.sent.text')}</p>
+			</div>
+		</div>
+
+		<div class="contact-layout">
+			<form class="contact-form" action="https://formspree.io/f/maqdrkgr" method="POST">
+				{/* Piege a robots : Formspree ignore l'envoi si `_gotcha` est rempli.
+				    `display: none` suffirait au robot, mais pas a l'accessibilite —
+				    d'ou le retrait explicite du parcours clavier et de l'arbre
+				    d'accessibilite, et l'etiquette au cas ou. */}
+				<div class="honeypot" aria-hidden="true">
+					<label for="_gotcha">{t('contact.honeypot')}</label>
+					<input type="text" id="_gotcha" name="_gotcha" tabindex="-1" autocomplete="off" />
+				</div>
+
+				<input type="hidden" name="_subject" value={t('contact.mail.subject')} />
+				<input type="hidden" name="_next" value={nextUrl} />
+
+				<div class="field">
+					<label for="name">{t('contact.name')}</label>
+					<input
+						type="text"
+						id="name"
+						name="name"
+						autocomplete="name"
+						placeholder={t('contact.name.placeholder')}
+						required
+					/>
+				</div>
+
+				<div class="field">
+					<label for="email">{t('contact.email')}</label>
+					<input
+						type="email"
+						id="email"
+						name="email"
+						autocomplete="email"
+						placeholder={t('contact.email.placeholder')}
+						required
+					/>
+				</div>
+
+				<div class="field">
+					<label for="subject">{t('contact.subject')}</label>
+					<input type="text" id="subject" name="subject" placeholder={t('contact.subject.placeholder')} required />
+				</div>
+
+				<div class="field">
+					<label for="message">{t('contact.message')}</label>
+					<textarea id="message" name="message" rows="6" placeholder={t('contact.message.placeholder')} required></textarea>
+				</div>
+
+				<button type="submit" class="submit-btn">
+					{t('contact.submit')}
+					<Icon icon="paper-plane-tilt" size="1.2em" />
+				</button>
+			</form>
+
+			{/* Coordonnees lues dans src/data/profile.ts, qui alimente deja le CV :
+			    elles etaient codees en dur ici, donc libres de diverger. */}
+			<aside class="contact-info stack gap-6">
+				<div class="info-block">
+					<h2>{t('contact.details')}</h2>
+					<ul class="info-list">
+						<li>
+							<Icon icon="paper-plane-tilt" size="1.1em" />
+							<a href={`mailto:${contact.email}`}>{contact.email}</a>
+						</li>
+						<li>
+							<Icon icon="github-logo" size="1.1em" />
+							<a href={contact.github.href} target="_blank" rel="noopener noreferrer">{contact.github.label}</a>
+						</li>
+						<li>
+							<Icon icon="linkedin-logo" size="1.1em" />
+							<a href={contact.linkedin.href} target="_blank" rel="noopener noreferrer">{contact.linkedin.label}</a>
+						</li>
+					</ul>
+				</div>
+
+				<div class="info-block">
+					<h2>{t('contact.availability')}</h2>
+					<p>{t('contact.availability.text')}</p>
+				</div>
+			</aside>
+		</div>
+	</main>
+</BaseLayout>
+
+<script is:inline define:vars={{ successParam }}>
+	// Le site etant statique, la confirmation ne peut pas venir du serveur :
+	// Formspree renvoie sur /contact/?envoye=1, le bandeau se devoile ici, puis
+	// le parametre est retire pour qu'un rechargement ne le reaffiche pas.
+	if (new URLSearchParams(location.search).get(successParam) === '1') {
+		const banner = document.getElementById('contact-sent');
+		if (banner) banner.hidden = false;
+		history.replaceState(null, '', location.pathname);
+	}
+</script>
+
+<style>
+	main {
+		padding-block: 4rem;
+	}
+
+	.contact-header {
+		max-width: 50ch;
+	}
+
+	.contact-title {
+		font-size: var(--text-4xl);
+		font-family: var(--font-brand);
+		color: var(--gray-0);
+	}
+
+	.contact-subtitle {
+		font-size: var(--text-lg);
+		color: var(--gray-400);
+	}
+
+	.sent-banner {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		padding: 1rem 1.5rem;
+		background: var(--gray-999);
+		border: 1px solid var(--accent-regular);
+		border-radius: 1rem;
+		color: var(--gray-100);
+	}
+
+	.sent-banner[hidden] {
+		display: none;
+	}
+
+	.sent-title {
+		font-family: var(--font-brand);
+		font-weight: 600;
+		color: var(--gray-0);
+	}
+
+	.sent-text {
+		font-size: var(--text-sm);
+		color: var(--gray-300);
+	}
+
+	.contact-layout {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 3rem;
+	}
+
+	/* Formulaire */
+	.contact-form {
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+	}
+
+	/* Sorti de l'ecran plutot que `display: none`, que certains robots savent
+	   reconnaitre. Le champ etant deja retire du parcours clavier et de l'arbre
+	   d'accessibilite, personne ne peut l'atteindre par erreur. */
+	.honeypot {
+		position: absolute;
+		left: -9999px;
+		top: -9999px;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+	}
+
+	.field {
+		display: flex;
+		flex-direction: column;
+		gap: 0.4rem;
+	}
+
+	label {
+		font-size: var(--text-sm);
+		font-weight: 600;
+		color: var(--gray-200);
+	}
+
+	input,
+	textarea {
+		padding: 0.65rem 1rem;
+		background: var(--gray-999);
+		border: 1px solid var(--gray-800);
+		border-radius: 0.5rem;
+		color: var(--gray-200);
+		font-family: var(--font-body);
+		font-size: var(--text-md, 1rem);
+		resize: vertical;
+		transition: border-color var(--theme-transition);
+	}
+
+	/* `outline: none` supprimait le seul indicateur de focus fiable et ne le
+	   remplacait que par une couleur de bordure — invisible pour qui ne
+	   distingue pas les teintes. */
+	input:focus-visible,
+	textarea:focus-visible {
+		outline: 2px solid var(--accent-regular);
+		outline-offset: 2px;
+		border-color: var(--accent-regular);
+	}
+
+	/* --gray-600 sur --gray-999 mesurait 2,26:1 en theme clair et 3,03:1 en
+	   sombre, sous le seuil AA de 4,5:1 dans les deux cas. --gray-400 donne
+	   4,60:1 et 6,22:1. Ces placeholders portent une information de format, pas
+	   du decor. */
+	input::placeholder,
+	textarea::placeholder {
+		color: var(--gray-400);
+	}
+
+	.submit-btn {
+		align-self: flex-start;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.6rem;
+		padding: 0.65rem 2rem;
+		background: var(--gradient-accent-orange);
+		color: var(--accent-text-over);
+		border: none;
+		border-radius: 999rem;
+		font-family: var(--font-brand);
+		font-size: var(--text-lg);
+		font-weight: 600;
+		cursor: pointer;
+		box-shadow: var(--shadow-md);
+		transition: opacity var(--theme-transition);
+	}
+
+	.submit-btn:hover,
+	.submit-btn:focus {
+		opacity: 0.85;
+	}
+
+	/* Infos de contact */
+	.contact-info {
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+	}
+
+	.info-block {
+		padding: 1.5rem;
+		background: var(--gray-999);
+		border: 1px solid var(--gray-800);
+		border-radius: 1rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+
+	.info-block h2 {
+		font-size: var(--text-lg);
+		font-family: var(--font-brand);
+		color: var(--gray-0);
+	}
+
+	.info-block p {
+		font-size: var(--text-sm);
+		color: var(--gray-400);
+		line-height: 1.6;
+	}
+
+	.info-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+	}
+
+	.info-list li {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		font-size: var(--text-sm);
+		color: var(--gray-300);
+	}
+
+	/* Ces liens avaient exactement la couleur du texte qui les entoure et pas
+	   de soulignement : rien ne les signalait comme liens (WCAG 1.4.1, qui
+	   interdit de s'en remettre a la seule couleur — ici il n'y avait meme pas
+	   de difference de couleur). */
+	.info-list a {
+		color: var(--gray-300);
+		text-decoration: underline;
+		text-underline-offset: 0.2em;
+		transition: color var(--theme-transition);
+	}
+
+	.info-list a:hover,
+	.info-list a:focus {
+		color: var(--accent-regular);
+	}
+
+	@media (min-width: 50em) {
+		.contact-layout {
+			grid-template-columns: 1fr 340px;
+			align-items: start;
+		}
+
+		.contact-title {
+			font-size: var(--text-5xl);
+		}
+	}
+</style>

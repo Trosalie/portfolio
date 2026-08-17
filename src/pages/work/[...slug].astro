@@ -30,7 +30,7 @@ const { Content } = await render(entry);
 	<div class="stack gap-20">
 		{/* Le <h1> du projet vivait dans un <header> hors du <main>, qui se
 		    mappait sur un repere `banner` sans contenir la navigation. */}
-		<main id="main-content" class="stack gap-15">
+		<main id="main-content" tabindex="-1" class="stack gap-15">
 			<div class="project-header">
 				<div class="wrapper stack gap-2">
 					<a class="back-link" href="/work/"><Icon icon="arrow-left" /> Retour aux projets</a>
