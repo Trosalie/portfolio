@@ -1,0 +1,177 @@
+---
+/**
+ * Le CV, et rien d'autre : ni layout, ni boutons, ni styles.
+ *
+ * Source unique du balisage pour les quatre pages du CV. Les classes `cv-*`
+ * qu'il produit sont habillées par `src/styles/cv-screen.css` ou par
+ * `src/styles/cv-print.css` selon la page qui l'inclut — le composant ne
+ * porte volontairement aucun style, sans quoi les deux rendus ne pourraient
+ * pas diverger.
+ *
+ * Remplace `CvContent.astro`, resté du code mort faute d'avoir été branché.
+ * Voir docs/AMELIORATIONS.md (P2).
+ */
+
+import { cv } from '../data/cv';
+import { contact, identity, getAge } from '../data/profile';
+import type { Lang } from '../i18n/ui';
+import CvIcon from './CvIcon.astro';
+
+interface Props {
+	lang: Lang;
+	/**
+	 * `screen` pour les pages du site, `print` pour les pages A4 servant à
+	 * générer les PDF. La variante ne change que deux choses : la taille des
+	 * icônes, et le repère ARIA racine — les pages d'impression n'ont pas de
+	 * `<main>` autour, elles doivent donc porter le rôle elles-mêmes.
+	 */
+	variant?: 'screen' | 'print';
+}
+
+const { lang, variant = 'screen' } = Astro.props;
+const data = cv[lang];
+const age = getAge();
+const iconSize = variant === 'print' ? 13 : 14;
+const Root = variant === 'print' ? 'div' : 'article';
+const rootRole = variant === 'print' ? 'main' : undefined;
+---
+
+<Root class="cv" role={rootRole} aria-label={data.aria.document}>
+	<!-- EN-TÊTE -->
+	<header class="cv-header">
+		<div class="cv-header-identity">
+			<h1 class="cv-name">{identity.firstName} <span>{identity.lastName}</span></h1>
+			<p class="cv-age">{age} {data.ageUnit}</p>
+		</div>
+		<p class="cv-title">{data.jobTitle}</p>
+	</header>
+
+	<div class="cv-body">
+		<!-- COLONNE GAUCHE -->
+		<aside class="cv-sidebar" aria-label={data.aria.sidebar}>
+			<section class="cv-section">
+				<h2 class="cv-section-title">{data.sectionTitles.profile}</h2>
+				{data.profile.map((paragraph) => <p class="cv-profile-text">{paragraph}</p>)}
+			</section>
+
+			<section class="cv-section">
+				<h2 class="cv-section-title">{data.sectionTitles.contact}</h2>
+				<ul class="cv-contact-list">
+					<li>
+						<span class="cv-contact-icon" aria-hidden="true">
+							<CvIcon name="pin" size={iconSize} />
+						</span>
+						<span>
+							{
+								data.address.map((line, index) => (
+									<>
+										{index > 0 && <br />}
+										{line}
+									</>
+								))
+							}
+						</span>
+					</li>
+					<li>
+						<span class="cv-contact-icon" aria-hidden="true">
+							<CvIcon name="phone" size={iconSize} />
+						</span>
+						<a href={contact.phoneHref}>{data.phoneDisplay}</a>
+					</li>
+					<li>
+						<span class="cv-contact-icon" aria-hidden="true">
+							<CvIcon name="mail" size={iconSize} />
+						</span>
+						<a href={`mailto:${contact.email}`}>{contact.email}</a>
+					</li>
+					<li>
+						<span class="cv-contact-icon" aria-hidden="true">
+							<CvIcon name="linkedin" size={iconSize} />
+						</span>
+						<a href={contact.linkedin.href} target="_blank" rel="noopener noreferrer">
+							{contact.linkedin.label}
+						</a>
+					</li>
+					<li>
+						<span class="cv-contact-icon" aria-hidden="true">
+							<CvIcon name="github" size={iconSize} />
+						</span>
+						<a href={contact.github.href} target="_blank" rel="noopener noreferrer">
+							{contact.github.label}
+						</a>
+					</li>
+					<li>
+						<span class="cv-contact-icon" aria-hidden="true">
+							<CvIcon name="globe" size={iconSize} />
+						</span>
+						<a href={contact.website.href} target="_blank" rel="noopener noreferrer">
+							{contact.website.label}
+						</a>
+					</li>
+				</ul>
+			</section>
+
+			<section class="cv-section">
+				<h2 class="cv-section-title">{data.sectionTitles.skills}</h2>
+				<ul class="cv-skills-list">
+					{data.skills.map((skill) => <li><span class="cv-skill">{skill}</span></li>)}
+				</ul>
+			</section>
+
+			<section class="cv-section">
+				<h2 class="cv-section-title">{data.sectionTitles.languages}</h2>
+				<ul class="cv-lang-list">
+					{
+						data.languages.map((language) => (
+							<li>
+								<span class="cv-lang-name">{language.name}</span>
+								<span class="cv-lang-level">{language.level}</span>
+							</li>
+						))
+					}
+				</ul>
+			</section>
+
+			<section class="cv-section">
+				<h2 class="cv-section-title">{data.sectionTitles.hobbies}</h2>
+				<ul class="cv-hobbies-list">
+					{data.hobbies.map((hobby) => <li>{hobby}</li>)}
+				</ul>
+			</section>
+		</aside>
+
+		<!-- COLONNE DROITE -->
+		<section class="cv-main" aria-label={data.aria.main}>
+			{
+				(
+					[
+						[data.sectionTitles.education, data.education],
+						[data.sectionTitles.projects, data.projects],
+						[data.sectionTitles.experience, data.experience],
+					] as const
+				).map(([title, entries]) => (
+					<section class="cv-section">
+						<h2 class="cv-section-title cv-section-title--main">{title}</h2>
+						{entries.map((entry) => (
+							<article class="cv-entry">
+								<div class="cv-entry-header">
+									<div>
+										<h3 class="cv-entry-title">{entry.title}</h3>
+										{entry.subtitle && <p class="cv-entry-subtitle">{entry.subtitle}</p>}
+										{entry.place && <p class="cv-entry-place">{entry.place}</p>}
+									</div>
+									<time class="cv-entry-date">{entry.date}</time>
+								</div>
+								<ul class="cv-entry-list">
+									{entry.bullets.map((bullet) => (
+										<li>{bullet}</li>
+									))}
+								</ul>
+							</article>
+						))}
+					</section>
+				))
+			}
+		</section>
+	</div>
+</Root>

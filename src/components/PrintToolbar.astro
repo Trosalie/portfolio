@@ -1,0 +1,36 @@
+---
+/**
+ * Barre d'actions des pages d'impression (CV et lettre de motivation).
+ *
+ * Masquee a l'impression par la regle `.print-toolbar { display: none }` de la
+ * feuille de style de chaque page, et par Puppeteer lors de la generation des
+ * PDF. Ses libelles sont traduits : ils etaient jusqu'ici ecrits en dur dans
+ * les quatre pages d'impression.
+ */
+
+import { getLangFromUrl, useTranslations } from '../i18n/ui';
+
+interface Props {
+	/** Titre affiche a gauche de la barre. */
+	title: string;
+	/** Page a laquelle revenir : le CV ou l'editeur de lettre. */
+	backHref: string;
+}
+
+const { title, backHref } = Astro.props;
+const t = useTranslations(getLangFromUrl(Astro.url));
+---
+
+<div class="print-toolbar">
+	<span class="print-toolbar-title">{title}</span>
+	<div class="print-toolbar-actions">
+		<a href={backHref} class="btn-back">
+			<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+			{t('print.back')}
+		</a>
+		<button class="btn-print" onclick="window.print()">
+			<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+			{t('print.action')}
+		</button>
+	</div>
+</div>

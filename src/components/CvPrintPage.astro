@@ -1,0 +1,43 @@
+---
+/**
+ * La page A4 du CV, dans les deux langues.
+ *
+ * Pas de BaseLayout : ni nav, ni footer, ni fonds de page. C'est cette page
+ * que Puppeteer charge pour produire les PDF (scripts/generate-cv-pdf.mjs),
+ * et qui s'ouvre dans un nouvel onglet depuis le bouton « Sauvegarder en PDF »
+ * de la page CV.
+ */
+
+import { getLangFromUrl, useTranslations } from '../i18n/ui';
+import CvDocument from './CvDocument.astro';
+import PrintToolbar from './PrintToolbar.astro';
+import '../styles/cv-print.css';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const backHref = lang === 'fr' ? '/cv/' : `/${lang}/cv/`;
+---
+
+<html lang={lang}>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width" />
+	<meta name="robots" content="noindex, nofollow" />
+	<title>{t('cv.print.title')}</title>
+
+	<!-- Polices identiques au site -->
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	<link
+		href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;700&family=Rubik:wght@300;500;700&display=swap"
+		rel="stylesheet"
+	/>
+</head>
+<body>
+	<PrintToolbar title={t('cv.print.toolbar')} backHref={backHref} />
+
+	<div class="cv-page-wrapper">
+		<CvDocument lang={lang} variant="print" />
+	</div>
+</body>
+</html>

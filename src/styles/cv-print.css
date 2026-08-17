@@ -1,0 +1,440 @@
+/*
+ * Habillage du CV sur les pages A4 (/cv-print/ et /en/cv-print/), celles que
+ * Puppeteer transforme en PDF.
+ *
+ * Couleurs en dur et non en variables : ces pages ne chargent pas global.css
+ * et n'ont ni theme clair/sombre ni layout du site. Sorti des pages pour la
+ * meme raison que cv-screen.css. Voir docs/AMELIORATIONS.md (P2).
+ */
+
+/* ══════════════════════════════════════
+   RESET & BASE
+   ══════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+	margin: 0;
+	padding: 0;
+	background: #e8e8e8;
+	font-family: 'Public Sans', system-ui, sans-serif;
+	font-size: 14px;
+	color: #090b11;
+}
+
+/* ══════════════════════════════════════
+   BARRE D'ACTIONS (masquée à l'impression)
+   ══════════════════════════════════════ */
+.print-toolbar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 100;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0.6rem 1.5rem;
+	background: #1c0056;
+	color: #fff;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.print-toolbar-title {
+	font-family: 'Rubik', sans-serif;
+	font-size: 0.9rem;
+	font-weight: 500;
+	letter-spacing: 0.04em;
+	opacity: 0.85;
+}
+
+.print-toolbar-actions {
+	display: flex;
+	gap: 0.75rem;
+}
+
+.btn-print {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	background: linear-gradient(150deg, #c561f6, #7611a6);
+	color: #fff;
+	border: none;
+	border-radius: 999px;
+	padding: 0.45rem 1.1rem;
+	font-size: 0.82rem;
+	font-weight: 700;
+	cursor: pointer;
+	letter-spacing: 0.03em;
+	transition: opacity 0.15s;
+}
+
+.btn-print:hover { opacity: 0.85; }
+
+.btn-back {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	background: transparent;
+	color: rgba(255,255,255,0.7);
+	border: 1px solid rgba(255,255,255,0.25);
+	border-radius: 999px;
+	padding: 0.45rem 1rem;
+	font-size: 0.82rem;
+	cursor: pointer;
+	text-decoration: none;
+	transition: color 0.15s, border-color 0.15s;
+}
+
+.btn-back:hover {
+	color: #fff;
+	border-color: rgba(255,255,255,0.6);
+}
+
+/* ══════════════════════════════════════
+   PRÉVISUALISATION A4 (écran)
+   ══════════════════════════════════════ */
+.cv-page-wrapper {
+	/* Espace pour la toolbar fixe */
+	padding-top: calc(44px + 1.5rem);
+	padding-bottom: 2rem;
+	display: flex;
+	justify-content: center;
+}
+
+/* Simule exactement une page A4 dans le navigateur */
+.cv {
+	width: 210mm;
+	min-height: 297mm;
+	background: #fff;
+	box-shadow: 0 4px 32px rgba(0,0,0,0.22);
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+}
+
+/* ══════════════════════════════════════
+   STRUCTURE DU CV
+   ══════════════════════════════════════ */
+
+/* En-tête */
+.cv-header {
+	background: linear-gradient(150deg, #c561f6, #7611a6, #1c0056);
+	color: #fff;
+	padding: 1.6rem 2rem;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75rem;
+}
+
+.cv-header-identity {
+	display: flex;
+	align-items: baseline;
+	gap: 0.75rem;
+}
+
+.cv-name {
+	font-family: 'Rubik', sans-serif;
+	font-size: 2rem;
+	font-weight: 700;
+	margin: 0;
+	letter-spacing: 0.02em;
+}
+
+.cv-name span { font-weight: 300; }
+
+.cv-age {
+	font-size: 0.8rem;
+	opacity: 0.8;
+	margin: 0;
+}
+
+.cv-title {
+	font-size: 0.95rem;
+	font-weight: 400;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	opacity: 0.9;
+	margin: 0;
+}
+
+/* Corps deux colonnes */
+.cv-body {
+	display: grid;
+	grid-template-columns: 230px 1fr;
+	flex: 1;
+	align-items: stretch;
+}
+
+/* Sidebar */
+.cv-sidebar {
+	background: #1c0056;
+	color: #fff;
+	padding: 1.4rem 1.2rem;
+	display: flex;
+	flex-direction: column;
+	gap: 1.4rem;
+	word-break: break-word;
+	overflow-wrap: break-word;
+}
+
+/* Colonne droite */
+.cv-main {
+	padding: 1.4rem 1.6rem;
+	display: flex;
+	flex-direction: column;
+	gap: 1.4rem;
+	background: #fff;
+}
+
+/* Sections */
+.cv-section {
+	display: flex;
+	flex-direction: column;
+	gap: 0.6rem;
+	break-inside: avoid;
+	page-break-inside: avoid;
+}
+
+.cv-section-title {
+	font-family: 'Rubik', sans-serif;
+	font-size: 0.72rem;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.13em;
+	color: #c561f6;
+	padding-bottom: 0.3rem;
+	border-bottom: 1px solid rgba(197, 97, 246, 0.4);
+	margin: 0;
+}
+
+.cv-section-title--main {
+	color: #7611a6;
+	border-bottom-color: hsla(280, 89%, 67%, 0.3);
+}
+
+/* Profil */
+.cv-profile-text {
+	font-size: 0.8rem;
+	line-height: 1.6;
+	margin: 0;
+	opacity: 0.9;
+}
+
+/* Coordonnées */
+.cv-contact-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.cv-contact-list li {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.45rem;
+	font-size: 0.78rem;
+	line-height: 1.45;
+}
+
+.cv-contact-icon {
+	flex-shrink: 0;
+	margin-top: 0.1rem;
+	opacity: 0.7;
+}
+
+.cv-contact-list a {
+	color: inherit;
+	text-decoration: underline;
+	text-underline-offset: 2px;
+}
+
+.cv-contact-list a[href^="mailto:"] {
+	font-size: 0.68rem;
+}
+
+/* Compétences */
+.cv-skills-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.35rem;
+}
+
+.cv-skill {
+	display: inline-block;
+	background: rgba(197, 97, 246, 0.18);
+	border: 1px solid rgba(197, 97, 246, 0.45);
+	color: #c561f6;
+	border-radius: 999px;
+	padding: 0.15rem 0.6rem;
+	font-size: 0.72rem;
+	font-weight: 600;
+	letter-spacing: 0.03em;
+}
+
+/* Langues */
+.cv-lang-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.45rem;
+}
+
+.cv-lang-list li {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-size: 0.8rem;
+	gap: 0.4rem;
+}
+
+.cv-lang-name { font-weight: 600; }
+
+.cv-lang-level {
+	font-size: 0.72rem;
+	opacity: 0.7;
+	background: rgba(197, 97, 246, 0.15);
+	border-radius: 999px;
+	padding: 0.12rem 0.5rem;
+}
+
+/* Loisirs */
+.cv-hobbies-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.35rem;
+}
+
+.cv-hobbies-list li {
+	font-size: 0.78rem;
+	line-height: 1.4;
+	padding-left: 0.85rem;
+	position: relative;
+}
+
+.cv-hobbies-list li::before {
+	content: '▸';
+	position: absolute;
+	left: 0;
+	color: rgba(197, 97, 246, 0.7);
+	font-size: 0.65rem;
+	top: 0.15rem;
+}
+
+/* Entrées */
+.cv-entry {
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+	padding-left: 0.65rem;
+	border-left: 2.5px solid hsla(280, 89%, 67%, 0.35);
+	break-inside: avoid;
+	page-break-inside: avoid;
+}
+
+.cv-entry-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	gap: 0.5rem;
+}
+
+.cv-entry-title {
+	font-size: 0.9rem;
+	font-weight: 700;
+	color: #090b11;
+	margin: 0;
+	line-height: 1.3;
+}
+
+.cv-entry-subtitle {
+	font-size: 0.8rem;
+	font-weight: 600;
+	color: #7611a6;
+	margin: 0.08rem 0 0;
+}
+
+.cv-entry-place {
+	font-size: 0.78rem;
+	color: #6474a2;
+	margin: 0.1rem 0 0;
+	font-style: italic;
+}
+
+.cv-entry-date {
+	flex-shrink: 0;
+	font-size: 0.75rem;
+	font-weight: 700;
+	color: #7611a6;
+	background: hsla(280, 89%, 67%, 0.2);
+	padding: 0.15rem 0.55rem;
+	border-radius: 999px;
+	white-space: nowrap;
+}
+
+.cv-entry-list {
+	margin: 0;
+	padding-left: 1rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.2rem;
+}
+
+.cv-entry-list li {
+	font-size: 0.8rem;
+	color: #3d4663;
+	line-height: 1.5;
+}
+
+/* ══════════════════════════════════════
+   IMPRESSION @media print
+   ══════════════════════════════════════ */
+@media print {
+	/* Format papier exact */
+	@page {
+		size: A4 portrait;
+		margin: 0;
+	}
+
+	/* Forcer la reproduction des couleurs & arrière-plans */
+	*, *::before, *::after {
+		-webkit-print-color-adjust: exact !important;
+		print-color-adjust: exact !important;
+	}
+
+	/* Masquer la toolbar */
+	.print-toolbar { display: none !important; }
+
+	/* Supprimer les marges du body et fond gris */
+	body {
+		background: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	/* Plus de padding-top pour la toolbar fixe */
+	.cv-page-wrapper {
+		padding: 0;
+		display: block;
+	}
+
+	/* CV = page entière, sans ombre */
+	.cv {
+		width: 100%;
+		min-height: 297mm;
+		box-shadow: none;
+		page-break-inside: avoid;
+		display: flex;
+		flex-direction: column;
+	}
+}

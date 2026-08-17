@@ -92,12 +92,17 @@ export const ui = {
 		'about.meta.desc': 'À propos de Thibault Rosalie - Étudiant en BUT 3 Informatique',
 		'about.wip.title': 'À propos',
 
+		// Barre des pages d'impression (CV et lettre)
+		'print.back': 'Retour',
+		'print.action': 'Imprimer / Sauvegarder en PDF',
+
 		// CV
 		'cv.save': 'Sauvegarder en PDF',
 		'cv.download': 'Télécharger le PDF',
-		'cv.age.unit': 'ans',
 		'cv.meta.title': 'CV | Thibault Rosalie',
 		'cv.meta.desc': 'Curriculum Vitae de Thibault Rosalie - Développeur FullStack, étudiant en BUT 3 Informatique',
+		'cv.print.title': 'CV – Thibault Rosalie (impression)',
+		'cv.print.toolbar': 'Aperçu avant impression — CV Thibault Rosalie',
 
 		// Lettre de motivation
 		'letter.meta.title': 'Lettre de motivation | Thibault Rosalie',
@@ -202,12 +207,17 @@ export const ui = {
 		'about.meta.desc': 'About Thibault Rosalie - 3rd year Computer Science student',
 		'about.wip.title': 'About',
 
+		// Print page toolbar (resume and cover letter)
+		'print.back': 'Back',
+		'print.action': 'Print / Save as PDF',
+
 		// Resume
 		'cv.save': 'Save as PDF',
 		'cv.download': 'Download the PDF',
-		'cv.age.unit': 'years old',
 		'cv.meta.title': 'Resume | Thibault Rosalie',
 		'cv.meta.desc': 'Curriculum Vitae of Thibault Rosalie - FullStack Developer, 3rd year Computer Science student',
+		'cv.print.title': 'Resume – Thibault Rosalie (print)',
+		'cv.print.toolbar': 'Print preview — Resume of Thibault Rosalie',
 
 		// Cover letter
 		'letter.meta.title': 'Cover Letter | Thibault Rosalie',
