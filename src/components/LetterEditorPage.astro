@@ -1,0 +1,232 @@
+---
+/**
+ * L'editeur de lettre de motivation, dans les deux langues.
+ *
+ * `lettre.astro` et `en/letter.astro` etaient identiques a huit lignes pres
+ * sur 386 — CSS et JavaScript compris. Ce qui variait reellement (texte par
+ * defaut, locale de date, cle de stockage) vit maintenant dans
+ * `src/data/letter.ts` et `src/i18n/ui.ts`.
+ */
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getLangFromUrl, useTranslations } from '../i18n/ui';
+import { dateLocale, defaultLetter, storageKeys } from '../data/letter';
+import { identity } from '../data/profile';
+import '../styles/letter-editor.css';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const keys = storageKeys(lang);
+const printHref = lang === 'fr' ? '/lettre-print/' : `/${lang}/letter-print/`;
+
+// Le script client est bundle par Astro : il ne voit pas ces variables de
+// frontmatter. Elles transitent par un attribut data-, plutot que par
+// `define:vars` qui sortirait le script du bundle et donc de `astro check`.
+const config = {
+	storageKey: keys.text,
+	metaStorageKey: keys.meta,
+	defaultText: defaultLetter[lang].join('\n\n'),
+	defaultSubject: t('letter.default.subject'),
+	dateLocale: dateLocale[lang],
+};
+---
+
+<BaseLayout title={t('letter.meta.title')} description={t('letter.meta.desc')}>
+	<main class="letter-editor-page wrapper" data-config={JSON.stringify(config)}>
+		<section class="editor-panel" aria-label={t('letter.editor.aria')}>
+			<header class="editor-head">
+				<h1>{t('letter.page.title')}</h1>
+				<p>{t('letter.page.subtitle')}</p>
+			</header>
+
+			<div class="meta-fields">
+				<div class="field-group">
+					<label class="field" for="letter-date">{t('letter.form.date')}</label>
+					<input id="letter-date" class="text-input" type="date" />
+				</div>
+				<div class="field-group">
+					<label class="field" for="letter-company">{t('letter.form.company')}</label>
+					<input id="letter-company" class="text-input" type="text" placeholder={t('letter.form.company.placeholder')} />
+				</div>
+				<div class="field-group field-group--full">
+					<label class="field" for="letter-address">{t('letter.form.address')}</label>
+					<input id="letter-address" class="text-input" type="text" placeholder={t('letter.form.address.placeholder')} />
+				</div>
+				<div class="field-group field-group--full">
+					<label class="field" for="letter-subject">{t('letter.form.title')}</label>
+					<input id="letter-subject" class="text-input" type="text" placeholder={t('letter.form.title.placeholder')} />
+				</div>
+			</div>
+
+			<label class="field" for="letter-content">{t('letter.form.label')}</label>
+			<textarea id="letter-content" class="letter-textarea" placeholder={t('letter.form.placeholder')}></textarea>
+
+			<div class="actions">
+				<a href={printHref} target="_blank" rel="noopener" class="btn-download" id="open-print">
+					<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>
+					</svg>
+					{t('letter.form.cta')}
+				</a>
+			</div>
+		</section>
+
+		<section class="preview-panel" aria-label={t('letter.preview.aria')}>
+			<article class="letter-card" id="letter-preview">
+				<header class="letter-header">
+					<h2 class="name">{identity.firstName} <span>{identity.lastName}</span></h2>
+					<p class="title">{t('letter.preview.header')}</p>
+				</header>
+				<div class="letter-meta">
+					<p class="letter-meta-date" id="preview-date"></p>
+					<p class="letter-meta-company" id="preview-company"></p>
+					<p class="letter-meta-address" id="preview-address"></p>
+					<p class="letter-meta-subject" id="preview-subject"></p>
+				</div>
+				<div class="letter-body" id="preview-content"></div>
+			</article>
+		</section>
+	</main>
+</BaseLayout>
+
+<script>
+	type LetterMeta = {
+		date: string;
+		company: string;
+		address: string;
+		subject: string;
+	};
+
+	type EditorConfig = {
+		storageKey: string;
+		metaStorageKey: string;
+		defaultText: string;
+		defaultSubject: string;
+		dateLocale: string;
+	};
+
+	const root = document.querySelector<HTMLElement>('.letter-editor-page');
+	const config = JSON.parse(root?.dataset.config ?? '{}') as EditorConfig;
+	const { storageKey, metaStorageKey, defaultText, dateLocale } = config;
+	const today = new Date().toISOString().slice(0, 10);
+
+	const defaultMeta: LetterMeta = {
+		date: today,
+		company: '',
+		address: '',
+		subject: config.defaultSubject,
+	};
+
+	const textarea = document.getElementById('letter-content');
+	const preview = document.getElementById('preview-content');
+	const openPrint = document.getElementById('open-print');
+	const dateInput = document.getElementById('letter-date');
+	const companyInput = document.getElementById('letter-company');
+	const addressInput = document.getElementById('letter-address');
+	const subjectInput = document.getElementById('letter-subject');
+	const previewDate = document.getElementById('preview-date');
+	const previewCompany = document.getElementById('preview-company');
+	const previewAddress = document.getElementById('preview-address');
+	const previewSubject = document.getElementById('preview-subject');
+
+	const renderPreview = (text: string) => {
+		if (!preview) return;
+		const safe = text && text.trim() ? text : defaultText;
+		preview.innerHTML = '';
+
+		safe
+			.split(/\n\s*\n/)
+			.map((p: string) => p.trim())
+			.filter(Boolean)
+			.forEach((p: string) => {
+				const el = document.createElement('p');
+				el.textContent = p;
+				preview.appendChild(el);
+			});
+	};
+
+	const sync = (text: string) => {
+		localStorage.setItem(storageKey, text);
+		renderPreview(text);
+	};
+
+	const formatDate = (raw: string) => {
+		if (!raw) return '';
+		const date = new Date(raw);
+		if (Number.isNaN(date.getTime())) return raw;
+		return date.toLocaleDateString(dateLocale);
+	};
+
+	const readMetaFromInputs = (): LetterMeta => ({
+		date: dateInput instanceof HTMLInputElement ? dateInput.value : '',
+		company: companyInput instanceof HTMLInputElement ? companyInput.value : '',
+		address: addressInput instanceof HTMLInputElement ? addressInput.value : '',
+		subject: subjectInput instanceof HTMLInputElement ? subjectInput.value : '',
+	});
+
+	const renderMeta = (meta: LetterMeta) => {
+		if (previewDate) previewDate.textContent = formatDate(meta.date || defaultMeta.date);
+		if (previewCompany) previewCompany.textContent = meta.company;
+		if (previewAddress) previewAddress.textContent = meta.address;
+		if (previewSubject) previewSubject.textContent = meta.subject;
+	};
+
+	const syncMeta = () => {
+		const meta = readMetaFromInputs();
+		localStorage.setItem(metaStorageKey, JSON.stringify(meta));
+		renderMeta(meta);
+	};
+
+	const setMetaInputs = (meta: LetterMeta) => {
+		if (dateInput instanceof HTMLInputElement) dateInput.value = meta.date;
+		if (companyInput instanceof HTMLInputElement) companyInput.value = meta.company;
+		if (addressInput instanceof HTMLInputElement) addressInput.value = meta.address;
+		if (subjectInput instanceof HTMLInputElement) subjectInput.value = meta.subject;
+	};
+
+	const loadMeta = (): LetterMeta => {
+		const raw = localStorage.getItem(metaStorageKey);
+		if (!raw) return defaultMeta;
+		try {
+			const parsed = JSON.parse(raw);
+			return {
+				date: typeof parsed.date === 'string' && parsed.date ? parsed.date : defaultMeta.date,
+				company: typeof parsed.company === 'string' ? parsed.company : defaultMeta.company,
+				address: typeof parsed.address === 'string' ? parsed.address : defaultMeta.address,
+				subject: typeof parsed.subject === 'string' && parsed.subject ? parsed.subject : defaultMeta.subject,
+			};
+		} catch {
+			return defaultMeta;
+		}
+	};
+
+	if (textarea instanceof HTMLTextAreaElement) {
+		const saved = localStorage.getItem(storageKey) ?? defaultText;
+		textarea.value = saved;
+		renderPreview(saved);
+		textarea.addEventListener('input', (event: Event) => {
+			const target = event.currentTarget;
+			if (target instanceof HTMLTextAreaElement) {
+				sync(target.value);
+			}
+		});
+	}
+
+	const initialMeta = loadMeta();
+	setMetaInputs(initialMeta);
+	renderMeta(initialMeta);
+	// Les metadonnees sont ecrites des le chargement : sans cela, ouvrir la page
+	// d'impression sans avoir touche un champ laissait la lettre sans date.
+	localStorage.setItem(metaStorageKey, JSON.stringify(initialMeta));
+
+	[dateInput, companyInput, addressInput, subjectInput].forEach((input) => {
+		input?.addEventListener('input', syncMeta);
+	});
+
+	openPrint?.addEventListener('click', () => {
+		if (textarea instanceof HTMLTextAreaElement) {
+			sync(textarea.value);
+		}
+		syncMeta();
+	});
+</script>

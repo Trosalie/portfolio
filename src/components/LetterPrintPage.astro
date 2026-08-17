@@ -1,0 +1,125 @@
+---
+/**
+ * La page A4 de la lettre de motivation, dans les deux langues.
+ *
+ * Pas de BaseLayout : ni nav, ni footer. Elle relit ce que l'editeur a depose
+ * dans le `localStorage` et l'affiche au format papier. Le contenu statique
+ * qu'elle porte n'est qu'un repli, visible si rien n'a encore ete saisi.
+ */
+
+import { getLangFromUrl, useTranslations } from '../i18n/ui';
+import { dateLocale, defaultLetter, storageKeys } from '../data/letter';
+import { identity } from '../data/profile';
+import PrintToolbar from './PrintToolbar.astro';
+import '../styles/letter-print.css';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const keys = storageKeys(lang);
+const backHref = lang === 'fr' ? '/lettre/' : `/${lang}/letter/`;
+
+const config = {
+	storageKey: keys.text,
+	metaStorageKey: keys.meta,
+	defaultSubject: t('letter.default.subject'),
+	dateLocale: dateLocale[lang],
+};
+---
+
+<html lang={lang}>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width" />
+	<meta name="robots" content="noindex, nofollow" />
+	<title>{t('letter.print.title')}</title>
+
+	<!-- Polices identiques au site -->
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	<link
+		href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;700&family=Rubik:wght@300;500;700&display=swap"
+		rel="stylesheet"
+	/>
+</head>
+<body data-config={JSON.stringify(config)}>
+	<PrintToolbar title={t('letter.print.toolbar')} backHref={backHref} />
+
+	<div class="letter-page-wrapper">
+		<div class="letter-page" role="main" aria-label={t('letter.doc.aria')}>
+			<header class="letter-header">
+				<h1 class="letter-name">{identity.firstName} <span>{identity.lastName}</span></h1>
+				<p class="letter-title">{t('letter.preview.header')}</p>
+			</header>
+			<section class="letter-meta">
+				<!-- Repli : le script remplace ces valeurs par celles de l'editeur.
+				     La date restait figee au 19/03/2026 dans les deux pages ; elle
+				     est desormais calculee a l'affichage. -->
+				<p id="letter-date"></p>
+				<p id="letter-company">{t('letter.form.company')}</p>
+				<p id="letter-address">{t('letter.form.address')}</p>
+				<p class="letter-meta-subject" id="letter-subject">{t('letter.default.subject')}</p>
+			</section>
+			<section class="letter-content" id="letter-content">
+				{defaultLetter[lang].map((paragraph) => <p>{paragraph}</p>)}
+			</section>
+		</div>
+	</div>
+
+	<script>
+		type PrintConfig = {
+			storageKey: string;
+			metaStorageKey: string;
+			defaultSubject: string;
+			dateLocale: string;
+		};
+
+		const config = JSON.parse(document.body.dataset.config ?? '{}') as PrintConfig;
+		const { storageKey, metaStorageKey, defaultSubject, dateLocale } = config;
+
+		const target = document.getElementById('letter-content');
+		const text = localStorage.getItem(storageKey);
+		const metaDate = document.getElementById('letter-date');
+		const metaCompany = document.getElementById('letter-company');
+		const metaAddress = document.getElementById('letter-address');
+		const metaSubject = document.getElementById('letter-subject');
+
+		if (target && text && text.trim()) {
+			target.innerHTML = '';
+			text
+				.split(/\n\s*\n/)
+				.map((p) => p.trim())
+				.filter(Boolean)
+				.forEach((p) => {
+					const el = document.createElement('p');
+					el.textContent = p;
+					target.appendChild(el);
+				});
+		}
+
+		const formatDate = (raw: string) => {
+			if (!raw) return '';
+			const date = new Date(raw);
+			if (Number.isNaN(date.getTime())) return raw;
+			return date.toLocaleDateString(dateLocale);
+		};
+
+		// Repli sur la date du jour : le site est statique, une date ecrite dans
+		// le HTML serait celle du build et vieillirait en silence.
+		const todayLabel = new Date().toLocaleDateString(dateLocale);
+		if (metaDate) metaDate.textContent = todayLabel;
+
+		const rawMeta = localStorage.getItem(metaStorageKey);
+		if (rawMeta) {
+			try {
+				const meta = JSON.parse(rawMeta);
+				if (metaDate) metaDate.textContent = formatDate(meta.date || '') || todayLabel;
+				if (metaCompany) metaCompany.textContent = meta.company || '';
+				if (metaAddress) metaAddress.textContent = meta.address || '';
+				if (metaSubject) metaSubject.textContent = meta.subject || defaultSubject;
+			} catch {
+				// Ignore invalid stored metadata
+			}
+		}
+	</script>
+</body>
+</html>

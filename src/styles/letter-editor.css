@@ -1,0 +1,196 @@
+/*
+ * Habillage de l'editeur de lettre de motivation (/lettre/ et /en/letter/).
+ *
+ * Sorti des pages pour la meme raison que cv-screen.css : le balisage vit
+ * desormais dans LetterEditorPage.astro, et un <style> scope d'Astro ne
+ * s'applique pas aux elements d'un composant enfant.
+ * Voir docs/AMELIORATIONS.md (P2).
+ */
+
+.letter-editor-page {
+	display: grid;
+	gap: 1.5rem;
+	padding-top: 2rem;
+	padding-bottom: 4rem;
+}
+
+.editor-panel,
+.preview-panel {
+	background: var(--gray-999);
+	border: 1px solid var(--gray-800);
+	border-radius: 1rem;
+	box-shadow: var(--shadow-md);
+	padding: 1.25rem;
+}
+
+.editor-head h1 {
+	font-size: var(--text-3xl);
+	margin-bottom: 0.5rem;
+}
+
+.editor-head p {
+	color: var(--gray-300);
+	max-width: 62ch;
+	margin-bottom: 1rem;
+}
+
+.field {
+	display: inline-block;
+	font-weight: 600;
+	margin-bottom: 0.5rem;
+}
+
+.meta-fields {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 0.75rem;
+	margin-bottom: 1rem;
+}
+
+.field-group {
+	display: flex;
+	flex-direction: column;
+}
+
+.text-input {
+	width: 100%;
+	padding: 0.72rem 0.85rem;
+	font: inherit;
+	color: var(--gray-100);
+	background: var(--gray-999);
+	border: 1px solid var(--gray-700);
+	border-radius: 0.75rem;
+}
+
+.text-input:focus {
+	outline: 2px solid var(--accent-regular);
+	outline-offset: 2px;
+}
+
+.letter-textarea {
+	width: 100%;
+	min-height: 360px;
+	resize: vertical;
+	padding: 1rem;
+	font: inherit;
+	line-height: 1.6;
+	color: var(--gray-100);
+	background: var(--gray-999);
+	border: 1px solid var(--gray-700);
+	border-radius: 0.75rem;
+}
+
+.letter-textarea:focus {
+	outline: 2px solid var(--accent-regular);
+	outline-offset: 2px;
+}
+
+.actions {
+	margin-top: 1rem;
+	display: flex;
+	justify-content: flex-end;
+}
+
+.btn-download {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	background: var(--gradient-accent);
+	color: var(--accent-text-over);
+	padding: 0.6rem 1.25rem;
+	border-radius: 999px;
+	font-size: var(--text-sm);
+	font-weight: 600;
+	text-decoration: none;
+	transition: opacity var(--theme-transition), box-shadow var(--theme-transition);
+	box-shadow: var(--shadow-md);
+}
+
+.btn-download:hover {
+	opacity: 0.85;
+	box-shadow: var(--shadow-lg);
+}
+
+.letter-card {
+	background: #ffffff;
+	border-radius: 0.85rem;
+	overflow: hidden;
+	border: 1px solid var(--gray-800);
+}
+
+.letter-header {
+	background: var(--gradient-accent);
+	color: #ffffff;
+	padding: 1.5rem 1.75rem;
+	display: flex;
+	justify-content: space-between;
+	gap: 0.75rem;
+	align-items: baseline;
+}
+
+.name {
+	margin: 0;
+	font-family: var(--font-brand);
+	font-size: clamp(1.4rem, 3.2vw, 2rem);
+	font-weight: 700;
+}
+
+.name span {
+	font-weight: 300;
+}
+
+.title {
+	margin: 0;
+	letter-spacing: 0.1em;
+	font-size: var(--text-sm);
+	text-transform: uppercase;
+	opacity: 0.92;
+}
+
+.letter-body {
+	padding: 1.5rem 1.75rem 1.75rem;
+	color: #090b11;
+	line-height: 1.75;
+	font-size: 0.98rem;
+}
+
+.letter-meta {
+	padding: 1rem 1.75rem 0;
+	font-size: 0.9rem;
+	line-height: 1.5;
+	color: #283044;
+}
+
+.letter-meta p {
+	margin: 0;
+}
+
+.letter-meta-subject {
+	margin-top: 0.65rem !important;
+	font-weight: 700;
+	color: #1c0056;
+}
+
+.letter-body p + p {
+	margin-top: 1rem;
+}
+
+@media (min-width: 62em) {
+	.letter-editor-page {
+		grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+		align-items: start;
+	}
+
+	.meta-fields {
+		grid-template-columns: 1fr 1fr;
+	}
+
+	.field-group--full {
+		grid-column: 1 / -1;
+	}
+
+	.preview-panel {
+		position: sticky;
+		top: 1.25rem;
+	}
+}

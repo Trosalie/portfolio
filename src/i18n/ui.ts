@@ -120,6 +120,12 @@ export const ui = {
 		'letter.form.address.placeholder': 'Ex: 62 rue Tiquetonne, 75002 Paris',
 		'letter.form.title.placeholder': 'Ex: Candidature pour un stage de developpement web',
 		'letter.preview.header': 'Lettre de motivation',
+		'letter.default.subject': 'Objet : Candidature',
+		'letter.editor.aria': 'Editeur de lettre de motivation',
+		'letter.preview.aria': 'Apercu lettre de motivation',
+		'letter.doc.aria': 'Lettre de motivation de Thibault Rosalie',
+		'letter.print.title': 'Lettre de motivation - Thibault Rosalie (impression)',
+		'letter.print.toolbar': 'Apercu avant impression - Lettre de motivation',
 	},
 	en: {
 		// Métadonnées par défaut (pages sans title/description explicites)
@@ -235,6 +241,12 @@ export const ui = {
 		'letter.form.address.placeholder': 'E.g. 62 rue Tiquetonne, 75002 Paris',
 		'letter.form.title.placeholder': 'E.g. Application for a web development internship',
 		'letter.preview.header': 'Cover Letter',
+		'letter.default.subject': 'Subject: Application',
+		'letter.editor.aria': 'Cover letter editor',
+		'letter.preview.aria': 'Cover letter preview',
+		'letter.doc.aria': 'Cover letter of Thibault Rosalie',
+		'letter.print.title': 'Cover Letter - Thibault Rosalie (print)',
+		'letter.print.toolbar': 'Print preview - Cover Letter',
 	},
 } as const;
 
