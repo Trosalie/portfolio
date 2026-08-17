@@ -138,15 +138,23 @@ const t = useTranslations(lang);
 		transition: border-color var(--theme-transition);
 	}
 
-	input:focus,
-	textarea:focus {
-		outline: none;
+	/* `outline: none` supprimait le seul indicateur de focus fiable et ne le
+	   remplacait que par une couleur de bordure — invisible pour qui ne
+	   distingue pas les teintes. */
+	input:focus-visible,
+	textarea:focus-visible {
+		outline: 2px solid var(--accent-regular);
+		outline-offset: 2px;
 		border-color: var(--accent-regular);
 	}
 
+	/* --gray-600 sur --gray-999 mesurait 2,26:1 en theme clair et 3,03:1 en
+	   sombre, sous le seuil AA de 4,5:1 dans les deux cas. --gray-400 donne
+	   4,60:1 et 6,22:1. Ces placeholders portent une information de format, pas
+	   du decor. */
 	input::placeholder,
 	textarea::placeholder {
-		color: var(--gray-600);
+		color: var(--gray-400);
 	}
 
 	.submit-btn {
@@ -218,9 +226,14 @@ const t = useTranslations(lang);
 		color: var(--gray-300);
 	}
 
+	/* Ces liens avaient exactement la couleur du texte qui les entoure et pas
+	   de soulignement : rien ne les signalait comme liens (WCAG 1.4.1, qui
+	   interdit de s'en remettre a la seule couleur — ici il n'y avait meme pas
+	   de difference de couleur). */
 	.info-list a {
 		color: var(--gray-300);
-		text-decoration: none;
+		text-decoration: underline;
+		text-underline-offset: 0.2em;
 		transition: color var(--theme-transition);
 	}
 

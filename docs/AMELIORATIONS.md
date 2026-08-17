@@ -175,6 +175,24 @@ justifie l'intervention, et l'action proposée.
   équivalent EN) → décalage de mise en page au chargement. `PortfolioPreview.astro` le fait
   correctement, ces pages non.
 
-- [ ] **Contrastes à mesurer** : `--gray-300` sur `--gray-999` dans `.info-list`, et les
+- [x] **Contrastes à mesurer** : `--gray-300` sur `--gray-999` dans `.info-list`, et les
   placeholders en `--gray-600`, sont probablement sous le seuil 4.5:1 du WCAG AA. À passer au
   contrast checker plutôt qu'à l'œil.
+  → Mesuré. L'hypothèse était juste pour l'un, fausse pour l'autre. La palette étant inversée
+  entre les deux thèmes, chaque variable a été mesurée deux fois :
+
+  | Élément | Couleur sur `--gray-999` | Clair | Sombre |
+  |---|---|---|---|
+  | `.info-list` (texte et liens) | `--gray-300` | 6,48:1 | 8,70:1 |
+  | `::placeholder` (avant) | `--gray-600` | **2,26:1** | **3,03:1** |
+  | `::placeholder` (après) | `--gray-400` | 4,60:1 | 6,22:1 |
+
+  `.info-list` était donc conforme et n'a pas bougé. Les placeholders échouaient dans les deux
+  thèmes, et ils portent une information de format (« Proposition de poste, collaboration… »),
+  pas du décor : passés en `--gray-400`.
+
+  Deux défauts voisins relevés au passage sur la même page. `input:focus { outline: none }`
+  supprimait l'indicateur de focus natif en ne le remplaçant que par une couleur de bordure :
+  remplacé par un `outline` sur `:focus-visible`. Et les liens de `.info-list` avaient
+  exactement la couleur du texte qui les entoure, sans soulignement — rien ne les signalait
+  comme liens (WCAG 1.4.1) : soulignés.
