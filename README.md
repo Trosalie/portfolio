@@ -1,30 +1,80 @@
-# Astro Starter Kit: Portfolio
+# Portfolio — Thibault Rosalie
 
-```sh
-npm create astro@latest -- --template portfolio
+Site personnel bilingue (français / anglais) d'un étudiant en BUT 3 Informatique : projets,
+CV consultable et téléchargeable en PDF, et un éditeur de lettre de motivation.
+
+**En ligne :** <https://trosalie.alwaysdata.net>
+
+## Stack
+
+- [Astro 5](https://astro.build) en sortie **statique** — aucun serveur applicatif en production.
+- Internationalisation maison : un dictionnaire dans `src/i18n/ui.ts`, la langue déduite de
+  l'URL. Le français est la locale par défaut et n'est pas préfixée (`/cv/`), l'anglais l'est
+  (`/en/cv/`).
+- [Puppeteer](https://pptr.dev) au moment du build, pour transformer les pages A4 du CV en PDF.
+- `@astrojs/sitemap` pour le sitemap, `astro:assets` pour l'optimisation des images.
+- Aucun framework d'interface : le peu de JavaScript client est écrit à la main.
+
+## Commandes
+
+| Commande               | Effet                                                              |
+| :--------------------- | :----------------------------------------------------------------- |
+| `npm install`          | Installe les dépendances (dont Chromium, pour Puppeteer)            |
+| `npm run dev`          | Serveur de développement sur `localhost:4321`                       |
+| `npm run check`        | Contrôle de types (`astro check`) — lancé aussi en CI               |
+| `npm run build`        | Compile le site **et** génère les PDF du CV dans `dist/`            |
+| `npm run build:fast`   | Compile le site seul, sans Puppeteer — pour itérer rapidement       |
+| `npm run preview`      | Sert le `dist/` compilé                                             |
+
+> `build:fast` produit un site dont les deux boutons « Télécharger le PDF » pointent dans le
+> vide : les PDF ne sont créés que par `npm run build`. C'est la commande de déploiement.
+
+## Organisation
+
+```
+src/
+├── data/          Contenu structuré : cv.ts, letter.ts, profile.ts
+├── i18n/ui.ts     Dictionnaire FR/EN + résolution des routes traduites
+├── components/    Composants, dont le CV et la lettre (voir ci-dessous)
+├── content/       Collections des projets : work/ (FR) et work-en/ (EN)
+├── layouts/       BaseLayout : head, nav, footer, fonds de page
+├── pages/         Routes. Les pages EN vivent sous pages/en/
+└── styles/        global.css + les feuilles du CV et de la lettre
+scripts/
+└── generate-cv-pdf.mjs   Sert dist/ en local et imprime les pages A4 du CV
+docs/
+└── AMELIORATIONS.md      Backlog d'audit, points traités cochés
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/portfolio)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/portfolio)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/portfolio/devcontainer.json)
+### CV et lettre : une seule source
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Le CV est rendu par **quatre** routes — `/cv/`, `/en/cv/`, `/cv-print/`, `/en/cv-print/` — mais
+son contenu n'est écrit qu'**une fois**, dans `src/data/cv.ts`. Les pages ne font que déclarer
+leur route ; tout le balisage vient de `CvDocument.astro`, habillé par `cv-screen.css` ou
+`cv-print.css` selon le contexte. Même principe pour la lettre de motivation.
 
-![portfolio](https://user-images.githubusercontent.com/357379/210779178-a98f0fb7-6b1a-4068-894c-8e1403e26654.jpg)
+Pour corriger une date, une mission ou un intitulé : **modifier `src/data/cv.ts`, et rien
+d'autre.** Le typage `Record<Lang, CvData>` fait échouer `npm run check` si une langue est
+incomplète.
 
-## 🧞 Commands
+Cette structure remplace un état où le CV existait en cinq copies, qui avaient déjà divergé —
+la page anglaise et le PDF anglais ne disaient pas la même chose en douze endroits. L'historique
+est dans `docs/AMELIORATIONS.md`.
 
-All commands are run from the root of the project, from a terminal:
+### Ajouter un projet
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+Créer le même fichier dans `src/content/work/` (français) **et** dans `src/content/work-en/`
+(anglais), avec le **même nom de fichier** : c'est ce slug commun qui permet au sélecteur de
+langue de retrouver la page équivalente. Le schéma attendu est dans `src/content.config.ts`.
 
-## 👀 Want to learn more?
+## Déploiement
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Un push sur la branche `release` déclenche `.github/workflows/deploy.yml` : contrôle de types,
+build avec génération des PDF, puis synchronisation de `dist/` vers Alwaysdata par `rsync`.
+Les identifiants sont des secrets GitHub (`REMOTE_USER`, `REMOTE_HOST`, `REMOTE_PATH`,
+`SSH_PASSWORD`).
+
+## État du projet
+
+`docs/AMELIORATIONS.md` tient la liste des améliorations identifiées lors d'un audit, classées
+par priorité, les points traités cochés. À lire avant d'ouvrir un chantier.

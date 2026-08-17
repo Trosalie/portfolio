@@ -54,31 +54,29 @@ justifie l'intervention, et l'action proposée.
 
 ## P2 — Duplication de code
 
-- [ ] **`CvContent.astro` est du code mort (481 lignes).** Aucun `import` nulle part, alors
-  que son en-tête affirme « Utilisé à la fois par cv.astro et cv-print.astro ». La refacto a
-  été commencée puis abandonnée : `cv.astro` (~700 l.) et `cv-print.astro` (~690 l.) embarquent
-  chacun leur copie intégrale du CV. Le contenu existe donc en **6 exemplaires**
-  (FR/EN × cv / cv-print / CvContent mort). Chaque correction — adresse, date, mission —
-  demande 6 modifications, avec certitude d'en oublier une. Un CV affiché à l'écran qui diffère
-  du PDF téléchargé est éliminatoire sur une candidature.
-  → Extraire les données du CV dans un fichier de données par langue et n'avoir qu'un seul
-  composant de rendu. **C'est le chantier prioritaire restant.**
+- [x] **`CvContent.astro` était du code mort (481 lignes).** Aucun `import` nulle part, alors
+  que son en-tête affirmait « Utilisé à la fois par cv.astro et cv-print.astro ». La refacto
+  avait été commencée puis abandonnée : `cv.astro` (~700 l.) et `cv-print.astro` (~690 l.)
+  embarquaient chacun leur copie intégrale du CV. Le contenu existait en **5 exemplaires**.
+  → Contenu extrait dans `src/data/cv.ts` (typé `Record<Lang, CvData>`, donc une langue
+  incomplète échoue au `astro check`), rendu unique dans `CvDocument.astro` décliné par une
+  prop `variant` écran/impression, styles dans `src/styles/cv-{screen,print}.css`.
+  `CvContent.astro` supprimé, les quatre pages tombent à six lignes. **−1 687 lignes.**
 
-  **La dérive s'est déjà produite.** Au moment de rendre l'âge automatique, les cinq copies
-  affichaient quatre valeurs différentes : `22 ans` sur la page FR, `23 ans` dans le PDF FR,
-  `22 ans` — en français — sur la page EN, et `22 years old` dans le PDF EN. Seul le PDF
-  français était juste. C'est exactement le scénario décrit ci-dessus, et il concernait la
-  donnée la plus visible du CV.
+  **La dérive s'était produite deux fois.** D'abord sur l'âge : les cinq copies affichaient
+  quatre valeurs différentes, seul le PDF français étant juste. Puis, découvert au moment de
+  la refacto, entre l'écran et le PDF : la page anglaise et le PDF anglais divergeaient en
+  **douze endroits** — faute « studiying », « UIT » au lieu de « IUT » quatre fois, paragraphe
+  de profil entièrement différent, « POO » au lieu de « OOP », repères ARIA rédigés en
+  français. Le PDF, celui qu'un recruteur reçoit, a été retenu comme référence partout.
 
-  `src/data/profile.ts` a été créé à cette occasion : c'est l'amorce du fichier de données
-  visé par cette refacto. Les prochaines données extraites (coordonnées, formation,
-  expériences) ont vocation à l'y rejoindre.
-
-- [ ] **Pages FR/EN dupliquées.** `cv.astro` vs `en/cv.astro` : ~170 lignes de différence sur
+- [x] **Pages FR/EN dupliquées.** `cv.astro` vs `en/cv.astro` : ~170 lignes de différence sur
   ~700, soit 75 % identiques. `lettre.astro` vs `en/letter.astro` : 34 lignes sur 386, soit
   **91 % identiques**, CSS et logique JavaScript compris.
-  → Une seule page par fonctionnalité, textes dans `src/i18n/ui.ts` (le mécanisme existe déjà
-  et fonctionne bien).
+  → Une seule page par fonctionnalité. Le CV et la lettre passent par un composant unique
+  alimenté par `src/data/`, les libellés restants rejoignent `src/i18n/ui.ts`, et les pages de
+  `src/pages/` ne déclarent plus que leur route. La barre des pages d'impression est
+  mutualisée dans `PrintToolbar.astro`. **−2 188 lignes au total sur les deux chantiers.**
 
 - [ ] **Deux collections de contenu parallèles** (`work` / `work-en`, mêmes slugs). Rien ne
   garantit leur synchronisation : un projet ajouté en FR et oublié en EN casse le sélecteur de
@@ -110,11 +108,13 @@ justifie l'intervention, et l'action proposée.
   une page d'erreur n'ayant pas d'équivalent traduit. À traiter avec une règle `ErrorDocument`
   si le besoin se confirme.
 
-- [ ] **`npm run build` seul produit deux liens de téléchargement morts.** Les PDF ne sont
-  générés que par `npm run build:full`. Le workflow de déploiement utilise bien `build:full`,
-  donc la production est correcte — mais un déploiement manuel lancé depuis `npm run build`
-  livrerait un `/cv/` dont le bouton de téléchargement renvoie sur du vide. À sécuriser en
-  fusionnant les deux scripts, ou en documentant la commande de déploiement.
+- [x] **`npm run build` seul produisait deux liens de téléchargement morts.** Les PDF n'étaient
+  générés que par `npm run build:full`. Le workflow de déploiement utilisait bien `build:full`,
+  donc la production était correcte — mais un déploiement manuel lancé depuis `npm run build`
+  livrait un `/cv/` dont le bouton de téléchargement renvoyait sur du vide.
+  → Les deux scripts sont fusionnés : `npm run build` compile et génère les PDF. `build:fast`
+  reste disponible pour itérer sans Puppeteer, et le README dit explicitement qu'il ne produit
+  pas de PDF.
 
 - [ ] **« À propos » affiche « 🚧 en construction »** alors que la page est dans le menu
   principal. Sur un portfolio de recherche de stage, une entrée de menu menant à une page vide
@@ -122,29 +122,30 @@ justifie l'intervention, et l'action proposée.
 
 ## P4 — Outillage et dépôt
 
-- [ ] **Aucun contrôle qualité automatisé.** `@astrojs/check` n'est pas installé, ni ESLint, ni
-  Prettier, ni `.editorconfig`. Le `tsconfig` étend `astro/tsconfigs/strict` mais rien ne le
-  vérifie, ni en local ni en CI. Un `astro check` dans le workflow attraperait typiquement une
-  clé i18n manquante avant qu'elle n'atteigne la production.
+- [x] **Aucun contrôle qualité automatisé.** Le `tsconfig` étendait `astro/tsconfigs/strict`
+  mais rien ne le vérifiait, ni en local ni en CI.
+  → `@astrojs/check` installé, `npm run check` disponible et lancé par le workflow avant le
+  build. ESLint, Prettier et `.editorconfig` restent à faire si le besoin se confirme.
 
-- [ ] **Le README est le template Astro non modifié** (« Astro Starter Kit: Portfolio »,
+- [x] **Le README était le template Astro non modifié** (« Astro Starter Kit: Portfolio »,
   « Seasoned astronaut? Delete this file »). Le dépôt est lié depuis le portfolio *et* depuis
-  le CV : un recruteur qui clique tombe sur la documentation d'un template. Cinq minutes de
-  travail pour un signal disproportionné.
+  le CV : un recruteur qui cliquait tombait sur la documentation d'un template.
+  → Réécrit : présentation, stack, commandes, arborescence, règle de la source unique pour le
+  CV et la lettre, procédure d'ajout d'un projet, déploiement.
 
 - [ ] **Déploiement par mot de passe SSH.** `deploy.yml` utilise `sshpass -e` avec
   `StrictHostKeyChecking=no`. Alwaysdata supporte les clés SSH : une deploy key dédiée avec
   `known_hosts` épinglé supprime le risque de MITM et la dépendance à sshpass.
 
-- [ ] **`astro-i18n` est une dépendance non utilisée.** Aucun import dans `src/` ni dans
-  `astro.config.mjs` — le projet utilise son propre `src/i18n/ui.ts`. À désinstaller.
+- [x] **`astro-i18n` était une dépendance non utilisée.** Aucun import dans `src/` ni dans
+  `astro.config.mjs` — le projet utilise son propre `src/i18n/ui.ts`. → Désinstallée.
 
 - [ ] **13 vulnérabilités npm en dépendances de production** (sharp/libvips, picomatch),
   héritées de l'arbre de dépendances d'Astro. Le site étant statique, rien de tout cela ne
   s'exécute à l'exécution : le risque est limité au poste de build. À traiter lors d'une montée
   de version d'Astro.
 
-- [ ] **`.venv/` dans le `.gitignore`** d'un projet Astro : résidu à nettoyer.
+- [x] **`.venv/` dans le `.gitignore`** d'un projet Astro : résidu. → Retiré.
 
 - [ ] **Le blob de 15 Mo subsiste dans l'historique git.** Le fichier a été supprimé du dépôt
   mais reste dans les objets git : chaque clone le télécharge encore. Le retirer demanderait une

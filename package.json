@@ -4,12 +4,12 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/generate-cv-pdf.mjs",
+    "build:fast": "astro build",
     "check": "astro check",
     "preview": "astro preview",
     "astro": "astro",
-    "generate-pdf": "node scripts/generate-cv-pdf.mjs",
-    "build:full": "astro build && node scripts/generate-cv-pdf.mjs"
+    "generate-pdf": "node scripts/generate-cv-pdf.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",

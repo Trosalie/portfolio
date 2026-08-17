@@ -3,7 +3,8 @@
  * Utilise un serveur HTTP local + Puppeteer pour produire un rendu fidèle.
  *
  * Utilisation :
- *   npm run generate-pdf   →  astro build + génération des PDFs
+ *   npm run build         →  astro build, puis ce script
+ *   npm run generate-pdf  →  ce script seul, sur un dist/ déjà compilé
  */
 
 import { createServer } from 'http';

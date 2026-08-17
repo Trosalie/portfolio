@@ -40,7 +40,7 @@ jobs:
 
       # 6. Build Astro + génération du PDF
       - name: Build (Astro + PDF)
-        run: npm run build:full
+        run: npm run build
         env:
           PUPPETEER_EXECUTABLE_PATH: ${{ steps.chrome.outputs.chrome-path }}
 
