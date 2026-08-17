@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "check": "astro check",
     "preview": "astro preview",
     "astro": "astro",
     "generate-pdf": "node scripts/generate-cv-pdf.mjs",
@@ -12,10 +13,11 @@
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
-    "astro": "^5.17.1",
-    "astro-i18n": "^2.2.4"
+    "astro": "^5.17.1"
   },
   "devDependencies": {
-    "puppeteer": "^24.38.0"
+    "@astrojs/check": "^0.9.10",
+    "puppeteer": "^24.38.0",
+    "typescript": "^5.9.3"
   }
 }

@@ -33,17 +33,22 @@ jobs:
         env:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
 
-      # 5. Build Astro + génération du PDF
+      # 5. Contrôle de types : attrape une clé i18n ou une donnée manquante
+      #    avant que le build ne la fige dans dist/
+      - name: Vérification des types
+        run: npm run check
+
+      # 6. Build Astro + génération du PDF
       - name: Build (Astro + PDF)
         run: npm run build:full
         env:
           PUPPETEER_EXECUTABLE_PATH: ${{ steps.chrome.outputs.chrome-path }}
 
-      # 6. Installe sshpass pour l'authentification par mot de passe
+      # 7. Installe sshpass pour l'authentification par mot de passe
       - name: Installer sshpass
         run: sudo apt-get install -y sshpass
 
-      # 7. Déploie le dossier dist/ vers Alwaysdata via rsync + mot de passe
+      # 8. Déploie le dossier dist/ vers Alwaysdata via rsync + mot de passe
       - name: Déployer via rsync
         env:
           SSHPASS: ${{ secrets.SSH_PASSWORD }}
