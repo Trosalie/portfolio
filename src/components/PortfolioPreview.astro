@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
@@ -11,7 +12,22 @@ const basePath = Astro.props.basePath ?? '/work/';
 ---
 
 <a class="card" href={`${basePath}${id}`} style={`background: ${data.gradient ?? 'var(--gradient-subtle)'}`}>
-	{data.img && <img src={data.img} alt={data.img_alt || ''} loading="lazy" decoding="async" />}
+	{/* La carte a une hauteur fixe et l'image la remplit en `object-fit: cover` :
+	    les dimensions ne servent donc pas a reserver la place, mais a ne pas
+	    telecharger plus de pixels que la carte n'en affiche. Meme jeu de
+	    `widths`/`sizes` que le portrait de l'accueil. */}
+	{data.img && (
+		<Image
+			src={data.img}
+			alt={data.img_alt || ''}
+			width={704}
+			height={352}
+			widths={[352, 704, 1056]}
+			sizes="(min-width: 50em) 40vw, 100vw"
+			loading="lazy"
+			decoding="async"
+		/>
+	)}
 	<span class="title">{data.title}</span>
 	<div class="bottom">
 		<ul class="tags">

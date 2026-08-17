@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import { type CollectionEntry, getCollection, render } from 'astro:content';
 
 import ContactCTA from '../../../components/ContactCTA.astro';
@@ -49,7 +50,12 @@ const { Content } = await render(entry);
 			</div>
 			<div class="wrapper">
 				<div class="stack gap-10 content">
-					{entry.data.img && <img src={entry.data.img} alt={entry.data.img_alt || ''} />}
+					{/* Ici l'image est dans le flux : sans dimensions declarees elle
+					    occupait une hauteur nulle puis poussait le contenu au
+					    chargement. `<Image>` les deduit du fichier source. */}
+					{entry.data.img && (
+						<Image src={entry.data.img} alt={entry.data.img_alt || ''} loading="lazy" decoding="async" />
+					)}
 					<div class="content">
 						<Content />
 					</div>

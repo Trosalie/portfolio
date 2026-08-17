@@ -181,9 +181,20 @@ justifie l'intervention, et l'action proposée.
   rejoué la dérive du CV : rendu unique dans `ContactPage.astro`, les pages de `src/pages/`
   ne déclarent plus que leur route.
 
-- [ ] **Images des pages projet sans dimensions ni `loading`** (`work/[...slug].astro` et son
+- [x] **Images des pages projet sans dimensions ni `loading`** (`work/[...slug].astro` et son
   équivalent EN) → décalage de mise en page au chargement. `PortfolioPreview.astro` le fait
   correctement, ces pages non.
+  → Deux nuances à l'audit, vérifiées. D'abord, ces `<img>` sont **inertes** : aucun des six
+  fichiers de contenu ne renseigne `img`, ils n'ont qu'un `gradient`. Ensuite,
+  `PortfolioPreview.astro` ne « le fait » pas non plus — il n'avait pas davantage de
+  dimensions, il était simplement protégé par un conteneur de hauteur fixe.
+
+  La cause tient au schéma : `img` y était une `z.string()`, donc un chemin opaque qu'aucun
+  outil ne pouvait mesurer. Il passe par le helper `image()`, ce qui fait entrer le fichier
+  dans le pipeline `astro:assets` — comme le portrait de l'accueil — et les trois points de
+  rendu utilisent `<Image>`. Les `width`/`height` sont désormais déduits du fichier source.
+  Vérifié en ajoutant temporairement une image à un projet : le HTML sort en WebP avec ses
+  dimensions et, pour les cartes, un `srcset` à trois tailles.
 
 - [x] **Contrastes à mesurer** : `--gray-300` sur `--gray-999` dans `.info-list`, et les
   placeholders en `--gray-600`, sont probablement sous le seuil 4.5:1 du WCAG AA. À passer au
