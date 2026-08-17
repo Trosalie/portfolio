@@ -158,7 +158,7 @@ export const cv: Record<Lang, CvData> = {
 			},
 			{
 				title: 'Stagiaire en Recherche et Développement',
-				place: "LIUPPA — Laboratoire Informatique de l'Université de Pau et des Pays de l'Adour",
+				place: "LIUPPA",
 				date: 'Mai – Juil. 2025',
 				bullets: [
 					"État de l'art des outils de classification sémantique",
@@ -267,7 +267,7 @@ export const cv: Record<Lang, CvData> = {
 			},
 			{
 				title: 'Research and Development Intern',
-				place: 'LIUPPA — Computer Science Research Laboratory, University of Pau',
+				place: 'LIUPPA',
 				date: 'May – July 2025',
 				bullets: [
 					'State of the art review of semantic classification tools',
