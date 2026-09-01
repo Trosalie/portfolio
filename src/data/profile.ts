@@ -10,7 +10,7 @@
 
 export const identity = {
 	firstName: 'Thibault',
-	lastName: 'Rosalie',
+	lastName: 'ROSALIE',
 } as const;
 
 /**

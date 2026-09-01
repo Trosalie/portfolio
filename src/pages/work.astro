@@ -10,7 +10,9 @@ import { getLangFromUrl, useTranslations } from '../i18n/ui';
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-const projects = await getWorkCollection(lang);
+// La collection est deja triee du plus recent au plus ancien : le premier
+// projet ouvre la page en pleine largeur, les suivants suivent en grille.
+const [featured, ...rest] = await getWorkCollection(lang);
 ---
 
 <BaseLayout
@@ -24,11 +26,12 @@ const projects = await getWorkCollection(lang);
 				tagline={t('work.tagline')}
 				align="start"
 			/>
-			<Grid variant="offset">
+			{featured && <PortfolioPreview project={featured} basePath={workBasePath(lang)} lang={lang} featured />}
+			<Grid>
 				{
-					projects.map((project) => (
+					rest.map((project) => (
 						<li>
-							<PortfolioPreview project={project} basePath={workBasePath(lang)} />
+							<PortfolioPreview project={project} basePath={workBasePath(lang)} lang={lang} />
 						</li>
 					))
 				}

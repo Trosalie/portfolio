@@ -119,12 +119,12 @@ export const cv: Record<Lang, CvData> = {
 		projects: [
 			{
 				title: 'Application Web Responsive',
-				subtitle: 'Laravel / Angular — SportPxl Dashboard',
+				subtitle: 'SportPxl Dashboard (Laravel / Angular)',
 				place: 'IUT de Bayonne et du Pays Basque',
 				date: '2025 – 2026',
 				bullets: [
 					'Gestion de projet agile SCRUM',
-					'Architecture MVC — POO',
+					'Architecture MVC et programmation orientée objet',
 					'Conteneurisation Docker',
 					'Gestion et sécurisation de base de données MySQL',
 					'Rédaction de tests unitaires',
@@ -132,11 +132,11 @@ export const cv: Record<Lang, CvData> = {
 			},
 			{
 				title: 'Application Web de Covoiturage',
-				subtitle: "PHP / Twig / Bootstrap — Covoit'Étud",
+				subtitle: "Covoit'Etud (PHP / Twig / Bootstrap)",
 				place: 'IUT de Bayonne et du Pays Basque',
 				date: '2024 – 2025',
 				bullets: [
-					'Développement fullstack en équipe de 5 — Architecture MVC',
+					'Développement fullstack en équipe de 5, architecture MVC',
 					'Système de réservation de trajets conducteur / passager',
 					"Intégration d'une API de géocodage pour la carte des trajets",
 					'Gestion de profils étudiants, notation et système de badges',
@@ -146,8 +146,8 @@ export const cv: Record<Lang, CvData> = {
 		],
 		experience: [
 			{
-				title: 'Stagiaire développement — Vision par ordinateur',
-				place: 'Compositadour — Projet européen BluePoint',
+				title: 'Stagiaire développement en vision par ordinateur',
+				place: 'Compositadour, projet européen BluePoint',
 				date: 'Avr. – Juil. 2026',
 				bullets: [
 					"Conception et développement d'une application Python/PyQt6 de suivi d'objets en temps réel, architecture MVC",
@@ -228,12 +228,12 @@ export const cv: Record<Lang, CvData> = {
 		projects: [
 			{
 				title: 'Responsive Web Application',
-				subtitle: 'Laravel / Angular — SportPxl Dashboard',
+				subtitle: 'SportPxl Dashboard (Laravel / Angular)',
 				place: 'IUT of Bayonne and the Basque Country',
 				date: '2025 – 2026',
 				bullets: [
 					'Agile SCRUM Project Management',
-					'MVC Architecture — OOP',
+					'MVC Architecture and Object-Oriented Programming',
 					'Docker Containerization',
 					'MySQL Database Management and Security',
 					'Unit Test Development',
@@ -241,11 +241,11 @@ export const cv: Record<Lang, CvData> = {
 			},
 			{
 				title: 'Car Sharing Web Application',
-				subtitle: "PHP / Twig / Bootstrap — Covoit'Étud",
+				subtitle: "Covoit'Etud (PHP / Twig / Bootstrap)",
 				place: 'IUT of Bayonne and the Basque Country',
 				date: '2024 – 2025',
 				bullets: [
-					'Fullstack Development in a Team of 5 — MVC Architecture',
+					'Fullstack Development in a Team of 5, MVC Architecture',
 					'Booking System for Drivers and Passengers',
 					'Integration of a Geocoding API for the Trip Map',
 					'Student Profile Management, Grading, and Badge System',
@@ -255,8 +255,8 @@ export const cv: Record<Lang, CvData> = {
 		],
 		experience: [
 			{
-				title: 'Development Intern — Computer Vision',
-				place: 'Compositadour — BluePoint European project',
+				title: 'Development Intern, Computer Vision',
+				place: 'Compositadour, BluePoint European project',
 				date: 'April – July 2026',
 				bullets: [
 					'Design and development of a Python/PyQt6 real-time object tracking application, MVC architecture',

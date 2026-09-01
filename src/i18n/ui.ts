@@ -8,9 +8,9 @@ export const defaultLang = 'fr';
 export const ui = {
 	fr: {
 		// Métadonnées par défaut (pages sans title/description explicites)
-		'meta.default.title': 'Thibault Rosalie - Portfolio',
+		'meta.default.title': 'ThibaultROSALIE- Portfolio',
 		'meta.default.description':
-			'Portfolio de Thibault Rosalie, développeur web full stack issu du BUT Informatique, en recherche de poste.',
+			'Portfolio de Thibault ROSALIE, développeur web full stack issu du BUT Informatique, en recherche de poste.',
 
 		// Accessibilite
 		'a11y.skipToContent': 'Aller au contenu',
@@ -30,8 +30,8 @@ export const ui = {
 		'footer.madeWith': 'Créé avec',
 
 		// Page 404
-		'404.meta.title': 'Page introuvable | Thibault Rosalie',
-		'404.meta.desc': "Erreur 404 — cette page n'existe pas ou a été déplacée.",
+		'404.meta.title': 'Page introuvable | Thibault ROSALIE',
+		'404.meta.desc': "Erreur 404 : cette page n'existe pas ou a été déplacée.",
 		'404.title': 'Page introuvable',
 		'404.tagline': "Cette page n'existe pas ou a été déplacée.",
 		'404.back': "← Retour à l'accueil",
@@ -42,9 +42,9 @@ export const ui = {
 		'wip.back': '← Retour à l\'accueil',
 
 		// Page d'accueil
-		'index.hero.title': "Bonjour, je m'appelle Thibault Rosalie",
+		'index.hero.title': "Bonjour, je m'appelle Thibault ROSALIE",
 		'index.hero.tagline': "Développeur full stack au terme d'un BUT Informatique, je recherche un poste où mettre en pratique ce que j'ai appris.",
-		'index.hero.portrait.alt': 'Photo de profil de Thibault Rosalie',
+		'index.hero.portrait.alt': 'Photo de profil de Thibault ROSALIE',
 		'index.hero.role.dev': 'Développeur',
 		'index.hero.role.fullstack': 'Full Stack',
 		'index.hero.cta': 'Voir mon CV',
@@ -60,17 +60,34 @@ export const ui = {
 
 		// Encart compétences (composant Skills)
 		'skills.backend.text':
-			"PHP, Laravel, Python — développement d'applications web robustes, tests unitaires avec PHPUnit et conception orientée objet.",
+			"PHP, Laravel, Python : développement d'applications web robustes, tests unitaires avec PHPUnit et conception orientée objet.",
 		'skills.frontend.text':
-			"Angular, HTML/CSS — création d'interfaces modernes et responsives, avec une approche mobile-first et un souci du détail.",
+			"Angular, HTML/CSS : création d'interfaces modernes et responsives, avec une approche mobile-first et un souci du détail.",
 		'skills.tools.text':
-			'Git, Docker, MySQL, SCRUM — environnements conteneurisés, versioning collaboratif et gestion de projet agile.',
+			'Git, Docker, MySQL, SCRUM : environnements conteneurisés, versioning collaboratif et gestion de projet agile.',
 
 		// Projets
 		'work.title': 'Mes Projets',
 		'work.tagline': 'Découvrez mes projets les plus récents pour avoir un aperçu de mon expérience.',
-		'work.meta.title': 'Mes Projets | Thibault Rosalie',
-		'work.meta.desc': 'Découvrez les projets récents de Thibault Rosalie',
+		'work.meta.title': 'Mes Projets | Thibault ROSALIE',
+		'work.meta.desc': 'Découvrez les projets récents de Thibault ROSALIE',
+		'work.card.featured': 'Projet le plus récent',
+		'work.back': 'Retour aux projets',
+		'work.github': 'Voir sur GitHub',
+		'work.demo': 'Voir la démo',
+		// Les intitulés de section vivent ici et non dans le contenu : les deux
+		// versions d'un projet ne peuvent plus les nommer différemment.
+		'work.section.about': 'Le projet',
+		'work.section.features': 'Fonctionnalités',
+		'work.section.stack': 'Stack technique',
+		'work.section.gallery': 'En images',
+		'work.section.role': 'Mon rôle',
+		'work.section.more': 'Pour aller plus loin',
+		'work.gallery.roleDescription': 'carrousel',
+		'work.gallery.label': "Captures d'écran du projet",
+		'work.gallery.previous': 'Capture précédente',
+		'work.gallery.next': 'Capture suivante',
+		'work.gallery.position': 'Capture {n} sur {total}',
 
 		// Contact
 		'contact.title': 'Me contacter',
@@ -87,11 +104,11 @@ export const ui = {
 		'contact.details': 'Coordonnées',
 		'contact.availability': 'Disponibilité',
 		'contact.availability.text': "Au terme de mon BUT Informatique à l'IUT de Bayonne. À la recherche d'un poste de développeur full stack.",
-		'contact.meta.title': 'Me contacter | Thibault Rosalie',
+		'contact.meta.title': 'Me contacter | Thibault ROSALIE',
 		'contact.meta.desc': 'Envoyez-moi un message pour toute proposition de collaboration ou question.',
 		// Sujet de l'e-mail que Formspree envoie : les deux langues partagent le
 		// meme endpoint, c'est lui qui distingue les demandes dans la boite mail.
-		'contact.mail.subject': 'Portfolio (FR) — nouveau message',
+		'contact.mail.subject': 'Portfolio (FR) : nouveau message',
 		'contact.sent.title': 'Message envoyé',
 		'contact.sent.text': 'Merci, votre message est bien parti. Je vous réponds dès que possible.',
 		// Libelle du piege a robots. Le champ est masque et retire du parcours
@@ -99,8 +116,8 @@ export const ui = {
 		'contact.honeypot': 'Ne remplissez pas ce champ si vous êtes humain',
 
 		// À propos
-		'about.meta.title': 'À propos | Thibault Rosalie',
-		'about.meta.desc': 'À propos de Thibault Rosalie - Développeur full stack issu du BUT Informatique',
+		'about.meta.title': 'À propos | Thibault ROSALIE',
+		'about.meta.desc': 'À propos de Thibault ROSALIE- Développeur full stack issu du BUT Informatique',
 		'about.wip.title': 'À propos',
 
 		// Barre des pages d'impression (CV et lettre)
@@ -110,14 +127,14 @@ export const ui = {
 		// CV
 		'cv.save': 'Sauvegarder en PDF',
 		'cv.download': 'Télécharger le PDF',
-		'cv.meta.title': 'CV | Thibault Rosalie',
-		'cv.meta.desc': 'Curriculum Vitae de Thibault Rosalie - Développeur FullStack issu du BUT Informatique',
-		'cv.print.title': 'CV – Thibault Rosalie (impression)',
-		'cv.print.toolbar': 'Aperçu avant impression — CV Thibault Rosalie',
+		'cv.meta.title': 'CV | Thibault ROSALIE',
+		'cv.meta.desc': 'Curriculum Vitae de ThibaultROSALIE- Développeur FullStack issu du BUT Informatique',
+		'cv.print.title': 'CV – Thibault ROSALIE(impression)',
+		'cv.print.toolbar': 'Aperçu avant impression du CV de Thibault ROSALIE',
 
 		// Lettre de motivation
-		'letter.meta.title': 'Lettre de motivation | Thibault Rosalie',
-		'letter.meta.desc': 'Rédaction et impression PDF de la lettre de motivation de Thibault Rosalie.',
+		'letter.meta.title': 'Lettre de motivation | Thibault ROSALIE',
+		'letter.meta.desc': 'Rédaction et impression PDF de la lettre de motivation de Thibault ROSALIE.',
 		'letter.page.title': 'Lettre de motivation',
 		'letter.page.subtitle': 'Rédigez votre lettre puis ouvrez la page d\'impression pour la sauvegarder en PDF, comme pour le CV.',
 		'letter.form.label': 'Contenu de la lettre',
@@ -134,15 +151,15 @@ export const ui = {
 		'letter.default.subject': 'Objet : Candidature',
 		'letter.editor.aria': 'Editeur de lettre de motivation',
 		'letter.preview.aria': 'Apercu lettre de motivation',
-		'letter.doc.aria': 'Lettre de motivation de Thibault Rosalie',
-		'letter.print.title': 'Lettre de motivation - Thibault Rosalie (impression)',
+		'letter.doc.aria': 'Lettre de motivation de Thibault ROSALIE',
+		'letter.print.title': 'Lettre de motivation - Thibault ROSALIE(impression)',
 		'letter.print.toolbar': 'Apercu avant impression - Lettre de motivation',
 	},
 	en: {
 		// Métadonnées par défaut (pages sans title/description explicites)
-		'meta.default.title': 'Thibault Rosalie - Portfolio',
+		'meta.default.title': 'Thibault ROSALIE- Portfolio',
 		'meta.default.description':
-			'Portfolio of Thibault Rosalie, full stack web developer completing a Computer Science degree and looking for a position.',
+			'Portfolio of Thibault ROSALIE, full stack web developer completing a Computer Science degree and looking for a position.',
 
 		// Accessibility
 		'a11y.skipToContent': 'Skip to content',
@@ -162,8 +179,8 @@ export const ui = {
 		'footer.madeWith': 'Built with',
 
 		// Page 404
-		'404.meta.title': 'Page not found | Thibault Rosalie',
-		'404.meta.desc': '404 error — this page does not exist or has been moved.',
+		'404.meta.title': 'Page not found | Thibault ROSALIE',
+		'404.meta.desc': '404 error: this page does not exist or has been moved.',
 		'404.title': 'Page not found',
 		'404.tagline': 'This page does not exist or has been moved.',
 		'404.back': '← Back to home',
@@ -174,9 +191,9 @@ export const ui = {
 		'wip.back': '← Back to home',
 
 		// Page d'accueil
-		'index.hero.title': "Hello, my name is Thibault Rosalie",
+		'index.hero.title': "Hello, my name is Thibault ROSALIE",
 		'index.hero.tagline': 'Full stack developer completing a Computer Science degree, I am looking for a position where I can put what I have learned into practice.',
-		'index.hero.portrait.alt': 'Profile picture of Thibault Rosalie',
+		'index.hero.portrait.alt': 'Profile picture of Thibault ROSALIE',
 		'index.hero.role.dev': 'Developer',
 		'index.hero.role.fullstack': 'Full Stack',
 		'index.hero.cta': 'View my Resume',
@@ -192,17 +209,32 @@ export const ui = {
 
 		// Skills box (Skills component)
 		'skills.backend.text':
-			'PHP, Laravel, Python — building robust web applications, unit testing with PHPUnit and object-oriented design.',
+			'PHP, Laravel, Python: building robust web applications, unit testing with PHPUnit and object-oriented design.',
 		'skills.frontend.text':
-			'Angular, HTML/CSS — building modern, responsive interfaces with a mobile-first approach and an eye for detail.',
+			'Angular, HTML/CSS: building modern, responsive interfaces with a mobile-first approach and an eye for detail.',
 		'skills.tools.text':
-			'Git, Docker, MySQL, SCRUM — containerised environments, collaborative versioning and agile project management.',
+			'Git, Docker, MySQL, SCRUM: containerised environments, collaborative versioning and agile project management.',
 
 		// Projects
 		'work.title': 'My Projects',
 		'work.tagline': 'Discover my most recent projects to get an overview of my experience.',
-		'work.meta.title': 'My Projects | Thibault Rosalie',
-		'work.meta.desc': 'Discover the recent projects of Thibault Rosalie',
+		'work.meta.title': 'My Projects | Thibault ROSALIE',
+		'work.meta.desc': 'Discover the recent projects of Thibault ROSALIE',
+		'work.card.featured': 'Most recent project',
+		'work.back': 'Back to projects',
+		'work.github': 'View on GitHub',
+		'work.demo': 'View demo',
+		'work.section.about': 'The project',
+		'work.section.features': 'Features',
+		'work.section.stack': 'Tech stack',
+		'work.section.gallery': 'In pictures',
+		'work.section.role': 'My role',
+		'work.section.more': 'Going further',
+		'work.gallery.roleDescription': 'carousel',
+		'work.gallery.label': 'Project screenshots',
+		'work.gallery.previous': 'Previous screenshot',
+		'work.gallery.next': 'Next screenshot',
+		'work.gallery.position': 'Screenshot {n} of {total}',
 
 		// Contact
 		'contact.title': 'Contact me',
@@ -219,16 +251,16 @@ export const ui = {
 		'contact.details': 'Contact details',
 		'contact.availability': 'Availability',
 		'contact.availability.text': 'Completing my Computer Science degree at IUT de Bayonne. Looking for a full stack developer position.',
-		'contact.meta.title': 'Contact me | Thibault Rosalie',
+		'contact.meta.title': 'Contact me | Thibault ROSALIE',
 		'contact.meta.desc': 'Send me a message for any collaboration proposal or question.',
-		'contact.mail.subject': 'Portfolio (EN) — new message',
+		'contact.mail.subject': 'Portfolio (EN): new message',
 		'contact.sent.title': 'Message sent',
 		'contact.sent.text': 'Thank you, your message is on its way. I will get back to you as soon as possible.',
 		'contact.honeypot': 'Leave this field empty if you are human',
 
 		// About
-		'about.meta.title': 'About | Thibault Rosalie',
-		'about.meta.desc': 'About Thibault Rosalie - Full stack developer with a Computer Science degree',
+		'about.meta.title': 'About | Thibault ROSALIE',
+		'about.meta.desc': 'About Thibault ROSALIE- Full stack developer with a Computer Science degree',
 		'about.wip.title': 'About',
 
 		// Print page toolbar (resume and cover letter)
@@ -238,14 +270,14 @@ export const ui = {
 		// Resume
 		'cv.save': 'Save as PDF',
 		'cv.download': 'Download the PDF',
-		'cv.meta.title': 'Resume | Thibault Rosalie',
-		'cv.meta.desc': 'Curriculum Vitae of Thibault Rosalie - FullStack Developer with a Computer Science degree',
-		'cv.print.title': 'Resume – Thibault Rosalie (print)',
-		'cv.print.toolbar': 'Print preview — Resume of Thibault Rosalie',
+		'cv.meta.title': 'Resume | Thibault ROSALIE',
+		'cv.meta.desc': 'Curriculum Vitae of ThibaultROSALIE- FullStack Developer with a Computer Science degree',
+		'cv.print.title': 'Resume – Thibault ROSALIE(print)',
+		'cv.print.toolbar': "Print preview of Thibault ROSALIE's resume",
 
 		// Cover letter
-		'letter.meta.title': 'Cover Letter | Thibault Rosalie',
-		'letter.meta.desc': 'Write and print the PDF cover letter of Thibault Rosalie.',
+		'letter.meta.title': 'Cover Letter | Thibault ROSALIE',
+		'letter.meta.desc': 'Write and print the PDF cover letter of Thibault ROSALIE.',
 		'letter.page.title': 'Cover Letter',
 		'letter.page.subtitle': 'Write your letter, then open the print page to save it as PDF with the same flow as the resume.',
 		'letter.form.label': 'Letter content',
@@ -262,8 +294,8 @@ export const ui = {
 		'letter.default.subject': 'Subject: Application',
 		'letter.editor.aria': 'Cover letter editor',
 		'letter.preview.aria': 'Cover letter preview',
-		'letter.doc.aria': 'Cover letter of Thibault Rosalie',
-		'letter.print.title': 'Cover Letter - Thibault Rosalie (print)',
+		'letter.doc.aria': 'Cover letter of Thibault ROSALIE',
+		'letter.print.title': 'Cover Letter - Thibault ROSALIE(print)',
 		'letter.print.toolbar': 'Print preview - Cover Letter',
 	},
 } as const;

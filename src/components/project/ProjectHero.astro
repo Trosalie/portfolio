@@ -1,0 +1,200 @@
+---
+import Hero from '../Hero.astro';
+import Icon from '../Icon.astro';
+import Pill from '../Pill.astro';
+import { workBasePath, type WorkEntry } from '../../data/work';
+import { useTranslations, type Lang } from '../../i18n/ui';
+
+interface Props {
+	entry: WorkEntry;
+	lang: Lang;
+}
+
+const { entry, lang } = Astro.props;
+const { data } = entry;
+const t = useTranslations(lang);
+
+// Periode, cadre et equipe restent optionnels : la ligne n'apparait que si au
+// moins un des trois est renseigne.
+const meta = [data.period, data.context, data.team].filter(Boolean) as string[];
+---
+
+<div class="project-hero">
+	<a class="back-link" href={workBasePath(lang)}>
+		<Icon icon="arrow-left" />
+		{t('work.back')}
+	</a>
+	<Hero title={data.title} align="start">
+		<div class="details">
+			<p class="description">{data.description}</p>
+			{
+				meta.length > 0 && (
+					<ul class="meta">
+						{meta.map((item) => (
+							<li>{item}</li>
+						))}
+					</ul>
+				)
+			}
+			<div class="tags">
+				{data.tags.map((tag) => <Pill>{tag}</Pill>)}
+			</div>
+			{
+				(data.githubUrl || data.demoUrl) && (
+					<div class="actions">
+						{data.githubUrl && (
+							<a class="action" href={data.githubUrl} target="_blank" rel="noopener noreferrer">
+								<Icon icon="github-logo" />
+								{t('work.github')}
+							</a>
+						)}
+						{data.demoUrl && (
+							<a
+								class="action primary"
+								href={data.demoUrl}
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								<Icon icon="rocket-launch" />
+								{t('work.demo')}
+							</a>
+						)}
+					</div>
+				)
+			}
+		</div>
+	</Hero>
+</div>
+
+<style>
+	.project-hero {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+		padding-bottom: 2.5rem;
+		border-bottom: 1px solid var(--gray-800);
+	}
+
+	.back-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		align-self: flex-start;
+		padding: 0.5rem 1rem;
+		background: var(--gray-999);
+		border: 1px solid var(--gray-800);
+		border-radius: 0.5rem;
+		color: var(--gray-300);
+		text-decoration: none;
+		font-size: var(--text-sm);
+		font-weight: 500;
+		transition: border-color var(--theme-transition), color var(--theme-transition);
+	}
+
+	.back-link:hover,
+	.back-link:focus-visible {
+		color: var(--accent-regular);
+		border-color: var(--accent-regular);
+	}
+
+	/* `Hero` ne passe a gauche qu'au-dela de 50em ; sur une page projet, le titre
+	   se retrouvait centre au-dessus d'un bloc aligne a gauche. */
+	.project-hero :global(.hero) {
+		text-align: start;
+	}
+
+	.project-hero :global(.hero .title),
+	.project-hero :global(.hero .tagline) {
+		margin-inline: 0;
+	}
+
+	.details {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+		align-items: flex-start;
+		text-align: start;
+	}
+
+	.description {
+		margin: 0;
+		font-size: var(--text-md);
+		max-width: 58ch;
+	}
+
+	/* Periode / cadre / equipe, separes par des points medians generes en CSS :
+	   le separateur reste decoratif et n'est pas lu par les lecteurs d'ecran. */
+	.meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem 1rem;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		font-size: var(--text-sm);
+		color: var(--gray-400);
+	}
+
+	.meta li + li::before {
+		content: '·';
+		margin-inline-end: 1rem;
+		color: var(--gray-500);
+	}
+
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+	}
+
+	.action {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.5rem 1.25rem;
+		background: var(--gray-999);
+		color: var(--gray-200);
+		border: 1px solid var(--gray-800);
+		border-radius: 0.5rem;
+		text-decoration: none;
+		font-size: var(--text-sm);
+		font-weight: 500;
+		transition: border-color var(--theme-transition), color var(--theme-transition);
+	}
+
+	.action:hover,
+	.action:focus-visible {
+		color: var(--accent-regular);
+		border-color: var(--accent-regular);
+	}
+
+	.action.primary {
+		background: var(--accent-regular);
+		border-color: var(--accent-regular);
+		color: var(--accent-text-over);
+	}
+
+	.action.primary:hover,
+	.action.primary:focus-visible {
+		background: var(--accent-dark);
+		border-color: var(--accent-dark);
+		color: var(--accent-text-over);
+	}
+
+	.action :global(svg) {
+		width: 1.2em;
+		height: 1.2em;
+	}
+
+	@media (min-width: 50em) {
+		.description {
+			font-size: var(--text-lg);
+		}
+	}
+</style>

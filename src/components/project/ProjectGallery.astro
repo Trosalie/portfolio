@@ -1,0 +1,427 @@
+---
+import { Image } from 'astro:assets';
+
+import Icon from '../Icon.astro';
+import type { WorkEntry } from '../../data/work';
+import { useTranslations, type Lang } from '../../i18n/ui';
+
+/**
+ * Le carrousel de captures d'une page projet.
+ *
+ * Une couverture unique suffit pour un site, pas pour un logiciel a plusieurs
+ * ecrans : l'assistant de calibration, le flux annote et la fenetre de reglages
+ * ne se devinent pas depuis une seule vue.
+ *
+ * La piste est un conteneur de defilement horizontal avec accroche : sans
+ * JavaScript, les captures restent toutes atteignables au doigt, a la molette
+ * et au clavier — le script n'ajoute que les fleches, les pastilles et la mise
+ * en retrait des voisines, qui restent donc inertes tant qu'il n'a pas tourne.
+ *
+ * La piste deborde de la colonne de texte et occupe toute la largeur de la page :
+ * la capture centrale garde alors sa pleine taille — les captures d'interface
+ * sont denses, les retrecir les rendrait illisibles — et ce sont les marges du
+ * texte qui accueillent les voisines.
+ */
+interface Props {
+	gallery: NonNullable<WorkEntry['data']['gallery']>;
+	lang: Lang;
+}
+
+const { gallery, lang } = Astro.props;
+const t = useTranslations(lang);
+
+// La boite d'une diapositive est la meme pour toute la galerie, sinon le
+// carrousel avancerait par sauts inegaux et les voisines n'auraient pas le meme
+// retrait. Elle se cale sur la premiere capture ; une galerie melangeant les
+// formats verrait ses autres captures centrees dans cette boite.
+const galleryRatio = gallery[0]!.src.width / gallery[0]!.src.height;
+
+// `sizes` doit annoncer la largeur reellement occupee, et non celle de la
+// colonne : une capture de telephone s'affiche sur 325 px, pas sur 1056, et le
+// navigateur telechargeait sans cela une source trois fois trop large. La
+// formule reprend celle de `--slide-width`, plafond `--frame-height` compris.
+const slideWidthHint = Math.round(Math.min(1056, galleryRatio * 704));
+const sizes = `(min-width: 50em) ${slideWidthHint}px, calc(100vw - 3rem)`;
+
+const position = (index: number) =>
+	t('work.gallery.position')
+		.replace('{n}', String(index + 1))
+		.replace('{total}', String(gallery.length));
+---
+
+<div class="gallery" data-gallery style={`--gallery-ratio: ${galleryRatio}`}>
+	<ul
+		class="track"
+		tabindex="0"
+		role="group"
+		aria-roledescription={t('work.gallery.roleDescription')}
+		aria-label={t('work.gallery.label')}
+		data-track
+	>
+		{
+			gallery.map((item, index) => (
+				<li class="slide" aria-label={position(index)}>
+					<figure>
+						{/* Le cadre prend la forme de la capture : une vue de logiciel est
+						    large, une capture de telephone est haute, et les enfermer dans un
+						    meme rapport laisserait la seconde minuscule au milieu de bandes
+						    vides. */}
+						<div class="frame" style={`--ratio: ${item.src.width / item.src.height}`}>
+							<Image
+								src={item.src}
+								alt={item.alt}
+								widths={[Math.round(item.src.width / 2), item.src.width]}
+								sizes={sizes}
+								loading="lazy"
+								decoding="async"
+							/>
+						</div>
+						{item.caption && <figcaption>{item.caption}</figcaption>}
+					</figure>
+				</li>
+			))
+		}
+	</ul>
+
+	<div class="controls" hidden data-controls>
+		<button type="button" class="arrow" data-prev aria-label={t('work.gallery.previous')}>
+			<Icon icon="arrow-left" size="1.25rem" />
+		</button>
+
+		<ul class="dots">
+			{
+				gallery.map((_, index) => (
+					<li>
+						<button
+							type="button"
+							class="dot"
+							data-dot
+							aria-label={position(index)}
+							aria-current={index === 0 ? 'true' : undefined}
+						/>
+					</li>
+				))
+			}
+		</ul>
+
+		<button type="button" class="arrow" data-next aria-label={t('work.gallery.next')}>
+			<Icon icon="arrow-right" size="1.25rem" />
+		</button>
+	</div>
+
+	{/* La position change sans que rien ne bouge dans le focus : sans annonce,
+	    un lecteur d'ecran resterait muet apres un clic sur une fleche. */}
+	<p class="sr-only" aria-live="polite" data-live></p>
+</div>
+
+<script>
+	const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+	function setupGallery(gallery: HTMLElement) {
+		const track = gallery.querySelector<HTMLElement>('[data-track]');
+		const controls = gallery.querySelector<HTMLElement>('[data-controls]');
+		const live = gallery.querySelector<HTMLElement>('[data-live]');
+		const prev = gallery.querySelector<HTMLButtonElement>('[data-prev]');
+		const next = gallery.querySelector<HTMLButtonElement>('[data-next]');
+		const dots = [...gallery.querySelectorAll<HTMLButtonElement>('[data-dot]')];
+		if (!track || !controls || !prev || !next) return;
+
+		const slides = [...track.children] as HTMLElement[];
+		let current = 0;
+
+		controls.hidden = false;
+
+		// Fonctions flechees et non declarations : TypeScript perd le
+		// retrecissement de type des `const` ci-dessus dans une fonction hoistee,
+		// qu'il considere appelable avant la garde.
+		const render = (index: number) => {
+			current = index;
+			prev.disabled = index === 0;
+			next.disabled = index === slides.length - 1;
+			slides.forEach((slide, i) => slide.toggleAttribute('data-active', i === index));
+			dots.forEach((dot, i) => {
+				if (i === index) dot.setAttribute('aria-current', 'true');
+				else dot.removeAttribute('aria-current');
+			});
+		};
+
+		const goTo = (index: number) => {
+			const target = Math.max(0, Math.min(index, slides.length - 1));
+			const slide = slides[target]!;
+			// La diapositive est plus etroite que la piste : on l'amene au centre.
+			// `offsetLeft` et `scrollLeft` partent tous deux du bord interieur du
+			// remplissage, si bien que la premiere retombe bien sur zero.
+			track.scrollTo({
+				left: slide.offsetLeft - (track.clientWidth - slide.offsetWidth) / 2,
+				behavior: REDUCED.matches ? 'auto' : 'smooth',
+			});
+			render(target);
+			if (live) live.textContent = dots[target]?.getAttribute('aria-label') ?? '';
+		};
+
+		prev.addEventListener('click', () => goTo(current - 1));
+		next.addEventListener('click', () => goTo(current + 1));
+		dots.forEach((dot, index) => dot.addEventListener('click', () => goTo(index)));
+
+		// Une voisine visible a demi appelle le clic. L'affordance est au pointeur
+		// seulement : elle double des commandes deja atteignables au clavier — les
+		// fleches, les pastilles, et la piste elle-meme qui prend le focus.
+		slides.forEach((slide, index) =>
+			slide.addEventListener('click', () => {
+				if (index !== current) goTo(index);
+			}),
+		);
+
+		// Le defilement au doigt ou a la molette ne passe par aucun bouton : les
+		// pastilles suivent ce que l'utilisateur regarde, pas ce qu'il a clique.
+		const observer = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) {
+					if (!entry.isIntersecting) continue;
+					const index = slides.indexOf(entry.target as HTMLElement);
+					if (index !== -1 && index !== current) render(index);
+				}
+			},
+			// On observe une bande centrale, pas une surface : trois captures
+			// etroites peuvent etre visibles a 60 % en meme temps, et la pastille
+			// active se mettrait a osciller entre elles.
+			{ root: track, rootMargin: '0px -48% 0px -48%', threshold: 0 },
+		);
+		slides.forEach((slide) => observer.observe(slide));
+
+		// Le retrait des voisines n'a lieu qu'a partir d'ici : sans cette marque,
+		// une page privee de JavaScript les afficherait toutes assombries, faute
+		// d'une diapositive portant `data-active`.
+		gallery.setAttribute('data-enhanced', '');
+		render(0);
+	}
+
+	document.querySelectorAll<HTMLElement>('[data-gallery]').forEach(setupGallery);
+</script>
+
+<style>
+	.gallery {
+		--frame-height: min(72vh, 44rem);
+		/* `66rem` est la largeur de `.project`, `3rem` le remplissage de
+		   `.wrapper` : la capture centrale ne deborde jamais de la colonne de
+		   texte. Aucun pourcentage ici — une variable est heritee telle quelle et
+		   un `100%` se recalculerait contre la piste debordee, pas contre la
+		   colonne. */
+		--slide-width: min(
+			66rem,
+			calc(var(--gallery-ratio, 1.7778) * var(--frame-height)),
+			calc(100vw - 3rem)
+		);
+
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.track {
+		/* Repere des `offsetLeft` mesures par le script. */
+		position: relative;
+		display: flex;
+		gap: 1rem;
+		overflow-x: auto;
+		scroll-snap-type: x mandatory;
+		overscroll-behavior-x: contain;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+
+		/* La piste sort de la colonne de texte et prend toute la largeur de la
+		   page : `50%` se rapporte a la colonne, `50vw` a la page. `body` porte
+		   deja `overflow-x: hidden`, le debordement ne cree donc pas de barre de
+		   defilement horizontale. */
+		width: 100vw;
+		margin-inline: calc(50% - 50vw);
+
+		/* Sans ce remplissage, la premiere et la derniere capture ne pourraient
+		   pas atteindre le centre : le defilement bute avant. */
+		padding-inline: max(0px, calc((100vw - var(--slide-width)) / 2));
+
+		/* La barre de defilement native doublerait les pastilles sous la piste. */
+		scrollbar-width: none;
+	}
+
+	.track::-webkit-scrollbar {
+		display: none;
+	}
+
+	.track:focus-visible {
+		outline: 2px solid var(--accent-regular);
+		outline-offset: 4px;
+	}
+
+	.slide {
+		flex: 0 0 var(--slide-width);
+		/* Accroche au centre et non au bord : c'est ce qui laisse les voisines
+		   deborder de part et d'autre. */
+		scroll-snap-align: center;
+		scroll-snap-stop: always;
+		transform-origin: center center;
+	}
+
+	/* Le retrait des voisines. `transform` et `filter` ne touchent pas a la mise
+	   en page : l'ecart entre les captures nait de la reduction elle-meme, il n'y
+	   a pas de marge a ecrire. */
+	[data-enhanced] .slide {
+		transition:
+			transform 0.45s cubic-bezier(0.22, 0.61, 0.36, 1),
+			filter 0.45s ease-out,
+			opacity 0.45s ease-out;
+	}
+
+	[data-enhanced] .slide:not([data-active]) {
+		transform: scale(0.86);
+		filter: brightness(0.45) saturate(0.9);
+		opacity: 0.75;
+		cursor: pointer;
+	}
+
+	/* Une seule legende se lit a la fois, celle de la capture centrale. La place
+	   reste prise (`min-height` ci-dessous), la page ne sursaute pas. */
+	[data-enhanced] .slide:not([data-active]) figcaption {
+		visibility: hidden;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		[data-enhanced] .slide {
+			transition: none;
+		}
+	}
+
+	figure {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		margin: 0;
+	}
+
+	/* Meme cadre que la couverture : le ratio est fixe avant le chargement, la
+	   page ne sursaute pas quand une capture paresseuse arrive. */
+	.frame {
+		/* La hauteur est bornee par deux fois : par `--frame-height`, pour qu'une
+		   capture verticale ne pousse pas le reste de la page hors de l'ecran, et
+		   par la largeur disponible, pour qu'une capture horizontale ne se
+		   retrouve pas dans une boite plus haute qu'elle sur un ecran etroit. */
+		height: min(var(--frame-height), calc(var(--slide-width) / var(--ratio, 1.7778)));
+		aspect-ratio: var(--ratio, 1.7778);
+		width: auto;
+		max-width: 100%;
+		margin-inline: auto;
+		border: 1px solid var(--gray-800);
+		border-radius: 0.75rem;
+		overflow: hidden;
+		background: var(--gradient-subtle);
+		box-shadow: var(--shadow-sm);
+	}
+
+	.frame img {
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+	}
+
+	figcaption {
+		/* La legende n'est pas tenue par la largeur de la capture : sous un
+		   telephone de 325 px elle tiendrait sur quatre lignes. Dans une colonne
+		   flexible, `align-self` centre l'element sur l'axe horizontal — y
+		   compris quand il deborde, ce qui est exactement l'effet recherche. */
+		width: max(100%, min(34rem, 100vw - 3rem));
+		align-self: center;
+		min-height: 2.6em;
+		text-align: center;
+		font-size: var(--text-sm);
+		line-height: 1.4;
+		color: var(--gray-400);
+	}
+
+	.controls {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 1rem;
+	}
+
+	.arrow {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 2.5rem;
+		height: 2.5rem;
+		padding: 0;
+		border: 1px solid var(--gray-800);
+		border-radius: 999rem;
+		background-color: var(--gray-999_40);
+		color: var(--gray-300);
+		cursor: pointer;
+		transition:
+			color var(--theme-transition),
+			border-color var(--theme-transition);
+	}
+
+	.arrow:hover:not(:disabled),
+	.arrow:focus-visible {
+		color: var(--accent-regular);
+		border-color: var(--accent-regular);
+	}
+
+	.arrow:disabled {
+		opacity: 0.4;
+		cursor: default;
+	}
+
+	.dots {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.dot {
+		display: block;
+		/* La pastille visible fait 0.5rem, la cible de pointage 1.75rem : en
+		   dessous, elle serait inatteignable au doigt. */
+		width: 1.75rem;
+		height: 1.75rem;
+		padding: 0;
+		border: none;
+		background: none;
+		cursor: pointer;
+	}
+
+	.dot::before {
+		content: '';
+		display: block;
+		width: 0.5rem;
+		height: 0.5rem;
+		margin: auto;
+		border-radius: 999rem;
+		background-color: var(--gray-600);
+		transition: background-color var(--theme-transition);
+	}
+
+	.dot[aria-current]::before {
+		background-color: var(--accent-regular);
+		box-shadow: 0 0 0 3px var(--accent-overlay);
+	}
+
+	.dot:hover::before,
+	.dot:focus-visible::before {
+		background-color: var(--accent-regular);
+	}
+
+	@media (min-width: 50em) {
+		.frame {
+			border-radius: 1rem;
+		}
+
+		figcaption {
+			font-size: var(--text-base);
+		}
+	}
+</style>

@@ -9,29 +9,30 @@ tags:
   - pthread
 githubUrl: https://github.com/Trosalie/projetChat
 gradient: "linear-gradient(135deg, #0f172a 0%, #0ea5e9 100%)"
+period: "2026"
+context: Projet de cours en BUT Informatique
+intro: |
+  Projet Chat Multi-Channels est une application réseau en C qui implémente un système de messagerie en ligne de commande. L'architecture repose sur un serveur principal, des clients connectés et une gestion de channels dynamiques pour séparer les conversations.
+features:
+  - Connexion client/serveur via sockets TCP
+  - title: Gestion de plusieurs clients en parallèle
+    description: Un thread POSIX par client connecté.
+    icon: code
+  - Création et sélection de channels dynamiques à la connexion
+  - title: Historique des messages par channel
+    icon: list
+  - title: Commande de sortie client
+    description: Déconnexion propre via quit ou Ctrl+D.
+    icon: terminal-window
+stack:
+  - layer: Langage
+    items: [C]
+  - layer: Réseau
+    items: [Sockets TCP (POSIX)]
+  - layer: Concurrence
+    items: [Threads POSIX (pthread)]
+  - layer: Build
+    items: [GCC]
+role: |
+  Conception et développement d'un mini-système client/serveur en C : structuration du serveur, gestion des connexions concurrentes, logique de channels et tests d'exécution en local.
 ---
-
-## A propos du projet
-
-**Projet Chat Multi-Channels** est une application reseau en C qui implemente un systeme de messagerie en ligne de commande. L'architecture repose sur un serveur principal, des clients connectes et une gestion de channels dynamiques pour separer les conversations.
-
-## Fonctionnalites principales
-
-- Connexion client/serveur via sockets TCP
-- Gestion de plusieurs clients en parallele avec **pthread**
-- Creation et selection de channels dynamiques a la connexion
-- Historique des messages par channel
-- Commande de sortie client (`quit` ou `Ctrl+D`)
-
-## Stack technique
-
-| Couche        | Technologie                 |
-|---------------|-----------------------------|
-| Langage       | C                           |
-| Reseau        | Sockets TCP (POSIX)         |
-| Concurrence   | Threads POSIX (`pthread`)   |
-| Build         | GCC                         |
-
-## Mon role
-
-Conception et developpement d'un mini-systeme client/serveur en C : structuration du serveur, gestion des connexions concurrentes, logique de channels et tests d'execution en local.

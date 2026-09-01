@@ -1,0 +1,96 @@
+---
+import type { WorkEntry } from '../../data/work';
+
+interface Props {
+	stack: WorkEntry['data']['stack'];
+}
+
+const { stack } = Astro.props;
+---
+
+{/* Une liste de definitions plutot qu'un tableau : la relation est bien
+    « une couche → ses technologies », et elle se replie proprement en colonne
+    sous 50em, ce que le tableau Markdown ne faisait pas. */}
+<dl class="stack-table">
+	{
+		stack.map((group) => (
+			<div class="row">
+				<dt>{group.layer}</dt>
+				<dd>
+					<ul>
+						{group.items.map((item) => (
+							<li>{item}</li>
+						))}
+					</ul>
+				</dd>
+			</div>
+		))
+	}
+</dl>
+
+<style>
+	.stack-table {
+		margin: 0;
+		border: 1px solid var(--gray-800);
+		border-radius: 0.75rem;
+		overflow: hidden;
+		background-color: var(--gray-999_40);
+		box-shadow: var(--shadow-sm);
+	}
+
+	.row {
+		display: grid;
+		gap: 0.5rem;
+		padding: 1rem 1.25rem;
+	}
+
+	.row + .row {
+		border-top: 1px solid var(--gray-800);
+	}
+
+	dt {
+		font-size: var(--text-sm);
+		font-weight: 700;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: var(--gray-400);
+	}
+
+	dd {
+		margin: 0;
+	}
+
+	ul {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	li {
+		padding: 0.25rem 0.75rem;
+		border: 1px solid var(--gray-800);
+		border-radius: 999rem;
+		background: var(--gray-999);
+		color: var(--gray-200);
+		font-size: var(--text-sm);
+		line-height: 1.4;
+	}
+
+	@media (min-width: 50em) {
+		.stack-table {
+			border-radius: 1rem;
+		}
+
+		.row {
+			/* Les intitules de couche s'alignent en colonne, les technologies
+			   occupent le reste et passent a la ligne si besoin. */
+			grid-template-columns: minmax(8rem, 12rem) 1fr;
+			align-items: baseline;
+			gap: 1.5rem;
+			padding: 1.125rem 1.5rem;
+		}
+	}
+</style>

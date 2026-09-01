@@ -1,4 +1,4 @@
-# Portfolio — Thibault Rosalie
+# Portfolio — Thibault ROSALIE
 
 Site personnel bilingue (français / anglais) d'un développeur full stack au terme d'un BUT
 Informatique, en recherche de poste : projets, CV consultable et téléchargeable en PDF. Le

@@ -20,7 +20,7 @@ export const defaultLetter: Record<Lang, string[]> = {
 		"Rigoureux, curieux et implique, j'apprecie les environnements techniques stimulants et le travail en equipe.",
 		"Je serais heureux d'echanger avec vous afin de vous presenter plus en detail ma motivation.",
 		"Je vous prie d'agreer, Madame, Monsieur, l'expression de mes salutations distinguees.",
-		'Thibault Rosalie',
+		'Thibault ROSALIE',
 	],
 	en: [
 		'Dear Hiring Manager,',
@@ -28,7 +28,7 @@ export const defaultLetter: Record<Lang, string[]> = {
 		'I am rigorous, curious, and motivated by concrete technical challenges as well as collaborative work.',
 		'I would be pleased to discuss how my profile could contribute to your projects.',
 		'Yours faithfully,',
-		'Thibault Rosalie',
+		'Thibault ROSALIE',
 	],
 };
 

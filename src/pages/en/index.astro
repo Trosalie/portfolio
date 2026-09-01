@@ -87,11 +87,11 @@ const projects = (await getWorkCollection(lang)).slice(0, 4);
 					</header>
 
 					<div class="gallery">
-						<Grid variant="offset">
+						<Grid>
 							{
 								projects.map((project) => (
 									<li>
-										<PortfolioPreview project={project} basePath={workBasePath(lang)} />
+										<PortfolioPreview project={project} basePath={workBasePath(lang)} lang={lang} />
 									</li>
 								))
 							}

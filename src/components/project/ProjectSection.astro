@@ -1,0 +1,46 @@
+---
+/**
+ * Une section de page projet : un intitule discret, un filet, puis le contenu.
+ *
+ * L'intitule vient toujours de l'i18n et jamais du contenu — c'est ce qui
+ * garantit qu'un projet ne peut plus nommer ses sections differemment d'une
+ * langue a l'autre, comme c'etait le cas quand elles vivaient en `##` dans le
+ * corps Markdown.
+ */
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<section class="project-section">
+	<h2>{title}</h2>
+	<slot />
+</section>
+
+<style>
+	.project-section {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+
+	h2 {
+		/* Petit intitule de reperage, pas un titre de lecture : la hierarchie
+		   reste un h2, seule la graisse visuelle change. */
+		font-size: var(--text-sm);
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--accent-regular);
+		padding-bottom: 0.75rem;
+		border-bottom: 1px solid var(--gray-800);
+	}
+
+	@media (min-width: 50em) {
+		.project-section {
+			gap: 2rem;
+		}
+	}
+</style>
