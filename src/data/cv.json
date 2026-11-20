@@ -45,8 +45,8 @@
         "Curieux et rigoureux, je conçois des applications web complètes, performantes et fiables, du modèle de données jusqu’à l’interface utilisateur."
       ],
       "address": [
-        "197 Avenue Roger Salengro",
-        "69100 Villeurbanne"
+        "18 Avenue de Sainte-Croix",
+        "64100 Bayonne"
       ],
       "phoneDisplay": "07 60 29 99 13",
       "skills": [
@@ -74,8 +74,8 @@
       "hobbies": [
         "Jeux vidéo",
         "Randonnée",
-        "Musculation",
-        "Yoseikan Budo"
+        "Yoseikan Budo",
+        "Cinéma"
       ],
       "education": [
         {
@@ -101,9 +101,9 @@
           "bullets": [
             "Développement fullstack en React 19 et TypeScript strict, PWA installable avec notifications Web Push",
             "Architecture backend Supabase / PostgreSQL : fonctions RPC, triggers, Row Level Security (RLS) et Edge Functions",
-            "Duels asynchrones et écrans mis à jour en direct via Supabase Realtime (WebSockets)",
-            "Back-office complet d’administration : modération, gestion des défis, communication et métriques",
-            "Fiabilisation et qualité : tests unitaires/intégration (Vitest), E2E (Playwright) et base de données (pgTAP)"
+            "Duels asynchrones et écrans mis à jour en direct via WebSockets",
+            "Back-office complet d’administration",
+            "tests unitaires/intégration (Vitest), E2E (Playwright) et base de données (pgTAP)"
           ],
           "url": "https://www.chronopotes.fr"
         },
@@ -116,8 +116,20 @@
             "Gestion de projet agile SCRUM",
             "Architecture MVC — POO",
             "Conteneurisation Docker",
-            "Gestion et sécurisation de base de données MySQL",
-            "Rédaction de tests unitaires"
+            "Gestion et sécurisation de base de données MySQL"
+          ]
+        },
+        {
+          "title": "Application Web Locale",
+          "subtitle": "React / TypeScript / Node.js / SQLite — Seenit",
+          "place": "Projet personnel",
+          "date": "2026",
+          "bullets": [
+            "Développement fullstack en React 19 et TypeScript strict, serveur Node.js sans dépendance (node:http, node:sqlite)",
+            "Logique métier en fonctions pures testées : filtres, statistiques, recommandations, calendrier",
+            "Stockage des données via SQLite",
+            "Relais de l'API TMDb côté serveur",
+            "Tests unitaires (Vitest) et E2E (Playwright) à date figée, API TMDb simulée"
           ]
         }
       ],
@@ -129,18 +141,7 @@
           "bullets": [
             "Conception et développement d'une application Python/PyQt6 de suivi d'objets en temps réel, architecture MVC",
             "Vision par ordinateur : étalonnage caméra, détection YOLO26 et suivi multi-objets (ByteTrack, BoT-SORT)",
-            "Mise en place d'une suite de tests automatisés",
-            "Transmission de données vers un système robotisé (TCP)"
-          ]
-        },
-        {
-          "title": "Stagiaire en Recherche et Développement",
-          "place": "LIUPPA",
-          "date": "Mai – Juil. 2025",
-          "bullets": [
-            "État de l'art des outils de classification sémantique",
-            "Collecte et analyse de données",
-            "Conception et réalisation de scripts Python de classification de données structurées et semi-structurées"
+            "Mise en place d'une suite de tests automatisés"
           ]
         }
       ]
@@ -168,8 +169,8 @@
         "Curious and rigorous, I build complete, performant, and reliable web applications, from database design to modern user interfaces."
       ],
       "address": [
-        "197 Avenue Roger Salengro",
-        "69100 Villeurbanne, France"
+        "18 Avenue de Sainte-Croix",
+        "64100 Bayonne, France"
       ],
       "phoneDisplay": "+33 7 60 29 99 13",
       "skills": [
@@ -197,8 +198,8 @@
       "hobbies": [
         "Video Games",
         "Hiking",
-        "Weight Training",
-        "Yoseikan Budo"
+        "Yoseikan Budo",
+        "Cinema"
       ],
       "education": [
         {
@@ -224,8 +225,8 @@
           "bullets": [
             "Fullstack development with React 19 and strict TypeScript, installable PWA with Web Push notifications",
             "Supabase / PostgreSQL backend: RPC functions, triggers, Row Level Security (RLS), and Edge Functions",
-            "Asynchronous duels and live screen updates via Supabase Realtime (WebSockets)",
-            "Complete administration back-office: moderation, challenge management, communication, and metrics",
+            "Asynchronous duels and live screen updates via WebSockets",
+            "Complete administration back-office",
             "Reliability and quality: unit/integration (Vitest), E2E (Playwright), and database (pgTAP) testing"
           ],
           "url": "https://www.chronopotes.fr"
@@ -239,8 +240,20 @@
             "Agile SCRUM Project Management",
             "MVC Architecture — OOP",
             "Docker Containerization",
-            "MySQL Database Management and Security",
-            "Unit Test Development"
+            "MySQL Database Management and Security"
+          ]
+        },
+        {
+          "title": "Local Web Application",
+          "subtitle": "React / TypeScript / Node.js / SQLite — Seenit",
+          "place": "Personal Project",
+          "date": "2026",
+          "bullets": [
+            "Fullstack development with React 19 and strict TypeScript, dependency-free Node.js server (node:http, node:sqlite)",
+            "Business logic as tested pure functions: filters, statistics, recommendations, calendar",
+            "Data storage via SQLite",
+            "Server-side TMDb API proxy",
+            "Unit (Vitest) and E2E (Playwright) tests on a frozen date, with TMDb mocked"
           ]
         }
       ],
@@ -252,18 +265,7 @@
           "bullets": [
             "Design and development of a Python/PyQt6 real-time object tracking application, MVC architecture",
             "Computer vision: camera calibration, YOLO26 detection and multi-object tracking (ByteTrack, BoT-SORT)",
-            "Implementation of an automated test suite",
-            "Data transmission to a robotic system (TCP)"
-          ]
-        },
-        {
-          "title": "Research and Development Intern",
-          "place": "LIUPPA",
-          "date": "May – July 2025",
-          "bullets": [
-            "State of the art review of semantic classification tools",
-            "Data collection and analysis",
-            "Design and implementation of Python scripts for classification of structured and semi-structured data"
+            "Implementation of an automated test suite"
           ]
         }
       ]
