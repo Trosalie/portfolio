@@ -1,0 +1,100 @@
+---
+/**
+ * La page « A propos », pour les deux langues.
+ *
+ * Page provisoire en attendant son vrai texte : le portrait, la disponibilite
+ * deja redigee pour la page de contact, et les deux actions qu'une personne qui
+ * recrute vient chercher. Elle remplace une carte « en construction » qui
+ * occupait une entree du menu principal sans rien dire.
+ */
+import { Image } from 'astro:assets';
+
+import portrait from '../../assets/portrait.jpg';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getLangFromUrl, useTranslations } from '../../i18n/ui';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const prefix = lang === 'en' ? '/en' : '';
+---
+
+<BaseLayout title={t('about.meta.title')} description={t('about.meta.desc')}>
+	<main id="main-content" tabindex="-1" class="wrapper about">
+		<Image
+			src={portrait}
+			alt={t('index.hero.portrait.alt')}
+			width={360}
+			widths={[360, 720]}
+			sizes="(min-width: 50em) 22.5rem, 100vw"
+			format="webp"
+			loading="eager"
+		/>
+		<div class="text">
+			<h1>{t('about.title')}</h1>
+			<p>{t('contact.availability.text')}</p>
+			<div class="actions">
+				<a class="button" href={prefix + '/cv/'}>{t('cta.cv')}</a>
+				<a href={prefix + '/contact/'}>{t('cta.contact')}</a>
+			</div>
+		</div>
+	</main>
+</BaseLayout>
+
+<style>
+	.about {
+		display: grid;
+		gap: 2.5rem;
+		align-items: end;
+	}
+
+	img {
+		display: block;
+		width: 100%;
+		max-width: 22.5rem;
+		height: auto;
+		border-radius: 2px;
+	}
+
+	.text {
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+	}
+
+	h1 {
+		font-size: clamp(var(--step-4), 4vw, var(--step-5));
+		letter-spacing: -0.02em;
+	}
+
+	p {
+		max-width: var(--measure);
+		font-size: var(--step-1);
+	}
+
+	.actions {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 1.5rem;
+		font-weight: 600;
+	}
+
+	.button {
+		padding: 0.7em 1.2em;
+		border-radius: var(--radius);
+		background: var(--ink);
+		color: #fff;
+		text-decoration: none;
+	}
+
+	.button:hover {
+		background: #000;
+	}
+
+	@media (min-width: 50em) {
+		.about {
+			grid-template-columns: 22.5rem 1fr;
+			gap: 4rem;
+		}
+	}
+</style>

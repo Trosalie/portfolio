@@ -35,12 +35,8 @@ export const ui = {
 		'404.meta.desc': "Erreur 404 : cette page n'existe pas ou a été déplacée.",
 		'404.title': 'Page introuvable',
 		'404.tagline': "Cette page n'existe pas ou a été déplacée.",
-		'404.back': "← Retour à l'accueil",
+		'404.back': "Retour à l'accueil",
 
-		// WorkInProgress
-		'wip.subtitle': 'Cette page est en cours de construction.',
-		'wip.text': 'Je travaille activement dessus. Revenez bientôt !',
-		'wip.back': '← Retour à l\'accueil',
 
 		// Page d'accueil
 		'index.hero.title': "Je conçois et je développe des applications web, de la base de données jusqu'au dernier détail de l'interface.",
@@ -108,7 +104,7 @@ export const ui = {
 		// À propos
 		'about.meta.title': 'À propos | Thibault ROSALIE',
 		'about.meta.desc': 'À propos de Thibault ROSALIE- Développeur full stack issu du BUT Informatique',
-		'about.wip.title': 'À propos',
+		'about.title': "À propos",
 
 		// Barre des pages d'impression du CV
 		'print.back': 'Retour',
@@ -152,12 +148,8 @@ export const ui = {
 		'404.meta.desc': '404 error: this page does not exist or has been moved.',
 		'404.title': 'Page not found',
 		'404.tagline': 'This page does not exist or has been moved.',
-		'404.back': '← Back to home',
+		'404.back': "Back to home",
 
-		// WorkInProgress
-		'wip.subtitle': 'This page is under construction.',
-		'wip.text': 'I am actively working on it. Come back soon!',
-		'wip.back': '← Back to home',
 
 		// Page d'accueil
 		'index.hero.title': "I design and build web applications, from the database to the last detail of the interface.",
@@ -219,7 +211,7 @@ export const ui = {
 		// About
 		'about.meta.title': 'About | Thibault ROSALIE',
 		'about.meta.desc': 'About Thibault ROSALIE- Full stack developer with a Computer Science degree',
-		'about.wip.title': 'About',
+		'about.title': "About",
 
 		// Resume print page toolbar
 		'print.back': 'Back',

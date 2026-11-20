@@ -1,12 +1,5 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import WorkInProgress from '../../components/WorkInProgress.astro';
-import { getLangFromUrl, useTranslations } from '../../i18n/ui';
-
-const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
+import AboutPage from '../../components/pages/AboutPage.astro';
 ---
 
-<BaseLayout title={t('about.meta.title')} description={t('about.meta.desc')}>
-	<WorkInProgress title={t('about.wip.title')} />
-</BaseLayout>
+<AboutPage />

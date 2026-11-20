@@ -131,6 +131,9 @@ justifie l'intervention, et l'action proposée.
 - [ ] **« À propos » affiche « 🚧 en construction »** alors que la page est dans le menu
   principal. Sur un portfolio de recherche de stage, une entrée de menu menant à une page vide
   coûte plus cher que l'absence d'entrée. → La remplir, ou la retirer du nav en attendant.
+  Avancement (2026-11-20, direction visuelle « La vitrine ») : la carte de chantier est
+  remplacée par une page provisoire (portrait, phrase de disponibilité, liens vers le CV et le
+  contact). Le texte de la page reste à écrire.
 
 ## P4 — Outillage et dépôt
 

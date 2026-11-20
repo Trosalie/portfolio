@@ -1,5 +1,4 @@
 ---
-import Hero from '../components/Hero.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getLangFromUrl, useTranslations } from '../i18n/ui';
 
@@ -10,28 +9,32 @@ const t = useTranslations(lang);
 ---
 
 <BaseLayout title={t('404.meta.title')} description={t('404.meta.desc')}>
-	<main id="main-content" tabindex="-1" class="wrapper stack gap-8 not-found">
-		<Hero title={t('404.title')} tagline={t('404.tagline')} />
-		<a class="back-link" href="/">{t('404.back')}</a>
+	<main id="main-content" tabindex="-1" class="wrapper not-found">
+		<h1>{t('404.title')}</h1>
+		<p>{t('404.tagline')}</p>
+		<a href="/">{t('404.back')}</a>
 	</main>
 </BaseLayout>
 
 <style>
 	.not-found {
-		padding-block: 4rem;
-		text-align: center;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 1.25rem;
 	}
 
-	.back-link {
-		align-self: center;
-		color: var(--accent-regular);
-		font-family: var(--font-brand);
-		font-weight: 500;
-		text-decoration: none;
+	h1 {
+		font-size: clamp(var(--step-4), 4vw, var(--step-5));
+		letter-spacing: -0.02em;
 	}
 
-	.back-link:hover,
-	.back-link:focus {
-		text-decoration: underline;
+	p {
+		font-size: var(--step-1);
+		color: var(--ink-muted);
+	}
+
+	a {
+		font-weight: 600;
 	}
 </style>

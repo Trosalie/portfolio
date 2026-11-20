@@ -9,7 +9,6 @@
  */
 
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Icon from './Icon.astro';
 import { contact } from '../data/profile';
 import { getLangFromUrl, useTranslations } from '../i18n/ui';
 
@@ -29,7 +28,7 @@ const nextUrl = new URL(`${prefix}/contact/?${successParam}=1`, Astro.site).href
 	title={t('contact.meta.title')}
 	description={t('contact.meta.desc')}
 >
-	<main id="main-content" tabindex="-1" class="wrapper stack gap-12">
+	<main id="main-content" tabindex="-1" class="wrapper contact">
 		<div class="contact-header stack gap-2">
 			<h1 class="contact-title">{t('contact.title')}</h1>
 			<p class="contact-subtitle">{t('contact.subtitle')}</p>
@@ -38,7 +37,6 @@ const nextUrl = new URL(`${prefix}/contact/?${successParam}=1`, Astro.site).href
 		{/* Le bandeau est toujours dans le DOM et devoile au retour de Formspree :
 		    un `role="status"` insere apres coup n'est pas toujours annonce. */}
 		<div id="contact-sent" class="sent-banner" role="status" hidden>
-			<Icon icon="paper-plane-tilt" size="1.4em" />
 			<div>
 				<p class="sent-title">{t('contact.sent.title')}</p>
 				<p class="sent-text">{t('contact.sent.text')}</p>
@@ -95,7 +93,6 @@ const nextUrl = new URL(`${prefix}/contact/?${successParam}=1`, Astro.site).href
 
 				<button type="submit" class="submit-btn">
 					{t('contact.submit')}
-					<Icon icon="paper-plane-tilt" size="1.2em" />
 				</button>
 			</form>
 
@@ -106,15 +103,12 @@ const nextUrl = new URL(`${prefix}/contact/?${successParam}=1`, Astro.site).href
 					<h2>{t('contact.details')}</h2>
 					<ul class="info-list">
 						<li>
-							<Icon icon="paper-plane-tilt" size="1.1em" />
 							<a href={`mailto:${contact.email}`}>{contact.email}</a>
 						</li>
 						<li>
-							<Icon icon="github-logo" size="1.1em" />
 							<a href={contact.github.href} target="_blank" rel="noopener noreferrer">{contact.github.label}</a>
 						</li>
 						<li>
-							<Icon icon="linkedin-logo" size="1.1em" />
 							<a href={contact.linkedin.href} target="_blank" rel="noopener noreferrer">{contact.linkedin.label}</a>
 						</li>
 					</ul>
@@ -141,34 +135,33 @@ const nextUrl = new URL(`${prefix}/contact/?${successParam}=1`, Astro.site).href
 </script>
 
 <style>
-	main {
-		padding-block: 4rem;
+	.contact {
+		display: flex;
+		flex-direction: column;
+		gap: 2.5rem;
 	}
 
 	.contact-header {
-		max-width: 50ch;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		max-width: var(--measure);
 	}
 
 	.contact-title {
-		font-size: var(--text-4xl);
-		font-family: var(--font-brand);
-		color: var(--gray-0);
+		font-size: clamp(var(--step-4), 4vw, var(--step-5));
+		letter-spacing: -0.02em;
 	}
 
 	.contact-subtitle {
-		font-size: var(--text-lg);
-		color: var(--gray-400);
+		font-size: var(--step-1);
+		color: var(--ink-muted);
 	}
 
 	.sent-banner {
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-		padding: 1rem 1.5rem;
-		background: var(--gray-999);
-		border: 1px solid var(--accent-regular);
-		border-radius: 1rem;
-		color: var(--gray-100);
+		padding: 1rem 1.25rem;
+		border-left: 3px solid var(--ink);
+		background: var(--paper);
 	}
 
 	.sent-banner[hidden] {
@@ -176,27 +169,24 @@ const nextUrl = new URL(`${prefix}/contact/?${successParam}=1`, Astro.site).href
 	}
 
 	.sent-title {
-		font-family: var(--font-brand);
 		font-weight: 600;
-		color: var(--gray-0);
 	}
 
 	.sent-text {
-		font-size: var(--text-sm);
-		color: var(--gray-300);
+		font-size: var(--step--1);
+		color: var(--ink-muted);
 	}
 
 	.contact-layout {
 		display: grid;
-		grid-template-columns: 1fr;
 		gap: 3rem;
 	}
 
-	/* Formulaire */
 	.contact-form {
 		display: flex;
 		flex-direction: column;
 		gap: 1.25rem;
+		max-width: 40rem;
 	}
 
 	/* Sorti de l'ecran plutot que `display: none`, que certains robots savent
@@ -218,67 +208,46 @@ const nextUrl = new URL(`${prefix}/contact/?${successParam}=1`, Astro.site).href
 	}
 
 	label {
-		font-size: var(--text-sm);
+		font-size: var(--step--1);
 		font-weight: 600;
-		color: var(--gray-200);
 	}
 
+	/* Bordure --ink-muted (5,4:1 sur le mur, 6,7:1 sur le champ) : la limite d'un
+	   champ doit atteindre 3:1 (WCAG 1.4.11), ce que --rule n'atteint pas. */
 	input,
 	textarea {
-		padding: 0.65rem 1rem;
-		background: var(--gray-999);
-		border: 1px solid var(--gray-800);
-		border-radius: 0.5rem;
-		color: var(--gray-200);
-		font-family: var(--font-body);
-		font-size: var(--text-md, 1rem);
+		padding: 0.65rem 0.85rem;
+		border: 1px solid var(--ink-muted);
+		border-radius: var(--radius);
+		background: var(--paper);
+		color: var(--ink);
+		font: inherit;
 		resize: vertical;
-		transition: border-color var(--theme-transition);
 	}
 
-	/* `outline: none` supprimait le seul indicateur de focus fiable et ne le
-	   remplacait que par une couleur de bordure — invisible pour qui ne
-	   distingue pas les teintes. */
-	input:focus-visible,
-	textarea:focus-visible {
-		outline: 2px solid var(--accent-regular);
-		outline-offset: 2px;
-		border-color: var(--accent-regular);
-	}
-
-	/* --gray-600 sur --gray-999 mesurait 2,26:1 en theme clair et 3,03:1 en
-	   sombre, sous le seuil AA de 4,5:1 dans les deux cas. --gray-400 donne
-	   4,60:1 et 6,22:1. Ces placeholders portent une information de format, pas
-	   du decor. */
+	/* Les placeholders portent une information de format, pas du decor :
+	   --ink-muted mesure 6,7:1 sur --paper. */
 	input::placeholder,
 	textarea::placeholder {
-		color: var(--gray-400);
+		color: var(--ink-muted);
 	}
 
 	.submit-btn {
 		align-self: flex-start;
-		display: inline-flex;
-		align-items: center;
-		gap: 0.6rem;
-		padding: 0.65rem 2rem;
-		background: var(--gradient-accent-orange);
-		color: var(--accent-text-over);
-		border: none;
-		border-radius: 999rem;
-		font-family: var(--font-brand);
-		font-size: var(--text-lg);
+		padding: 0.7em 1.2em;
+		border: 0;
+		border-radius: var(--radius);
+		background: var(--ink);
+		color: #fff;
+		font: inherit;
 		font-weight: 600;
 		cursor: pointer;
-		box-shadow: var(--shadow-md);
-		transition: opacity var(--theme-transition);
 	}
 
-	.submit-btn:hover,
-	.submit-btn:focus {
-		opacity: 0.85;
+	.submit-btn:hover {
+		background: #000;
 	}
 
-	/* Infos de contact */
 	.contact-info {
 		display: flex;
 		flex-direction: column;
@@ -286,68 +255,34 @@ const nextUrl = new URL(`${prefix}/contact/?${successParam}=1`, Astro.site).href
 	}
 
 	.info-block {
-		padding: 1.5rem;
-		background: var(--gray-999);
-		border: 1px solid var(--gray-800);
-		border-radius: 1rem;
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
+		gap: 0.6rem;
 	}
 
 	.info-block h2 {
-		font-size: var(--text-lg);
-		font-family: var(--font-brand);
-		color: var(--gray-0);
+		font-size: var(--step-1);
 	}
 
 	.info-block p {
-		font-size: var(--text-sm);
-		color: var(--gray-400);
+		color: var(--ink-muted);
 		line-height: 1.6;
 	}
 
 	.info-list {
-		list-style: none;
-		padding: 0;
-		margin: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 0.75rem;
-	}
-
-	.info-list li {
-		display: flex;
-		align-items: center;
-		gap: 0.6rem;
-		font-size: var(--text-sm);
-		color: var(--gray-300);
-	}
-
-	/* Ces liens avaient exactement la couleur du texte qui les entoure et pas
-	   de soulignement : rien ne les signalait comme liens (WCAG 1.4.1, qui
-	   interdit de s'en remettre a la seule couleur — ici il n'y avait meme pas
-	   de difference de couleur). */
-	.info-list a {
-		color: var(--gray-300);
-		text-decoration: underline;
-		text-underline-offset: 0.2em;
-		transition: color var(--theme-transition);
-	}
-
-	.info-list a:hover,
-	.info-list a:focus {
-		color: var(--accent-regular);
+		gap: 0.5rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
 	}
 
 	@media (min-width: 50em) {
 		.contact-layout {
-			grid-template-columns: 1fr 340px;
+			grid-template-columns: 1fr 20rem;
 			align-items: start;
-		}
-
-		.contact-title {
-			font-size: var(--text-5xl);
+			gap: 4rem;
 		}
 	}
 </style>
