@@ -14,7 +14,7 @@ const { data } = Astro.props.entry;
     donc la place est reservee avant meme le chargement de l'image. */}
 <div
 	class="cover"
-	style={`background: ${data.gradient ?? 'var(--gradient-subtle)'}`}
+	style={`background: var(--ink)`}
 	aria-hidden={data.img ? undefined : 'true'}
 >
 	{

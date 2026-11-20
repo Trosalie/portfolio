@@ -13,8 +13,8 @@
  */
 
 import { getCollection, type CollectionEntry } from 'astro:content';
-import type { iconPaths } from '../components/IconPaths';
 import type { Lang } from '../i18n/ui';
+import { identityGaps } from './identity';
 
 export type WorkEntry = CollectionEntry<'work'> | CollectionEntry<'work-en'>;
 
@@ -22,7 +22,6 @@ export type WorkEntry = CollectionEntry<'work'> | CollectionEntry<'work-en'>;
 export interface ProjectFeature {
 	title: string;
 	description?: string;
-	icon?: keyof typeof iconPaths;
 }
 
 /** Prefixe des URL de projet, par langue. */
@@ -92,6 +91,10 @@ function listStructuralGaps(fr: WorkEntry[], en: WorkEntry[]): string[] {
 				`${frLayers.length} couche(s) de stack en francais contre ${enLayers.length} en anglais`,
 			);
 		}
+
+		// L'identite visuelle : memes codes, meme cadre, memes polices dans les deux
+		// langues ; seuls les noms des couleurs et les roles des polices se traduisent.
+		gaps.push(...identityGaps(frEntry.data.identity, enEntry.data.identity));
 
 		return gaps.length > 0 ? [`${frEntry.id} (${gaps.join(', ')})`] : [];
 	});

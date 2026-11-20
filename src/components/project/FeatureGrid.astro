@@ -1,5 +1,4 @@
 ---
-import Icon from '../Icon.astro';
 import type { ProjectFeature } from '../../data/work';
 
 interface Props {
@@ -13,11 +12,7 @@ const { features } = Astro.props;
 	{
 		features.map((feature) => (
 			<li class="feature">
-				{feature.icon ? (
-					<Icon icon={feature.icon} size="1.75rem" gradient />
-				) : (
-					<span class="marker" aria-hidden="true" />
-				)}
+				<span class="marker" aria-hidden="true" />
 				<div class="text">
 					<h3>{feature.title}</h3>
 					{feature.description && <p>{feature.description}</p>}

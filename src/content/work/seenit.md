@@ -9,39 +9,46 @@ tags:
   - Node.js
   - SQLite
   - API TMDb
-gradient: "linear-gradient(135deg, #C9A45C 0%, #2A1D12 100%)"
 img: ../../assets/projets/seenit/couverture.webp
 img_alt: "Accueil de Seenit : le fronton À l'affiche annonce trois séances prévues, au-dessus de la recherche, des filtres et du début de l'étagère des derniers visionnages."
 period: Novembre 2026
 context: Projet personnel
 team: Seul
+identity:
+  frame:
+    background: "#2C1C0F"
+    border: "#4D331E"
+    titleColor: "#C5A059"
+    titleStyle: playfair-italic
+  palette:
+    - { name: Bois, hex: "#2C1C0F" }
+    - { name: Laiton, hex: "#C5A059" }
+    - { name: Velours, hex: "#3A1214" }
+    - { name: Ivoire, hex: "#EFEBD9" }
+  fonts:
+    - { family: Playfair Display, role: Titres }
+    - { family: DM Sans, role: Texte }
+    - { family: DM Mono, role: Chiffres }
+  specimen: seenit-ticket
 intro: |
   Seenit est mon journal de cinéma : chaque film vu, chaque note, chaque séance prévue. L'interface reprend l'univers d'une salle de cinéma ancienne, avec une étagère en bois, des plaques de laiton et des fiches en forme de talon de billet. Les données de TMDb remplissent les fiches, relient chaque film à ses réalisateurs et à ses acteurs, et proposent des recommandations à partir de ce que j'ai aimé. L'application tourne sur mon poste : un petit serveur Node sert l'interface, conserve la bibliothèque dans SQLite et démarre avec la session Windows.
 features:
   - title: Une étagère qui se range seule
     description: Les films vus se classent par mois de visionnage, derrière des plaques de laiton, et les sagas se regroupent en coffrets qui s'ouvrent sur place.
-    icon: list
   - title: Fiches film et personne
     description: Synopsis, distribution, bande-annonce et plateformes où regarder le film en France ; la fiche d'un réalisateur ou d'un acteur déroule sa filmographie et montre ce que j'en ai déjà vu.
-    icon: heart
   - title: Recommandations
     description: L'onglet Découvrir croise les recommandations des films bien notés et de la liste à voir, et écarte ce qui ressemble aux films mal notés.
-    icon: strategy
   - title: Calendrier des séances
     description: Une affiche glissée sur un jour planifie une séance, et les sorties à venir des films attendus s'y ajoutent d'elles-mêmes.
-    icon: pencil-line
   - title: Statistiques de l'année
     description: Une pellicule déroule les mois de l'année, avec le temps passé devant l'écran, la note moyenne et les réalisateurs les plus vus.
-    icon: trophy
   - title: Que regarder ce soir ?
     description: Un tirage au sort parmi les films à voir, filtré par durée, par genre et par plateformes auxquelles je suis abonné.
-    icon: moon-stars
   - title: Navigation au clavier
     description: Une palette Ctrl+K pour aller à un film, une personne ou un onglet, des raccourcis pour chaque action, et une adresse qui suit la fiche ouverte.
-    icon: code
   - title: Application installable
     description: Seenit s'installe comme une application dans Chrome ou Edge, avec sa propre fenêtre, son icône et des raccourcis.
-    icon: rocket-launch
 stack:
   - layer: Frontend
     items: [React 19, TypeScript strict, Vite]

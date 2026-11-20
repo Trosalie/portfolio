@@ -10,39 +10,44 @@ tags:
   - PostgreSQL
   - PWA
 demoUrl: https://www.chronopotes.fr
-gradient: "linear-gradient(135deg, #F5C518 0%, #101216 100%)"
 img: ../../assets/projets/chronopotes/couverture.webp
 img_alt: "Three ChronoPotes screens side by side: the home screen with the daily challenge and the five Free Play modes, the result of a Classic game rated Masterclass, and the summary of a Survival game."
 period: June – November 2026
 context: Personal project, live
 team: Solo
+identity:
+  frame:
+    background: "#101216"
+    titleColor: "#F5C518"
+    titleStyle: oswald-caps
+  palette:
+    - { name: Night, hex: "#101216" }
+    - { name: Signal, hex: "#F5C518" }
+    - { name: Flap, hex: "#20242C" }
+    - { name: Dial, hex: "#F4F1E8" }
+  fonts:
+    - { family: Oswald, role: Text }
+    - { family: Space Mono, role: Figures }
+  specimen: chronopotes-flaps
 intro: |
   ChronoPotes is a daily game that trains your sense of time: stop a timer blind, as close as you can to a target duration. Every day, the server draws the same challenge for every player, with a single attempt. A first version has been live since the summer; in November, I rebuilt it from scratch, with a new visual identity inspired by railway departure boards, a new game engine, a new database, and redesigned social features. The game is open to everyone at chronopotes.fr and installs on a phone like an app.
 features:
   - title: A daily challenge, even without an account
     description: A target drawn by the server, the same for everyone on Paris time, never in the same mode two days in a row. You can play it without an account; an account adds the leaderboard and the streak.
-    icon: trophy
   - title: Five game modes
     description: Classic, blind Estimation, Multi-Target, Cadence, and Survival, where a time bank wears down round after round, with combos and random incidents.
-    icon: strategy
   - title: A result you read at a glance
     description: Flaps that flip like a departure board, a sound synthesised with Web Audio, and a clock-shaped target where each gap lands like a dart.
-    icon: pencil-line
   - title: Duels and group challenges
     description: An asynchronous duel in three attempts, started from a link or from your friends list, the record of every rivalry, and challenges open to a whole group with their own honours board.
-    icon: paper-plane-tilt
   - title: Friends and groups
     description: Friends added by username, groups joined with a code or a link, and leaderboards filtered to these circles.
-    icon: list
   - title: Installable app and notifications
     description: A PWA whose Free Play works offline, an installation guide for iPhone, and Web Push notifications that can be switched off type by type and stay silent at night.
-    icon: rocket-launch
   - title: Administration back office
     description: Access protected by a one-time code, the calendar of upcoming challenges, each player's record and data export, suspensions, announcements, and an information banner, with every action written to an audit log.
-    icon: terminal-window
   - title: The golden rule of the timer
     description: While a timer runs, nothing moves on screen and no network call goes out, so the player gets no cue at all. An end-to-end test checks that the page stays identical between GO and the tap.
-    icon: code
 stack:
   - layer: Frontend
     items: [React 19, strict TypeScript, Vite, React Router, CSS Modules]

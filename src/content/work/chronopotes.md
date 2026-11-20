@@ -10,39 +10,44 @@ tags:
   - PostgreSQL
   - PWA
 demoUrl: https://www.chronopotes.fr
-gradient: "linear-gradient(135deg, #F5C518 0%, #101216 100%)"
 img: ../../assets/projets/chronopotes/couverture.webp
 img_alt: "Trois écrans de ChronoPotes côte à côte : l'accueil avec le défi du jour et les cinq modes du Jeu libre, le résultat d'une partie de Classique notée Masterclass, et le bilan d'une partie de Survie."
 period: Juin – novembre 2026
 context: Projet personnel, en ligne
 team: Seul
+identity:
+  frame:
+    background: "#101216"
+    titleColor: "#F5C518"
+    titleStyle: oswald-caps
+  palette:
+    - { name: Nuit, hex: "#101216" }
+    - { name: Signal, hex: "#F5C518" }
+    - { name: Palette, hex: "#20242C" }
+    - { name: Cadran, hex: "#F4F1E8" }
+  fonts:
+    - { family: Oswald, role: Textes }
+    - { family: Space Mono, role: Chiffres }
+  specimen: chronopotes-flaps
 intro: |
   ChronoPotes est un jeu quotidien qui entraîne le sens du temps : arrêter un chronomètre à l'aveugle, au plus près d'une durée cible. Chaque jour, le serveur tire le même défi pour tous les joueurs, à jouer en un seul essai. Une première version est en ligne depuis l'été ; en novembre, je l'ai reconstruite de zéro, avec une nouvelle charte inspirée des tableaux de gare, un nouveau moteur de jeu, une nouvelle base et des fonctions sociales repensées. Le jeu est ouvert à tous sur chronopotes.fr et s'installe sur téléphone comme une application.
 features:
   - title: Défi du jour, même sans compte
     description: Une cible tirée par le serveur, la même pour tous à l'heure de Paris, jamais dans le même mode deux jours de suite. On le joue sans compte ; le compte ajoute le classement et la série.
-    icon: trophy
   - title: Cinq modes de jeu
     description: Classique, Estimation à l'aveugle, Multi-cible, Cadence, et Survie, où un capital de temps s'use au fil des manches, avec combos et incidents aléatoires.
-    icon: strategy
   - title: Un résultat lisible d'un coup d'œil
     description: Des palettes qui se retournent comme sur un tableau de gare, un son synthétisé en Web Audio et une horloge-cible où chaque écart se plante comme une fléchette.
-    icon: pencil-line
   - title: Duels et défis de groupe
     description: Un duel asynchrone en trois tentatives, lancé par lien ou depuis ses amis, le bilan de chaque rivalité, et des défis ouverts à tout un groupe avec leur palmarès.
-    icon: paper-plane-tilt
   - title: Amis et groupes
     description: Des amis ajoutés par pseudo, des groupes rejoints par code ou par lien, et des classements filtrés sur ces cercles.
-    icon: list
   - title: Application installable et notifications
     description: Une PWA qui se joue sans réseau en Jeu libre, un guide d'installation sur iPhone, et des notifications Web Push réglables type par type et muettes la nuit.
-    icon: rocket-launch
   - title: Back-office d'administration
     description: Un accès protégé par un code à usage unique, le calendrier des défis à venir, la fiche et l'export des données d'un joueur, les suspensions, les annonces et un bandeau d'information, chaque action notée au journal.
-    icon: terminal-window
   - title: La règle d'or du chrono
     description: Pendant qu'un chrono court, rien ne bouge à l'écran et aucun appel réseau ne part, pour ne donner aucun repère au joueur. Un test de bout en bout vérifie que la page reste identique entre le GO et le clic.
-    icon: code
 stack:
   - layer: Frontend
     items: [React 19, TypeScript strict, Vite, React Router, CSS Modules]

@@ -9,39 +9,46 @@ tags:
   - Node.js
   - SQLite
   - TMDb API
-gradient: "linear-gradient(135deg, #C9A45C 0%, #2A1D12 100%)"
 img: ../../assets/projets/seenit/couverture.webp
 img_alt: "Seenit home screen: the Now Showing marquee lists three planned screenings, above the search field, the filters, and the start of the shelf of recent viewings."
 period: November 2026
 context: Personal project
 team: Solo
+identity:
+  frame:
+    background: "#2C1C0F"
+    border: "#4D331E"
+    titleColor: "#C5A059"
+    titleStyle: playfair-italic
+  palette:
+    - { name: Wood, hex: "#2C1C0F" }
+    - { name: Brass, hex: "#C5A059" }
+    - { name: Velvet, hex: "#3A1214" }
+    - { name: Ivory, hex: "#EFEBD9" }
+  fonts:
+    - { family: Playfair Display, role: Headings }
+    - { family: DM Sans, role: Body text }
+    - { family: DM Mono, role: Figures }
+  specimen: seenit-ticket
 intro: |
   Seenit is my film diary: every film watched, every rating, every planned screening. The interface borrows from an old movie theatre, with a wooden shelf, brass plaques, and film pages shaped like a ticket stub. TMDb data fills in each film, links it to its directors and cast, and suggests recommendations based on what I liked. The app runs on my own computer: a small Node server serves the interface, stores the library in SQLite, and starts with the Windows session.
 features:
   - title: A shelf that sorts itself
     description: Watched films are filed by month of viewing, behind brass plaques, and sagas are grouped into box sets that open in place.
-    icon: list
   - title: Film and person pages
     description: Synopsis, cast, trailer, and the platforms where the film can be watched in France; a director's or actor's page lays out their filmography and shows what I have already seen.
-    icon: heart
   - title: Recommendations
     description: The Discover tab combines the recommendations of well-rated films and of the watchlist, and sets aside whatever resembles poorly rated ones.
-    icon: strategy
   - title: Screenings calendar
     description: Dragging a poster onto a day plans a screening, and upcoming releases of awaited films appear on their own.
-    icon: pencil-line
   - title: Year in review
     description: A film strip unrolls the months of the year, with time spent watching, the average rating, and the most-watched directors.
-    icon: trophy
   - title: What to watch tonight?
     description: A random draw from the watchlist, filtered by running time, genre, and the streaming platforms I subscribe to.
-    icon: moon-stars
   - title: Keyboard navigation
     description: A Ctrl+K palette to jump to a film, a person, or a tab, shortcuts for every action, and a URL that follows the open page.
-    icon: code
   - title: Installable app
     description: Seenit installs as an app in Chrome or Edge, with its own window, its icon, and shortcuts.
-    icon: rocket-launch
 stack:
   - layer: Frontend
     items: [React 19, strict TypeScript, Vite]

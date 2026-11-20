@@ -8,7 +8,6 @@ tags:
   - Sockets
   - pthread
 githubUrl: https://github.com/Trosalie/projetChat
-gradient: "linear-gradient(135deg, #0f172a 0%, #0ea5e9 100%)"
 period: "2026"
 context: Projet de cours en BUT Informatique
 intro: |
@@ -17,13 +16,10 @@ features:
   - Connexion client/serveur via sockets TCP
   - title: Gestion de plusieurs clients en parallèle
     description: Un thread POSIX par client connecté.
-    icon: code
   - Création et sélection de channels dynamiques à la connexion
   - title: Historique des messages par channel
-    icon: list
   - title: Commande de sortie client
     description: Déconnexion propre via quit ou Ctrl+D.
-    icon: terminal-window
 stack:
   - layer: Langage
     items: [C]

@@ -1,14 +1,11 @@
 import { defineCollection, z, type SchemaContext } from 'astro:content';
 import { glob } from 'astro/loaders';
 
-import { iconPaths } from './components/IconPaths';
-
-type IconName = keyof typeof iconPaths;
-const iconNames = Object.keys(iconPaths) as [IconName, ...IconName[]];
+import { specimenFonts, specimens, titleStyles } from './data/identity';
 
 /**
  * Une fonctionnalite s'ecrit en une ligne, ou en objet quand elle merite une
- * precision ou une icone. La forme courte suffit dans la plupart des cas et
+ * precision. La forme courte suffit dans la plupart des cas et
  * garde les fichiers de contenu lisibles ; `normalizeFeatures` (src/data/work.ts)
  * ramene les deux formes a la meme structure au moment du rendu.
  */
@@ -17,7 +14,6 @@ const featureSchema = z.union([
 	z.object({
 		title: z.string(),
 		description: z.string().optional(),
-		icon: z.enum(iconNames).optional(),
 	}),
 ]);
 
@@ -33,6 +29,22 @@ const galleryItemSchema = ({ image }: SchemaContext) =>
 		alt: z.string(),
 		caption: z.string().optional(),
 	});
+
+/** Un code couleur hexadecimal a six chiffres. */
+const hex = z.string().regex(/^#[0-9A-Fa-f]{6}$/);
+
+/** Voir src/data/identity.ts : les listes fermees et le controle entre les langues y vivent. */
+const identitySchema = z.object({
+	frame: z.object({
+		background: hex,
+		border: hex.optional(),
+		titleColor: hex,
+		titleStyle: z.enum(titleStyles),
+	}),
+	palette: z.array(z.object({ name: z.string(), hex })).min(2).max(6),
+	fonts: z.array(z.object({ family: z.enum(specimenFonts), role: z.string() })).min(1),
+	specimen: z.enum(specimens),
+});
 
 /** Une couche de la stack et les technologies qui la composent. */
 const stackGroupSchema = z.object({
@@ -65,7 +77,6 @@ const workSchema = ({ image }: SchemaContext) =>
 			img_alt: z.string().optional(),
 			githubUrl: z.string().url().optional(),
 			demoUrl: z.string().url().optional(),
-			gradient: z.string().optional(),
 
 			// Une seule capture ne suffit pas a montrer un logiciel a plusieurs
 			// ecrans. La couverture reste l'image d'appel, la galerie deroule le
@@ -80,6 +91,10 @@ const workSchema = ({ image }: SchemaContext) =>
 			period: z.string().optional(),
 			context: z.string().optional(),
 			team: z.string().optional(),
+
+			// L'identite visuelle du produit, pour les projets qui en ont une : elle
+			// habille la vignette et alimente le nuancier de la page projet.
+			identity: identitySchema.optional(),
 		})
 		.superRefine((data, ctx) => {
 			// Une capture d'ecran sans alternative textuelle n'existe pas pour un

@@ -24,7 +24,7 @@ const meta = [projectYear(project), data.context].filter(Boolean) as string[];
 <a class:list={['card', { featured }]} href={`${basePath}${id}`}>
 	{/* Le degrade du projet tient lieu de couverture tant qu'aucune capture
 	    n'est fournie : la carte reste pleine, jamais vide. */}
-	<div class="media" style={`background: ${data.gradient ?? 'var(--gradient-subtle)'}`}>
+	<div class="media" style={`background: var(--ink)`}>
 		{
 			data.img && (
 				<Image

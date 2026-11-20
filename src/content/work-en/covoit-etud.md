@@ -9,7 +9,6 @@ tags:
   - Bootstrap
   - MySQL
 githubUrl: https://github.com/kevin-oulai/COVOIT-ETUD
-gradient: "linear-gradient(135deg, #16a34a 0%, #0284c7 100%)"
 period: 2024 – 2025
 context: SAÉ project, BUT Computer Science
 team: Team of 5
@@ -21,12 +20,9 @@ features:
   - Seat reservation system (driver / passenger)
   - Student profile management with photo and vehicle details
   - title: Driver ratings and reviews
-    icon: heart
   - title: Interactive ride map
     description: Positions resolved through a geocoding API.
-    icon: strategy
   - title: Badges and rewards
-    icon: trophy
   - Privacy policy and password recovery
 stack:
   - layer: Frontend

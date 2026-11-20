@@ -9,7 +9,6 @@ tags:
   - Bootstrap
   - MySQL
 githubUrl: https://github.com/kevin-oulai/COVOIT-ETUD
-gradient: "linear-gradient(135deg, #16a34a 0%, #0284c7 100%)"
 period: 2024 – 2025
 context: SAÉ de BUT Informatique
 team: Équipe de 5
@@ -21,12 +20,9 @@ features:
   - Système de réservation de places (conducteur / passager)
   - Gestion de profil étudiant avec photo et véhicule
   - title: Notation et commentaires sur les conducteurs
-    icon: heart
   - title: Carte des trajets
     description: Positions calculées via une API de géocodage.
-    icon: strategy
   - title: Badges et récompenses
-    icon: trophy
   - Politique de confidentialité et récupération de mot de passe
 stack:
   - layer: Frontend

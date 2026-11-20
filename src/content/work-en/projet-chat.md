@@ -8,7 +8,6 @@ tags:
   - Sockets
   - pthread
 githubUrl: https://github.com/Trosalie/projetChat
-gradient: "linear-gradient(135deg, #0f172a 0%, #0ea5e9 100%)"
 period: "2026"
 context: Coursework, BUT Computer Science
 intro: |
@@ -17,13 +16,10 @@ features:
   - Client/server communication over TCP sockets
   - title: Parallel multi-client handling
     description: One POSIX thread per connected client.
-    icon: code
   - Dynamic channel creation and selection at connection time
   - title: Per-channel message history
-    icon: list
   - title: Client exit command
     description: Clean disconnection through quit or Ctrl+D.
-    icon: terminal-window
 stack:
   - layer: Language
     items: [C]

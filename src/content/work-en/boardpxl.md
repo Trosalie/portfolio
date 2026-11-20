@@ -9,7 +9,6 @@ tags:
   - TypeScript
   - Docker
 githubUrl: https://github.com/Trosalie/projetsportpxl
-gradient: "linear-gradient(135deg, #c3002f 0%, #1a56db 100%)"
 img: ../../assets/projets/boardpxl.png
 img_alt: SportPXL dashboard interface showing a photographer's transaction list and credit balance.
 period: 2025 – 2026
@@ -22,12 +21,9 @@ features:
   - Real-time photographer credit tracking
   - title: External service integration
     description: Stripe for payments, Pennylane for accounting, and ForestAdmin for administration.
-    icon: rocket-launch
   - title: Role-aware dashboard
     description: Separate views for photographers and for administrators.
-    icon: strategy
   - title: Complete financial history
-    icon: list
 stack:
   - layer: Frontend
     items: [Angular, TypeScript]

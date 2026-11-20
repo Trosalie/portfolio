@@ -9,7 +9,6 @@ tags:
   - YOLO
   - TensorRT
   - Modbus TCP
-gradient: "linear-gradient(135deg, #0d9488 0%, #1d4ed8 100%)"
 img: ../../assets/projets/bluepoint/flux-detection.webp
 img_alt: "Fenêtre principale de BluePoint WasteIdentifier : un bidon plastique suivi par une boîte orientée sur le flux du convoyeur, la liste des objets classés et la courbe spectrale de la matière identifiée."
 period: Avril – août 2026
@@ -20,27 +19,20 @@ intro: |
 features:
   - title: Détection et suivi temps réel
     description: Modèle YOLO à boîtes orientées et suivi ByteTrack sur le flux d'une caméra industrielle Basler, exécuté sur GPU via TensorRT.
-    icon: terminal-window
   - title: Reconnaissance de matière par imagerie hyperspectrale
     description: Le spectre de chaque objet est segmenté puis classé par un modèle scikit-learn, indépendamment de sa couleur ou de son étiquette.
-    icon: strategy
   - title: Association des deux chaînes
     description: Une file FIFO synchronise l'objet vu par la caméra couleur et la matière lue par le capteur hyperspectral, malgré leurs cadences et leurs champs de vue différents.
-    icon: list
   - title: Pilotage des actionneurs en Modbus TCP
     description: Convoyeur, jets d'air et bras de tri.
-    icon: rocket-launch
   - title: Assistants de calibration guidés
     description: Calibration intrinsèque de la caméra et pose du repère monde en quelques étapes, avec contrôle de couverture du champ, erreur de reprojection et comparaison à la calibration précédente.
-    icon: trophy
   - title: Profils de démarrage et modes simulés
     description: "Le poste industriel n'est pas toujours disponible : chaque périphérique a un mode simulé, et un profil rejoue une session complète sans matériel."
-    icon: pencil-line
   - title: Mesure de performance intégrée
     description: Fenêtre de benchmark dédiée et métriques temps réel (cadence d'acquisition, latence de traitement, charge GPU).
   - title: Qualité outillée
     description: Architecture MVC stricte, threads Qt et buffer circulaire zéro-copie, suite pytest avec couverture et documentation Sphinx.
-    icon: code
 stack:
   - layer: Interface
     items: [PyQt6, pytest-qt]

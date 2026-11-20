@@ -9,7 +9,6 @@ tags:
   - YOLO
   - TensorRT
   - Modbus TCP
-gradient: "linear-gradient(135deg, #0d9488 0%, #1d4ed8 100%)"
 img: ../../assets/projets/bluepoint/flux-detection.webp
 img_alt: "BluePoint WasteIdentifier main window: a plastic container tracked by an oriented box on the conveyor feed, the list of classified objects, and the spectral curve of the identified material."
 period: April – August 2026
@@ -20,27 +19,20 @@ intro: |
 features:
   - title: Real-time detection and tracking
     description: Oriented-bounding-box YOLO model with ByteTrack tracking on a Basler industrial camera feed, running on GPU through TensorRT.
-    icon: terminal-window
   - title: Material recognition through hyperspectral imaging
     description: Each object's spectrum is segmented then classified by a scikit-learn model, regardless of its colour or its label.
-    icon: strategy
   - title: Bridging the two chains
     description: A FIFO queue synchronises the object seen by the colour camera with the material read by the hyperspectral sensor, despite their different frame rates and fields of view.
-    icon: list
   - title: Actuator control over Modbus TCP
     description: Conveyor, air jets, and sorting arm are driven from the application as soon as an object crosses the end line.
-    icon: rocket-launch
   - title: Guided calibration wizards
     description: Intrinsic camera calibration and world-frame placement in a few steps, with field coverage checks, reprojection error, and a comparison against the previous calibration.
-    icon: trophy
   - title: Startup profiles and simulated modes
     description: "The industrial rig is not always available: every device has a mock mode, and a profile replays a full session with no hardware attached."
-    icon: pencil-line
   - title: Built-in performance measurement
     description: Dedicated benchmark window and live metrics (acquisition rate, processing latency, GPU load).
   - title: Tooled-up quality
     description: Strict MVC architecture, Qt threads and a zero-copy circular frame buffer, pytest suite with coverage, and Sphinx documentation.
-    icon: code
 stack:
   - layer: Interface
     items: [PyQt6, pytest-qt]
