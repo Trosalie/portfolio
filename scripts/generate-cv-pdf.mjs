@@ -55,6 +55,11 @@ const MIME = {
 	'.json'  : 'application/json',
 };
 
+/** Nombre de pages d'un PDF : les objets `/Type /Page`, sans compter `/Pages`. */
+function countPdfPages(pdf) {
+	return Buffer.from(pdf).toString('latin1').match(/\/Type\s*\/Page(?!s)/g)?.length ?? 0;
+}
+
 /* ── Serveur HTTP statique minimal ── */
 function startServer(port) {
 	return new Promise((resolve) => {
@@ -145,8 +150,19 @@ function startServer(port) {
 				preferCSSPageSize: false,
 			});
 
+			// Le CV doit tenir sur une page. Le contenu vient de l'outil candidatures,
+			// qui le vérifie déjà ; ce contrôle couvre ce que l'outil ne voit pas, le
+			// rendu de la CI. Un PDF de deux pages n'est pas écrit, et le build échoue.
+			const pages = countPdfPages(pdfBuffer);
+			if (pages > 1) {
+				console.error(`❌ PDF ${target.label} : ${pages} pages, le CV doit tenir sur une page.`);
+				process.exitCode = 1;
+				await page.close();
+				continue;
+			}
+
 			writeFileSync(target.output, pdfBuffer);
-			console.log(`✅ PDF ${target.label} généré : ${target.output}`);
+			console.log(`✅ PDF ${target.label} généré (1 page) : ${target.output}`);
 
 			await page.close();
 		}

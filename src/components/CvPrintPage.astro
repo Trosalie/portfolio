@@ -11,6 +11,15 @@
 import { getLangFromUrl, useTranslations } from '../i18n/ui';
 import CvDocument from './CvDocument.astro';
 import PrintToolbar from './PrintToolbar.astro';
+// Polices embarquées, et non chargées depuis Google Fonts : ce sont exactement
+// les fichiers de l'outil candidatures (src/template/fonts.ts), mêmes graisses.
+// Les PDF publics sont produits en CI sous Linux ; avec d'autres fichiers de
+// police, un CV plein pourrait y passer à deux pages sans que l'outil l'ait vu.
+import '@fontsource/public-sans/400.css';
+import '@fontsource/public-sans/700.css';
+import '@fontsource/rubik/300.css';
+import '@fontsource/rubik/500.css';
+import '@fontsource/rubik/700.css';
 import '../styles/cv-print.css';
 
 const lang = getLangFromUrl(Astro.url);
@@ -24,14 +33,6 @@ const backHref = lang === 'fr' ? '/cv/' : `/${lang}/cv/`;
 	<meta name="viewport" content="width=device-width" />
 	<meta name="robots" content="noindex, nofollow" />
 	<title>{t('cv.print.title')}</title>
-
-	<!-- Polices identiques au site -->
-	<link rel="preconnect" href="https://fonts.googleapis.com" />
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-	<link
-		href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;700&family=Rubik:wght@300;500;700&display=swap"
-		rel="stylesheet"
-	/>
 </head>
 <body>
 	<PrintToolbar title={t('cv.print.toolbar')} backHref={backHref} />
@@ -39,17 +40,5 @@ const backHref = lang === 'fr' ? '/cv/' : `/${lang}/cv/`;
 	<div class="cv-page-wrapper">
 		<CvDocument lang={lang} variant="print" />
 	</div>
-
-	<script is:inline>
-		const params = new URLSearchParams(window.location.search);
-		const city = params.get('city');
-		if (city === 'bayonne' || city === 'bab') {
-			const addr = document.querySelector('.cv-contact-address');
-			if (addr) addr.innerHTML = '18 Avenue de Sainte-Croix<br />64100 Bayonne';
-		} else if (city === 'lyon' || city === 'villeurbanne') {
-			const addr = document.querySelector('.cv-contact-address');
-			if (addr) addr.innerHTML = '197 Avenue Roger Salengro<br />69100 Villeurbanne';
-		}
-	</script>
 </body>
 </html>
