@@ -1,0 +1,52 @@
+---
+import { projectYear, type WorkEntry } from '../../data/work';
+
+/**
+ * L'etiquette d'un projet, sur le modele du cartel de musee : le titre et
+ * l'annee, puis la nature de l'oeuvre, puis ses materiaux, ici sa stack.
+ */
+interface Props {
+	entry: WorkEntry;
+	withDescription?: boolean;
+}
+
+const { entry, withDescription = false } = Astro.props;
+const { data } = entry;
+---
+
+<div class="cartel">
+	<p class="cartel-head"><strong>{data.title}</strong>, {projectYear(entry)}</p>
+	{data.context && <p class="cartel-meta">{data.context}</p>}
+	{withDescription && <p class="cartel-desc">{data.description}</p>}
+	<p class="cartel-meta">{data.tags.join(', ')}</p>
+</div>
+
+<style>
+	.cartel {
+		display: flex;
+		flex-direction: column;
+		gap: 0.15rem;
+		max-width: 34rem;
+		padding: 0.8rem 1rem 0.9rem;
+		background: var(--paper);
+		font-size: var(--step--1);
+		line-height: 1.5;
+	}
+
+	.cartel-head {
+		font-size: var(--step-0);
+	}
+
+	strong {
+		font-weight: 600;
+	}
+
+	.cartel-meta {
+		color: var(--ink-muted);
+	}
+
+	.cartel-desc {
+		margin-block: 0.35rem;
+		max-width: var(--measure);
+	}
+</style>

@@ -51,11 +51,16 @@ const ENTITIES = {
 	'&copy;': '©',
 };
 
-/** Le texte visible d'un fragment HTML, espaces resserres. */
+/**
+ * Le texte visible d'un fragment HTML, espaces resserres. Les balises de texte
+ * en ligne disparaissent sans laisser d'espace (`<strong>A</strong>, B` se lit
+ * « A, B ») ; les autres balises separent leur contenu par une espace.
+ */
 export function text(html) {
 	return html
 		.replace(/<script[\s\S]*?<\/script>/gi, ' ')
 		.replace(/<style[\s\S]*?<\/style>/gi, ' ')
+		.replace(/<\/?(strong|em|b|i|small|abbr|time|span)\b[^>]*>/gi, '')
 		.replace(/<[^>]+>/g, ' ')
 		.replace(/&(amp|lt|gt|quot|#39|#x27|nbsp|copy);/g, (entity) => ENTITIES[entity])
 		.replace(/\s+/g, ' ')

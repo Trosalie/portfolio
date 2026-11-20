@@ -64,8 +64,7 @@ export const ui = {
 			'Git, Docker, MySQL, SCRUM : environnements conteneurisés, versioning collaboratif et gestion de projet agile.',
 
 		// Projets
-		'work.title': 'Mes Projets',
-		'work.tagline': 'Découvrez mes projets les plus récents pour avoir un aperçu de mon expérience.',
+		'work.title': 'Projets',
 		'work.meta.title': 'Mes Projets | Thibault ROSALIE',
 		'work.meta.desc': 'Découvrez les projets récents de Thibault ROSALIE',
 		'work.card.featured': 'Projet le plus récent',
@@ -188,8 +187,7 @@ export const ui = {
 			'Git, Docker, MySQL, SCRUM: containerised environments, collaborative versioning and agile project management.',
 
 		// Projects
-		'work.title': 'My Projects',
-		'work.tagline': 'Discover my most recent projects to get an overview of my experience.',
+		'work.title': 'Projects',
 		'work.meta.title': 'My Projects | Thibault ROSALIE',
 		'work.meta.desc': 'Discover the recent projects of Thibault ROSALIE',
 		'work.card.featured': 'Most recent project',

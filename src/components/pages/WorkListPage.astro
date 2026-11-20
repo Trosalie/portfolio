@@ -1,0 +1,56 @@
+---
+/**
+ * La liste des projets, pour les deux langues.
+ *
+ * `src/pages/work.astro` et `src/pages/en/work.astro` etaient deux copies
+ * identiques aux chemins d'import pres ; elles ne declarent plus que leur route.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContactCTA from '../ContactCTA.astro';
+import ProjectTile from '../work/ProjectTile.astro';
+import { getWorkCollection } from '../../data/work';
+import { getLangFromUrl, useTranslations } from '../../i18n/ui';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+// La collection est deja triee du plus recent au plus ancien : le premier
+// projet ouvre la page sur toute la largeur, les suivants suivent en grille.
+const [featured, ...rest] = await getWorkCollection(lang);
+---
+
+<BaseLayout title={t('work.meta.title')} description={t('work.meta.desc')}>
+	<main id="main-content" tabindex="-1" class="wrapper work-list">
+		<h1>{t('work.title')}</h1>
+		{featured && <ProjectTile entry={featured} lang={lang} featured withDescription />}
+		<ul class="tiles">
+			{
+				rest.map((entry) => (
+					<li>
+						<ProjectTile entry={entry} lang={lang} withDescription />
+					</li>
+				))
+			}
+		</ul>
+	</main>
+	<ContactCTA />
+</BaseLayout>
+
+<style>
+	.work-list {
+		display: flex;
+		flex-direction: column;
+		gap: 3rem;
+	}
+
+	h1 {
+		font-size: clamp(var(--step-4), 4vw, var(--step-5));
+		letter-spacing: -0.02em;
+	}
+
+	@media (min-width: 50em) {
+		.work-list {
+			gap: 4.5rem;
+		}
+	}
+</style>

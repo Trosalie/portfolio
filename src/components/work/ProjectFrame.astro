@@ -1,0 +1,136 @@
+---
+import { Image } from 'astro:assets';
+import '@fontsource/oswald/latin-600.css';
+import '@fontsource/playfair-display/latin-600-italic.css';
+
+import type { WorkEntry } from '../../data/work';
+
+/**
+ * Le cadre d'un projet, dans l'identite que le produit s'est donnee : sa
+ * couleur de fond, son lisere, son nom compose dans sa police. Un projet sans
+ * identite prend un cadre encre et le nom dans la police du site.
+ *
+ * `tile` : la vignette des listes, nom du produit en tete (decoratif, le lien
+ * est nomme par l'etiquette), capture recadree au meme format pour toutes.
+ * `cover` : la couverture d'une page projet, capture entiere et decrite.
+ */
+interface Props {
+	entry: WorkEntry;
+	variant: 'tile' | 'cover';
+	featured?: boolean;
+}
+
+const { entry, variant, featured = false } = Astro.props;
+const { data } = entry;
+const identity = data.identity;
+
+const background = identity?.frame.background ?? 'var(--ink)';
+const border = identity?.frame.border ?? background;
+const titleColor = identity?.frame.titleColor ?? '#FFFFFF';
+const titleStyle = identity ? `title--${identity.frame.titleStyle}` : 'title--site';
+const style = `--frame-bg:${background};--frame-border:${border};--frame-title:${titleColor}`;
+
+const isCover = variant === 'cover';
+const sizes = isCover
+	? '(min-width: 50em) 66rem, 100vw'
+	: featured
+		? '(min-width: 50em) 40rem, 100vw'
+		: '(min-width: 50em) 34rem, 100vw';
+const widths = isCover ? [640, 1024, 1600] : [480, 800, 1200];
+---
+
+<div
+	class:list={['project-frame', variant, titleStyle, { bordered: border !== background }]}
+	data-frame={identity ? 'identity' : 'ink'}
+	style={style}
+>
+	{!isCover && data.img && <span class="frame-title" aria-hidden="true">{data.title}</span>}
+	{
+		data.img ? (
+			<Image
+				src={data.img}
+				alt={isCover ? data.img_alt! : ''}
+				widths={widths}
+				sizes={sizes}
+				loading={isCover ? 'eager' : 'lazy'}
+				decoding="async"
+			/>
+		) : (
+			<span class="frame-name">{data.title}</span>
+		)
+	}
+</div>
+
+<style>
+	.project-frame {
+		display: flex;
+		flex-direction: column;
+		padding: 1.25rem;
+		background: var(--frame-bg);
+	}
+
+	.project-frame.bordered {
+		border: 0.35rem solid var(--frame-border);
+	}
+
+	img {
+		display: block;
+		width: 100%;
+		height: auto;
+		border-radius: 2px;
+	}
+
+	/* Toutes les vignettes au meme format : la grille garde des rangees egales,
+	   quelle que soit la forme de la capture. */
+	.tile img {
+		aspect-ratio: 16 / 10;
+		object-fit: cover;
+		object-position: top;
+	}
+
+	.frame-title {
+		margin-bottom: 0.85rem;
+		font-size: var(--step-2);
+		line-height: 1.1;
+		color: var(--frame-title);
+	}
+
+	/* Sans capture, le nom occupe la place de l'image, au meme format. */
+	.frame-name {
+		display: flex;
+		align-items: flex-end;
+		aspect-ratio: 16 / 10;
+		font-size: var(--step-4);
+		line-height: 1.05;
+		color: var(--frame-title);
+		overflow-wrap: anywhere;
+	}
+
+	.title--oswald-caps :is(.frame-title, .frame-name) {
+		font-family: 'Oswald', sans-serif;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+	}
+
+	.title--playfair-italic :is(.frame-title, .frame-name) {
+		font-family: 'Playfair Display', serif;
+		font-style: italic;
+		font-weight: 600;
+	}
+
+	.title--site :is(.frame-title, .frame-name) {
+		font-family: var(--font-sans);
+		font-weight: 600;
+	}
+
+	@media (min-width: 50em) {
+		.project-frame {
+			padding: 1.6rem;
+		}
+
+		.cover {
+			padding: 2.25rem;
+		}
+	}
+</style>
