@@ -43,7 +43,7 @@ export const ui = {
 
 		// Page d'accueil
 		'index.hero.title': "Bonjour, je m'appelle Thibault ROSALIE",
-		'index.hero.tagline': "Développeur full stack au terme d'un BUT Informatique, je recherche un poste où mettre en pratique ce que j'ai appris.",
+		'index.hero.tagline': "Développeur full stack diplômé d'un BUT Informatique, je recherche un poste où mettre en pratique ce que j'ai appris.",
 		'index.hero.portrait.alt': 'Photo de profil de Thibault ROSALIE',
 		'index.hero.role.dev': 'Développeur',
 		'index.hero.role.fullstack': 'Full Stack',
@@ -103,7 +103,7 @@ export const ui = {
 		'contact.submit': 'Envoyer le message',
 		'contact.details': 'Coordonnées',
 		'contact.availability': 'Disponibilité',
-		'contact.availability.text': "Au terme de mon BUT Informatique à l'IUT de Bayonne. À la recherche d'un poste de développeur full stack.",
+		'contact.availability.text': "Diplômé d'un BUT Informatique de l'IUT de Bayonne. À la recherche d'un poste de développeur full stack.",
 		'contact.meta.title': 'Me contacter | Thibault ROSALIE',
 		'contact.meta.desc': 'Envoyez-moi un message pour toute proposition de collaboration ou question.',
 		// Sujet de l'e-mail que Formspree envoie : les deux langues partagent le
@@ -159,7 +159,7 @@ export const ui = {
 		// Métadonnées par défaut (pages sans title/description explicites)
 		'meta.default.title': 'Thibault ROSALIE- Portfolio',
 		'meta.default.description':
-			'Portfolio of Thibault ROSALIE, full stack web developer completing a Computer Science degree and looking for a position.',
+			'Portfolio of Thibault ROSALIE, graduate full stack web developer looking for a position.',
 
 		// Accessibility
 		'a11y.skipToContent': 'Skip to content',
@@ -192,7 +192,7 @@ export const ui = {
 
 		// Page d'accueil
 		'index.hero.title': "Hello, my name is Thibault ROSALIE",
-		'index.hero.tagline': 'Full stack developer completing a Computer Science degree, I am looking for a position where I can put what I have learned into practice.',
+		'index.hero.tagline': 'Full stack developer who recently graduated with a Computer Science degree, I am looking for a position where I can put what I have learned into practice.',
 		'index.hero.portrait.alt': 'Profile picture of Thibault ROSALIE',
 		'index.hero.role.dev': 'Developer',
 		'index.hero.role.fullstack': 'Full Stack',
@@ -250,7 +250,7 @@ export const ui = {
 		'contact.submit': 'Send message',
 		'contact.details': 'Contact details',
 		'contact.availability': 'Availability',
-		'contact.availability.text': 'Completing my Computer Science degree at IUT de Bayonne. Looking for a full stack developer position.',
+		'contact.availability.text': 'Graduated with a Computer Science degree from IUT de Bayonne. Looking for a full stack developer position.',
 		'contact.meta.title': 'Contact me | Thibault ROSALIE',
 		'contact.meta.desc': 'Send me a message for any collaboration proposal or question.',
 		'contact.mail.subject': 'Portfolio (EN): new message',

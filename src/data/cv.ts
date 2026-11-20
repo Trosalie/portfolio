@@ -23,6 +23,7 @@ export interface CvEntry {
 	place?: string;
 	date: string;
 	bullets: string[];
+	url?: string;
 }
 
 export interface CvData {
@@ -64,7 +65,7 @@ export const cv: Record<Lang, CvData> = {
 		jobTitle: 'Développeur FullStack',
 		ageUnit: 'ans',
 		aria: {
-			document: 'Curriculum Vitae de Thibault Rosalie',
+			document: 'Curriculum Vitae de Thibault ROSALIE',
 			sidebar: 'Informations personnelles',
 			main: 'Parcours',
 		},
@@ -75,26 +76,26 @@ export const cv: Record<Lang, CvData> = {
 			languages: 'Langues',
 			hobbies: 'Loisirs',
 			education: 'Formation',
-			projects: "Projets d'étude",
+			projects: 'Projets clés',
 			experience: 'Expérience professionnelle',
 		},
 		profile: [
-			'Au terme de mon BUT Informatique, je recherche un poste de développeur full stack pour mettre en pratique mes compétences.',
-			'Curieux et rigoureux, je souhaite contribuer à des projets concrets et techniques, tout en consolidant mon sens du travail en équipe.',
+			"Diplômé d'un BUT Informatique, je recherche un poste de développeur Fullstack pour mettre en pratique et approfondir mes compétences.",
+			'Curieux et rigoureux, je conçois des applications web complètes, performantes et fiables, du modèle de données jusqu’à l’interface utilisateur.',
 		],
-		address: ['18 Avenue de Sainte-Croix', '64100 Bayonne'],
+		address: ['197 Avenue Roger Salengro', '69100 Villeurbanne'],
 		phoneDisplay: '07 60 29 99 13',
 		skills: [
-			'PHP',
-			'Laravel',
+			'TypeScript',
+			'React',
+			'PHP / Laravel',
 			'Angular',
+			'PostgreSQL',
+			'Supabase',
 			'Docker',
-			'MySQL',
-			'PHPUnit',
+			'Vitest / Playwright',
 			'Python',
-			'SCRUM',
 			'Git / GitHub',
-			'POO',
 		],
 		languages: [
 			{ name: 'Anglais', level: 'Niveau B2' },
@@ -118,36 +119,37 @@ export const cv: Record<Lang, CvData> = {
 		],
 		projects: [
 			{
+				title: 'Application Web Temps Réel & PWA',
+				subtitle: 'React 19 / TypeScript / Supabase — ChronoPotes',
+				place: 'Projet personnel en production (chronopotes.fr)',
+				date: '2026',
+				url: 'https://www.chronopotes.fr',
+				bullets: [
+					'Développement fullstack en React 19, TypeScript strict et Tailwind CSS (PWA)',
+					'Architecture backend Supabase / PostgreSQL : fonctions RPC, triggers et Row Level Security (RLS)',
+					'Synchronisation multijoueur et duels en temps réel via Supabase Realtime (WebSockets)',
+					'Back-office complet d’administration : modération, gestion des défis, communication et métriques',
+					'Fiabilisation et qualité : tests unitaires/intégration (Vitest) et tests E2E (Playwright)',
+				],
+			},
+			{
 				title: 'Application Web Responsive',
-				subtitle: 'SportPxl Dashboard (Laravel / Angular)',
+				subtitle: 'Laravel / Angular — SportPxl Dashboard',
 				place: 'IUT de Bayonne et du Pays Basque',
 				date: '2025 – 2026',
 				bullets: [
 					'Gestion de projet agile SCRUM',
-					'Architecture MVC et programmation orientée objet',
+					'Architecture MVC — POO',
 					'Conteneurisation Docker',
 					'Gestion et sécurisation de base de données MySQL',
 					'Rédaction de tests unitaires',
 				],
 			},
-			{
-				title: 'Application Web de Covoiturage',
-				subtitle: "Covoit'Etud (PHP / Twig / Bootstrap)",
-				place: 'IUT de Bayonne et du Pays Basque',
-				date: '2024 – 2025',
-				bullets: [
-					'Développement fullstack en équipe de 5, architecture MVC',
-					'Système de réservation de trajets conducteur / passager',
-					"Intégration d'une API de géocodage pour la carte des trajets",
-					'Gestion de profils étudiants, notation et système de badges',
-					'Documentation technique avec Doxygen',
-				],
-			},
 		],
 		experience: [
 			{
-				title: 'Stagiaire développement en vision par ordinateur',
-				place: 'Compositadour, projet européen BluePoint',
+				title: 'Stagiaire développement — Vision par ordinateur',
+				place: 'Compositadour — Projet européen BluePoint',
 				date: 'Avr. – Juil. 2026',
 				bullets: [
 					"Conception et développement d'une application Python/PyQt6 de suivi d'objets en temps réel, architecture MVC",
@@ -173,7 +175,7 @@ export const cv: Record<Lang, CvData> = {
 		jobTitle: 'Full Stack Developer',
 		ageUnit: 'years old',
 		aria: {
-			document: 'Resume of Thibault Rosalie',
+			document: 'Resume of Thibault ROSALIE',
 			sidebar: 'Personal information',
 			main: 'Career path',
 		},
@@ -184,26 +186,26 @@ export const cv: Record<Lang, CvData> = {
 			languages: 'Languages',
 			hobbies: 'Hobbies',
 			education: 'Education',
-			projects: 'Study Projects',
+			projects: 'Key Projects',
 			experience: 'Professional Experience',
 		},
 		profile: [
-			"Completing a Bachelor's degree in Computer Science at IUT of Bayonne, I am looking for a full stack developer position to put my skills into practice.",
-			'Curious and rigorous, I wish to contribute to concrete and technical projects, while strengthening my sense of teamwork.',
+			"Graduated with a Bachelor's degree in Computer Science, I am looking for a full stack developer position to apply and enhance my skills.",
+			'Curious and rigorous, I build complete, performant, and reliable web applications, from database design to modern user interfaces.',
 		],
 		address: ['18 Avenue de Sainte-Croix', '64100 Bayonne, France'],
 		phoneDisplay: '+33 7 60 29 99 13',
 		skills: [
-			'PHP',
-			'Laravel',
+			'TypeScript',
+			'React',
+			'PHP / Laravel',
 			'Angular',
+			'PostgreSQL',
+			'Supabase',
 			'Docker',
-			'MySQL',
-			'PHPUnit',
+			'Vitest / Playwright',
 			'Python',
-			'SCRUM',
 			'Git / GitHub',
-			'OOP',
 		],
 		languages: [
 			{ name: 'English', level: 'B2 Level' },
@@ -227,36 +229,37 @@ export const cv: Record<Lang, CvData> = {
 		],
 		projects: [
 			{
+				title: 'Real-Time Web Application & PWA',
+				subtitle: 'React 19 / TypeScript / Supabase — ChronoPotes',
+				place: 'Live Personal Project (chronopotes.fr)',
+				date: '2026',
+				url: 'https://www.chronopotes.fr',
+				bullets: [
+					'Fullstack development with React 19, strict TypeScript, and Tailwind CSS (PWA)',
+					'Supabase / PostgreSQL backend: RPC functions, triggers, and Row Level Security (RLS)',
+					'Real-time multiplayer synchronization and duels via Supabase Realtime (WebSockets)',
+					'Complete administration back-office: moderation, challenge management, communication, and metrics',
+					'Reliability and quality: unit/integration testing (Vitest) and E2E testing (Playwright)',
+				],
+			},
+			{
 				title: 'Responsive Web Application',
-				subtitle: 'SportPxl Dashboard (Laravel / Angular)',
+				subtitle: 'Laravel / Angular — SportPxl Dashboard',
 				place: 'IUT of Bayonne and the Basque Country',
 				date: '2025 – 2026',
 				bullets: [
 					'Agile SCRUM Project Management',
-					'MVC Architecture and Object-Oriented Programming',
+					'MVC Architecture — OOP',
 					'Docker Containerization',
 					'MySQL Database Management and Security',
 					'Unit Test Development',
 				],
 			},
-			{
-				title: 'Car Sharing Web Application',
-				subtitle: "Covoit'Etud (PHP / Twig / Bootstrap)",
-				place: 'IUT of Bayonne and the Basque Country',
-				date: '2024 – 2025',
-				bullets: [
-					'Fullstack Development in a Team of 5, MVC Architecture',
-					'Booking System for Drivers and Passengers',
-					'Integration of a Geocoding API for the Trip Map',
-					'Student Profile Management, Grading, and Badge System',
-					'Technical Documentation with Doxygen',
-				],
-			},
 		],
 		experience: [
 			{
-				title: 'Development Intern, Computer Vision',
-				place: 'Compositadour, BluePoint European project',
+				title: 'Development Intern — Computer Vision',
+				place: 'Compositadour — BluePoint European project',
 				date: 'April – July 2026',
 				bullets: [
 					'Design and development of a Python/PyQt6 real-time object tracking application, MVC architecture',

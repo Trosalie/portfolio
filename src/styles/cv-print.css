@@ -120,7 +120,7 @@ body {
 .cv-header {
 	background: linear-gradient(150deg, #c561f6, #7611a6, #1c0056);
 	color: #fff;
-	padding: 1.6rem 2rem;
+	padding: 1.35rem 2rem;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -170,20 +170,20 @@ body {
 .cv-sidebar {
 	background: #1c0056;
 	color: #fff;
-	padding: 1.4rem 1.2rem;
+	padding: 1.15rem 1.15rem;
 	display: flex;
 	flex-direction: column;
-	gap: 1.4rem;
+	gap: 1.15rem;
 	word-break: break-word;
 	overflow-wrap: break-word;
 }
 
 /* Colonne droite */
 .cv-main {
-	padding: 1.4rem 1.6rem;
+	padding: 1.1rem 1.45rem;
 	display: flex;
 	flex-direction: column;
-	gap: 1.4rem;
+	gap: 1.05rem;
 	background: #fff;
 }
 
@@ -364,6 +364,12 @@ body {
 	margin: 0.08rem 0 0;
 }
 
+.cv-entry-subtitle a {
+	color: inherit;
+	text-decoration: underline;
+	text-underline-offset: 2px;
+}
+
 .cv-entry-place {
 	font-size: 0.78rem;
 	color: #6474a2;
@@ -387,13 +393,13 @@ body {
 	padding-left: 1rem;
 	display: flex;
 	flex-direction: column;
-	gap: 0.2rem;
+	gap: 0.15rem;
 }
 
 .cv-entry-list li {
 	font-size: 0.8rem;
 	color: #3d4663;
-	line-height: 1.5;
+	line-height: 1.45;
 }
 
 /* ══════════════════════════════════════

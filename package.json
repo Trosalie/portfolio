@@ -9,7 +9,8 @@
     "check": "astro check",
     "preview": "astro preview",
     "astro": "astro",
-    "generate-pdf": "node scripts/generate-cv-pdf.mjs"
+    "generate-pdf": "node scripts/generate-cv-pdf.mjs",
+    "generate-candidates": "node scripts/generate-cv-candidates.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",

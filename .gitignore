@@ -24,3 +24,5 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+# CV generes localement pour les candidatures (adresse et telephone)
+CV_Candidatures/

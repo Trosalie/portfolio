@@ -351,6 +351,16 @@
 	margin: 0.1rem 0 0;
 }
 
+.cv-entry-subtitle a {
+	color: inherit;
+	text-decoration: underline;
+	text-underline-offset: 2px;
+}
+
+.cv-entry-subtitle a:hover {
+	text-decoration-thickness: 2px;
+}
+
 :root.theme-dark .cv-entry-subtitle {
 	color: var(--accent-dark);
 }

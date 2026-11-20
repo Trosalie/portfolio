@@ -39,5 +39,17 @@ const backHref = lang === 'fr' ? '/cv/' : `/${lang}/cv/`;
 	<div class="cv-page-wrapper">
 		<CvDocument lang={lang} variant="print" />
 	</div>
+
+	<script is:inline>
+		const params = new URLSearchParams(window.location.search);
+		const city = params.get('city');
+		if (city === 'bayonne' || city === 'bab') {
+			const addr = document.querySelector('.cv-contact-address');
+			if (addr) addr.innerHTML = '18 Avenue de Sainte-Croix<br />64100 Bayonne';
+		} else if (city === 'lyon' || city === 'villeurbanne') {
+			const addr = document.querySelector('.cv-contact-address');
+			if (addr) addr.innerHTML = '197 Avenue Roger Salengro<br />69100 Villeurbanne';
+		}
+	</script>
 </body>
 </html>
