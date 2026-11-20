@@ -153,9 +153,11 @@ function startServer(port) {
 			// Le CV doit tenir sur une page. Le contenu vient de l'outil candidatures,
 			// qui le vérifie déjà ; ce contrôle couvre ce que l'outil ne voit pas, le
 			// rendu de la CI. Un PDF de deux pages n'est pas écrit, et le build échoue.
+			// Zéro page lue veut dire que le compteur ne sait plus lire le PDF (format de
+			// Chrome changé) : on échoue aussi, plutôt que de perdre le garde-fou en silence.
 			const pages = countPdfPages(pdfBuffer);
-			if (pages > 1) {
-				console.error(`❌ PDF ${target.label} : ${pages} pages, le CV doit tenir sur une page.`);
+			if (pages !== 1) {
+				console.error(`❌ PDF ${target.label} : ${pages} page(s) lue(s), le CV doit tenir sur une page.`);
 				process.exitCode = 1;
 				await page.close();
 				continue;

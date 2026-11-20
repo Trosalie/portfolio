@@ -2,7 +2,7 @@
 
 Site personnel bilingue (français / anglais) d'un développeur full stack au terme d'un BUT
 Informatique, en recherche de poste : projets, CV consultable et téléchargeable en PDF. Le
-texte du CV se rédige dans un outil local à part,  (voir plus bas).
+texte du CV se rédige dans un outil local à part, `candidatures` (voir plus bas).
 
 **En ligne :** <https://trosalie.alwaysdata.net>
 
