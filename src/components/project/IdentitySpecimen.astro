@@ -70,8 +70,11 @@ const Piece = pieces[identity.specimen];
 </div>
 
 <style>
+	/* `minmax(0, 1fr)` : une piece d'interface plus large que l'ecran ne doit
+	   pas elargir la colonne au-dela de la page. */
 	.specimen {
 		display: grid;
+		grid-template-columns: minmax(0, 1fr);
 		gap: 2.5rem;
 	}
 

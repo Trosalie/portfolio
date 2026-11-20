@@ -33,9 +33,16 @@ const tier = t('specimen.chrono.tier');
 </div>
 
 <style>
+	/* Sur un ecran de 375 px, quatre palettes en --step-4 et la mention ne
+	   tenaient pas sur une ligne : les palettes suivent la largeur de l'ecran et
+	   la mention passe a la ligne au besoin. */
 	.flaps {
+		--flap-size: clamp(1.5rem, 7vw, var(--step-4));
+
 		display: inline-flex;
+		flex-wrap: wrap;
 		align-items: center;
+		max-width: 100%;
 		gap: 0.25rem;
 		padding: 0.9rem 1rem;
 		background: #101216;
@@ -49,7 +56,7 @@ const tier = t('specimen.chrono.tier');
 		color: #fff;
 		font-family: 'Space Mono', monospace;
 		font-weight: 700;
-		font-size: var(--step-4);
+		font-size: var(--flap-size);
 		line-height: 1.45;
 		text-align: center;
 	}
@@ -69,7 +76,7 @@ const tier = t('specimen.chrono.tier');
 		color: #f5c518;
 		font-family: 'Space Mono', monospace;
 		font-weight: 700;
-		font-size: var(--step-4);
+		font-size: var(--flap-size);
 	}
 
 	.tier {
