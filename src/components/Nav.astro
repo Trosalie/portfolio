@@ -2,7 +2,6 @@
 import Icon from './Icon.astro';
 import type { iconPaths } from './IconPaths';
 import LangToggle from './LangToggle.astro';
-import ThemeToggle from './ThemeToggle.astro';
 import { getLangFromUrl, useTranslations } from '../i18n/ui';
 
 const lang = getLangFromUrl(Astro.url);
@@ -102,8 +101,7 @@ const isCurrentPage = (href: string) => {
 			</div>
 
 			<div class="theme-toggle">
-				<LangToggle />
-				<ThemeToggle />
+				<LangToggle />
 			</div>
 		</div>
 	</div>
