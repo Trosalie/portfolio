@@ -26,8 +26,6 @@ export const ui = {
 		'contactcta.title': 'Intéressé par une collaboration ?',
 		'contactcta.cta': 'Envoyez-moi un message',
 
-		// Footer
-		'footer.madeWith': 'Créé avec',
 
 		// Page 404
 		'404.meta.title': 'Page introuvable | Thibault ROSALIE',
@@ -152,8 +150,6 @@ export const ui = {
 		'contactcta.title': 'Interested in collaborating?',
 		'contactcta.cta': 'Send me a message',
 
-		// Footer
-		'footer.madeWith': 'Built with',
 
 		// Page 404
 		'404.meta.title': 'Page not found | Thibault ROSALIE',
