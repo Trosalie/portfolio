@@ -2,8 +2,7 @@
 
 Site personnel bilingue (français / anglais) d'un développeur full stack au terme d'un BUT
 Informatique, en recherche de poste : projets, CV consultable et téléchargeable en PDF. Le
-dépôt embarque aussi un éditeur de lettre de motivation, outil personnel qui ne part pas en
-production (voir plus bas).
+texte du CV se rédige dans un outil local à part,  (voir plus bas).
 
 **En ligne :** <https://trosalie.alwaysdata.net>
 
@@ -35,52 +34,49 @@ production (voir plus bas).
 
 ```
 src/
-├── data/          Contenu structuré : cv.ts, letter.ts, profile.ts
-├── i18n/ui.ts     Dictionnaire FR/EN + résolution des routes traduites
-├── components/    Composants, dont le CV et la lettre (voir ci-dessous)
+├── data/          cv.json (exporté par l'outil candidatures), cvExport.ts, cv.ts, profile.ts
+├── i18n/ui.ts     Dictionnaire FR/EN + chemin de la page équivalente dans l'autre langue
+├── components/    Composants, dont le CV (voir ci-dessous)
 ├── content/       Collections des projets : work/ (FR) et work-en/ (EN)
 ├── layouts/       BaseLayout : head, nav, footer, fonds de page
 ├── pages/         Routes publiées. Les pages EN vivent sous pages/en/
-├── routes-dev/    Routes servies en dev seulement (éditeur de lettre)
-└── styles/        global.css + les feuilles du CV et de la lettre
+└── styles/        global.css + les feuilles du CV
 scripts/
-└── generate-cv-pdf.mjs   Sert dist/ en local et imprime les pages A4 du CV
+└── generate-cv-pdf.mjs   Sert dist/ en local, imprime les pages A4 du CV, vérifie qu'elles
+                          tiennent sur une page
 docs/
 └── AMELIORATIONS.md      Backlog d'audit, points traités cochés
 ```
 
-### CV et lettre : une seule source
+### Le CV : une seule source, hors du portfolio
 
-Le CV est rendu par **quatre** routes — `/cv/`, `/en/cv/`, `/cv-print/`, `/en/cv-print/` — mais
-son contenu n'est écrit qu'**une fois**, dans `src/data/cv.ts`. Les pages ne font que déclarer
-leur route ; tout le balisage vient de `CvDocument.astro`, habillé par `cv-screen.css` ou
-`cv-print.css` selon le contexte. Même principe pour la lettre de motivation.
+Le CV est rendu par **quatre** routes — `/cv/`, `/en/cv/`, `/cv-print/`, `/en/cv-print/` — à
+partir d'un seul composant, `CvDocument.astro`, habillé par `cv-screen.css` ou `cv-print.css`
+selon le contexte.
 
-Pour corriger une date, une mission ou un intitulé : **modifier `src/data/cv.ts`, et rien
-d'autre.** Le typage `Record<Lang, CvData>` fait échouer `npm run check` si une langue est
-incomplète.
+Son texte, et les coordonnées, ne se rédigent **plus dans ce dépôt**. Ils vivent dans l'outil
+local `candidatures` (`C:\dev\candidatures`, dépôt privé), où chaque texte est écrit une fois
+en français et en anglais, et où se préparent aussi les versions de CV et les lettres de
+motivation de chaque candidature. La version marquée « Publique » s'exporte ici dans
+**`src/data/cv.json`** : ne pas modifier ce fichier à la main.
 
-Cette structure remplace un état où le CV existait en cinq copies, qui avaient déjà divergé —
+Pour changer le CV en ligne : le modifier dans l'outil, cliquer sur « Exporter vers le
+portfolio », relire le diff, committer, déployer.
+
+Deux garde-fous :
+
+- `src/data/cvExport.ts` valide `cv.json` au chargement. Un export incomplet fait échouer le
+  build en nommant le champ en cause, au lieu de publier un CV amputé.
+- `scripts/generate-cv-pdf.mjs` compte les pages de chaque PDF : un CV de deux pages fait
+  échouer le build. La page d'impression embarque les mêmes fichiers de police que l'outil
+  (`@fontsource`), pour que le rendu de la CI soit celui que l'outil a mesuré.
+
+La mise en page du CV existe en deux exemplaires (ici et dans l'outil) : changer le design
+demande de le changer aux deux endroits.
+
+Cette organisation remplace un état où le CV existait en cinq copies, qui avaient déjà divergé —
 la page anglaise et le PDF anglais ne disaient pas la même chose en douze endroits. L'historique
 est dans `docs/AMELIORATIONS.md`.
-
-### L'éditeur de lettre ne va pas en ligne
-
-L'éditeur de lettre de motivation est un outil personnel, pas une page du portfolio : il sert à
-rédiger une lettre puis à l'enregistrer en PDF, et n'a aucune raison d'être public.
-
-Ses quatre routes vivent donc dans **`src/routes-dev/`** et non dans `src/pages/`, où tout
-fichier deviendrait une page. Une petite intégration d'`astro.config.mjs` les rebranche
-uniquement quand Astro tourne en mode `dev`. Le bouton « Rédiger ma lettre » du hero suit le
-même signal, via `import.meta.env.DEV`, sans quoi il resterait en production en pointant vers
-une page absente.
-
-Conséquence : **aucun build ne peut publier ces pages**, pas même un `npm run build` lancé à la
-main. Pour écrire une lettre, `npm run dev` puis `/lettre/` ou `/en/letter/`.
-
-Le reste de la fonctionnalité — `src/data/letter.ts`, `LetterEditorPage.astro`,
-`LetterPrintPage.astro`, `letter-{editor,print}.css`, les clés `letter.*` — reste en place et
-continue d'être vérifié par `npm run check`.
 
 ### Ajouter un projet
 

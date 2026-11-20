@@ -47,10 +47,12 @@ justifie l'intervention, et l'action proposée.
 - [x] **Pas de sitemap ni de robots.txt.**
   → `@astrojs/sitemap` avec exclusion des pages d'impression, et `public/robots.txt`.
 
-- [ ] **Le sitemap n'apparie pas `/lettre/` et `/en/letter/`.** `@astrojs/sitemap` ne relie
+- [x] **Le sitemap n'apparie pas `/lettre/` et `/en/letter/`.** `@astrojs/sitemap` ne relie
   automatiquement que les pages dont le chemin est identique d'une langue à l'autre. Les
   balises `hreflang` en page sont correctes et restent le signal principal, donc l'impact est
   faible. À traiter si les routes traduites se multiplient.
+  → Sans objet : éditeur de lettre déplacé hors du portfolio (2026-11-20), dans l'outil local
+  `candidatures`. Plus aucune route ne change de nom d'une langue à l'autre.
 
 ## P2 — Duplication de code
 

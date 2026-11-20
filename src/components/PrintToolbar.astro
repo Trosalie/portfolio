@@ -1,6 +1,6 @@
 ---
 /**
- * Barre d'actions des pages d'impression (CV et lettre de motivation).
+ * Barre d'actions des pages d'impression du CV.
  *
  * Masquee a l'impression par la regle `.print-toolbar { display: none }` de la
  * feuille de style de chaque page, et par Puppeteer lors de la generation des
@@ -13,7 +13,7 @@ import { getLangFromUrl, useTranslations } from '../i18n/ui';
 interface Props {
 	/** Titre affiche a gauche de la barre. */
 	title: string;
-	/** Page a laquelle revenir : le CV ou l'editeur de lettre. */
+	/** Page a laquelle revenir : le CV. */
 	backHref: string;
 }
 

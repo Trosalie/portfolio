@@ -48,7 +48,6 @@ export const ui = {
 		'index.hero.role.dev': 'Développeur',
 		'index.hero.role.fullstack': 'Full Stack',
 		'index.hero.cta': 'Voir mon CV',
-		'index.hero.letterCta': 'Rédiger ma lettre',
 		'index.projects.title': 'Projets sélectionnés',
 		'index.projects.desc': 'Découvrez ci-dessous une sélection de mes projets récents réalisés dans le cadre de mes études et de mes projets personnels.',
 		'index.projects.cta': 'Voir tous les projets',
@@ -120,7 +119,7 @@ export const ui = {
 		'about.meta.desc': 'À propos de Thibault ROSALIE- Développeur full stack issu du BUT Informatique',
 		'about.wip.title': 'À propos',
 
-		// Barre des pages d'impression (CV et lettre)
+		// Barre des pages d'impression du CV
 		'print.back': 'Retour',
 		'print.action': 'Imprimer / Sauvegarder en PDF',
 
@@ -132,28 +131,6 @@ export const ui = {
 		'cv.print.title': 'CV – Thibault ROSALIE(impression)',
 		'cv.print.toolbar': 'Aperçu avant impression du CV de Thibault ROSALIE',
 
-		// Lettre de motivation
-		'letter.meta.title': 'Lettre de motivation | Thibault ROSALIE',
-		'letter.meta.desc': 'Rédaction et impression PDF de la lettre de motivation de Thibault ROSALIE.',
-		'letter.page.title': 'Lettre de motivation',
-		'letter.page.subtitle': 'Rédigez votre lettre puis ouvrez la page d\'impression pour la sauvegarder en PDF, comme pour le CV.',
-		'letter.form.label': 'Contenu de la lettre',
-		'letter.form.placeholder': 'Saisissez votre lettre de motivation ici...\n\nUtilisez une ligne vide entre deux paragraphes pour une meilleure mise en page.',
-		'letter.form.cta': 'Ouvrir la version PDF',
-		'letter.form.date': 'Date',
-		'letter.form.company': 'Nom de l\'entreprise',
-		'letter.form.address': 'Adresse de l\'entreprise',
-		'letter.form.title': 'Titre de la lettre',
-		'letter.form.company.placeholder': 'Ex: Alwaysdata',
-		'letter.form.address.placeholder': 'Ex: 62 rue Tiquetonne, 75002 Paris',
-		'letter.form.title.placeholder': 'Ex: Candidature au poste de developpeur full stack',
-		'letter.preview.header': 'Lettre de motivation',
-		'letter.default.subject': 'Objet : Candidature',
-		'letter.editor.aria': 'Editeur de lettre de motivation',
-		'letter.preview.aria': 'Apercu lettre de motivation',
-		'letter.doc.aria': 'Lettre de motivation de Thibault ROSALIE',
-		'letter.print.title': 'Lettre de motivation - Thibault ROSALIE(impression)',
-		'letter.print.toolbar': 'Apercu avant impression - Lettre de motivation',
 	},
 	en: {
 		// Métadonnées par défaut (pages sans title/description explicites)
@@ -197,7 +174,6 @@ export const ui = {
 		'index.hero.role.dev': 'Developer',
 		'index.hero.role.fullstack': 'Full Stack',
 		'index.hero.cta': 'View my Resume',
-		'index.hero.letterCta': 'Write my Cover Letter',
 		'index.projects.title': 'Selected Projects',
 		'index.projects.desc': 'Discover below a selection of my recent projects completed as part of my studies and personal projects.',
 		'index.projects.cta': 'View all projects',
@@ -263,7 +239,7 @@ export const ui = {
 		'about.meta.desc': 'About Thibault ROSALIE- Full stack developer with a Computer Science degree',
 		'about.wip.title': 'About',
 
-		// Print page toolbar (resume and cover letter)
+		// Resume print page toolbar
 		'print.back': 'Back',
 		'print.action': 'Print / Save as PDF',
 
@@ -275,28 +251,6 @@ export const ui = {
 		'cv.print.title': 'Resume – Thibault ROSALIE(print)',
 		'cv.print.toolbar': "Print preview of Thibault ROSALIE's resume",
 
-		// Cover letter
-		'letter.meta.title': 'Cover Letter | Thibault ROSALIE',
-		'letter.meta.desc': 'Write and print the PDF cover letter of Thibault ROSALIE.',
-		'letter.page.title': 'Cover Letter',
-		'letter.page.subtitle': 'Write your letter, then open the print page to save it as PDF with the same flow as the resume.',
-		'letter.form.label': 'Letter content',
-		'letter.form.placeholder': 'Write your cover letter here...\n\nUse an empty line between paragraphs for cleaner layout.',
-		'letter.form.cta': 'Open PDF version',
-		'letter.form.date': 'Date',
-		'letter.form.company': 'Company name',
-		'letter.form.address': 'Company address',
-		'letter.form.title': 'Letter title',
-		'letter.form.company.placeholder': 'E.g. Alwaysdata',
-		'letter.form.address.placeholder': 'E.g. 62 rue Tiquetonne, 75002 Paris',
-		'letter.form.title.placeholder': 'E.g. Application for a full stack developer position',
-		'letter.preview.header': 'Cover Letter',
-		'letter.default.subject': 'Subject: Application',
-		'letter.editor.aria': 'Cover letter editor',
-		'letter.preview.aria': 'Cover letter preview',
-		'letter.doc.aria': 'Cover letter of Thibault ROSALIE',
-		'letter.print.title': 'Cover Letter - Thibault ROSALIE(print)',
-		'letter.print.toolbar': 'Print preview - Cover Letter',
 	},
 } as const;
 
@@ -316,37 +270,19 @@ export function useTranslations(lang: Lang) {
 }
 
 /**
- * Segments de route dont le nom change d'une langue à l'autre.
- * Toutes les autres routes (/, /work/, /about/, /cv/, /contact/, /cv-print/
- * et les slugs de projets) sont identiques en FR et en EN.
- */
-const routeSegments = {
-	lettre: 'letter',
-	'lettre-print': 'letter-print',
-} as const;
-
-const frToEn: Record<string, string> = routeSegments;
-const enToFr: Record<string, string> = Object.fromEntries(
-	Object.entries(routeSegments).map(([fr, en]) => [en, fr]),
-);
-
-/**
- * Retourne le chemin vers la page équivalente dans l'autre langue.
- * Seul le premier segment est traduit : c'est le seul qui porte le nom de la
- * route, les suivants sont des slugs de contenu communs aux deux langues.
+ * Retourne le chemin vers la page équivalente dans l'autre langue. Toutes les
+ * routes (/, /work/, /about/, /cv/, /contact/, /cv-print/ et les slugs de
+ * projets) portent le même nom en FR et en EN : seul le préfixe /en change.
  */
 export function getAlternateLangPath(url: URL): string {
 	const isEn = url.pathname === '/en' || url.pathname.startsWith('/en/');
 	const source = isEn ? url.pathname.slice(3) : url.pathname;
-	const map = isEn ? enToFr : frToEn;
 
 	const segments = source.split('/').filter(Boolean);
 
 	// Une page d'erreur n'a pas d'equivalent dans l'autre langue : on renvoie
 	// vers l'accueil de cette langue plutot que vers une URL inexistante.
 	if (segments[0] === '404') return isEn ? '/' : '/en/';
-
-	if (segments.length > 0) segments[0] = map[segments[0]!] ?? segments[0]!;
 
 	const path = segments.length > 0 ? `/${segments.join('/')}/` : '/';
 	return isEn ? path : `/en${path}`;
