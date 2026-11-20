@@ -8,15 +8,14 @@ interface Props {
 const { features } = Astro.props;
 ---
 
+{/* Une liste simple : un titre, et sa precision quand elle existe. Les cartes
+    et les icones qui l'habillaient n'ajoutaient aucune information. */}
 <ul class="features">
 	{
 		features.map((feature) => (
-			<li class="feature">
-				<span class="marker" aria-hidden="true" />
-				<div class="text">
-					<h3>{feature.title}</h3>
-					{feature.description && <p>{feature.description}</p>}
-				</div>
+			<li>
+				<h3>{feature.title}</h3>
+				{feature.description && <p>{feature.description}</p>}
 			</li>
 		))
 	}
@@ -25,73 +24,33 @@ const { features } = Astro.props;
 <style>
 	.features {
 		display: grid;
-		gap: 1rem;
-		list-style: none;
+		gap: 1.5rem;
 		margin: 0;
 		padding: 0;
+		list-style: none;
 	}
 
-	/* Meme encart que `Skills.astro` : bordure fine, fond translucide, ombre
-	   courte. C'est le seul motif de carte du site, autant le garder unique. */
-	.feature {
-		display: flex;
-		align-items: flex-start;
-		gap: 1rem;
-		padding: 1.25rem;
-		border: 1px solid var(--gray-800);
-		border-radius: 0.75rem;
-		background-color: var(--gray-999_40);
-		box-shadow: var(--shadow-sm);
-	}
-
-	/* Repli quand la fonctionnalite n'a pas d'icone : un losange, pour que la
-	   grille garde le meme rythme d'alignement d'une carte a l'autre. */
-	.marker {
-		flex: none;
-		width: 0.6rem;
-		height: 0.6rem;
-		margin-top: 0.5rem;
-		background: var(--accent-regular);
-		transform: rotate(45deg);
-	}
-
-	.feature :global(svg) {
-		flex: none;
-	}
-
-	.text {
+	li {
 		display: flex;
 		flex-direction: column;
-		gap: 0.35rem;
+		gap: 0.3rem;
+		max-width: var(--measure);
 	}
 
 	h3 {
-		font-size: var(--text-md);
-		line-height: 1.3;
-		color: var(--gray-100);
+		font-size: var(--step-0);
+		line-height: 1.35;
 	}
 
 	p {
-		margin: 0;
-		font-size: var(--text-sm);
-		color: var(--gray-400);
+		font-size: var(--step--1);
+		color: var(--ink-muted);
 	}
 
 	@media (min-width: 50em) {
 		.features {
 			grid-template-columns: 1fr 1fr;
-			gap: 1.5rem;
-		}
-
-		.feature {
-			padding: 1.5rem;
-			border-radius: 1rem;
-		}
-
-		/* Une derniere carte seule s'etale sur les deux colonnes plutot que de
-		   laisser un vide a droite — meme regle que `Grid.astro`, variante small. */
-		.features > :last-child:nth-child(odd) {
-			grid-column: 1 / 3;
+			gap: 1.75rem 3rem;
 		}
 	}
 </style>

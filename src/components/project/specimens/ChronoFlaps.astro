@@ -1,0 +1,84 @@
+---
+import { useTranslations, type Lang } from '../../../i18n/ui';
+
+/**
+ * L'affichage a palettes de ChronoPotes : un resultat comme sur un tableau de
+ * gare, et la mention obtenue. Le tout se lit d'un bloc par son `aria-label` ;
+ * les palettes, une par caractere, sont decoratives.
+ */
+interface Props {
+	lang: Lang;
+}
+
+const t = useTranslations(Astro.props.lang);
+const value = t('specimen.chrono.value');
+const tier = t('specimen.chrono.tier');
+---
+
+<div class="flaps" role="img" aria-label={`${value} ${tier}`}>
+	{
+		[...value].map((char) =>
+			/\d/.test(char) ? (
+				<span class="flap" aria-hidden="true">
+					{char}
+				</span>
+			) : (
+				<span class="sep" aria-hidden="true">
+					{char}
+				</span>
+			),
+		)
+	}
+	<span class="tier" aria-hidden="true">{tier}</span>
+</div>
+
+<style>
+	.flaps {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.25rem;
+		padding: 0.9rem 1rem;
+		background: #101216;
+	}
+
+	.flap {
+		position: relative;
+		width: 1.3em;
+		border-radius: 3px;
+		background: #20242c;
+		color: #fff;
+		font-family: 'Space Mono', monospace;
+		font-weight: 700;
+		font-size: var(--step-4);
+		line-height: 1.45;
+		text-align: center;
+	}
+
+	/* La pliure de la palette, a mi-hauteur. */
+	.flap::after {
+		content: '';
+		position: absolute;
+		inset-inline: 0;
+		top: 50%;
+		height: 1px;
+		background: #101216;
+	}
+
+	.sep {
+		padding-inline: 0.1em;
+		color: #f5c518;
+		font-family: 'Space Mono', monospace;
+		font-weight: 700;
+		font-size: var(--step-4);
+	}
+
+	.tier {
+		margin-left: 0.75rem;
+		color: #f5c518;
+		font-family: 'Oswald', sans-serif;
+		font-weight: 600;
+		font-size: var(--step--1);
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+	}
+</style>

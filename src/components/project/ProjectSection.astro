@@ -1,6 +1,6 @@
 ---
 /**
- * Une section de page projet : un intitule discret, un filet, puis le contenu.
+ * Une section de page projet : un titre ordinaire, puis le contenu.
  *
  * L'intitule vient toujours de l'i18n et jamais du contenu — c'est ce qui
  * garantit qu'un projet ne peut plus nommer ses sections differemment d'une
@@ -23,24 +23,16 @@ const { title } = Astro.props;
 	.project-section {
 		display: flex;
 		flex-direction: column;
-		gap: 1.5rem;
+		gap: 1.25rem;
 	}
 
 	h2 {
-		/* Petit intitule de reperage, pas un titre de lecture : la hierarchie
-		   reste un h2, seule la graisse visuelle change. */
-		font-size: var(--text-sm);
-		font-weight: 700;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-		color: var(--accent-regular);
-		padding-bottom: 0.75rem;
-		border-bottom: 1px solid var(--gray-800);
+		font-size: var(--step-3);
 	}
 
 	@media (min-width: 50em) {
 		.project-section {
-			gap: 2rem;
+			gap: 1.5rem;
 		}
 	}
 </style>

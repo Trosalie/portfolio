@@ -15,10 +15,13 @@
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
     "@fontsource-variable/schibsted-grotesk": "^5.3.0",
+    "@fontsource/dm-mono": "^5.3.0",
+    "@fontsource/dm-sans": "^5.3.0",
     "@fontsource/oswald": "^5.3.0",
     "@fontsource/playfair-display": "^5.3.0",
     "@fontsource/public-sans": "^5.3.0",
     "@fontsource/rubik": "^5.3.0",
+    "@fontsource/space-mono": "^5.3.0",
     "astro": "^5.17.1"
   },
   "devDependencies": {

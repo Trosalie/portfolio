@@ -1,0 +1,45 @@
+---
+import { useTranslations, type Lang } from '../../../i18n/ui';
+
+/** Le talon de billet de Seenit : la fiche d'un film vu, avec sa date et sa note. */
+interface Props {
+	lang: Lang;
+}
+
+const t = useTranslations(Astro.props.lang);
+---
+
+<div class="ticket">
+	<p class="film">{t('specimen.seenit.film')}</p>
+	<p>{t('specimen.seenit.seen')}</p>
+	<p class="stars">
+		<span aria-hidden="true">★★★★½</span>
+		<span class="sr-only">{t('specimen.seenit.rating')}</span>
+	</p>
+</div>
+
+<style>
+	.ticket {
+		display: inline-flex;
+		flex-direction: column;
+		gap: 0.2rem;
+		padding: 1rem 1.25rem 1rem 1.5rem;
+		border-left: 0.35rem dashed #1d1209;
+		background: #3a2815;
+		color: #efebd9;
+		font-family: 'DM Sans', sans-serif;
+		font-size: var(--step--1);
+	}
+
+	.film {
+		font-family: 'Playfair Display', serif;
+		font-weight: 600;
+		font-size: var(--step-2);
+		color: #d9b872;
+	}
+
+	.stars {
+		color: #c5a059;
+		letter-spacing: 0.1em;
+	}
+</style>

@@ -1,0 +1,146 @@
+---
+import '@fontsource/dm-mono/latin-400.css';
+import '@fontsource/dm-sans/latin-400.css';
+import '@fontsource/oswald/latin-600.css';
+import '@fontsource/playfair-display/latin-600.css';
+import '@fontsource/space-mono/latin-700.css';
+
+import type { ProjectIdentity } from '../../data/identity';
+import { useTranslations, type Lang } from '../../i18n/ui';
+import ChronoFlaps from './specimens/ChronoFlaps.astro';
+import SeenitTicket from './specimens/SeenitTicket.astro';
+
+/**
+ * Le nuancier d'un projet : sa palette nommee, ses polices, et une piece
+ * d'interface typique recreee. Il montre les choix de design du produit au lieu
+ * de les affirmer.
+ */
+interface Props {
+	identity: ProjectIdentity;
+	lang: Lang;
+}
+
+const { identity, lang } = Astro.props;
+const t = useTranslations(lang);
+
+const pieces = {
+	'seenit-ticket': SeenitTicket,
+	'chronopotes-flaps': ChronoFlaps,
+} as const;
+const Piece = pieces[identity.specimen];
+---
+
+<div class="specimen">
+	<div class="block">
+		<h3>{t('work.identity.palette')}</h3>
+		<ul class="palette">
+			{
+				identity.palette.map((color) => (
+					<li>
+						<span class="swatch" style={`background:${color.hex}`} />
+						<span class="name">{color.name}</span>
+						<span class="detail">{color.hex}</span>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+
+	<div class="block">
+		<h3>{t('work.identity.fonts')}</h3>
+		<ul class="fonts">
+			{
+				identity.fonts.map((font) => (
+					<li>
+						<span class="sample" style={`font-family:'${font.family}'`} aria-hidden="true">
+							Aa
+						</span>
+						<span class="name">{font.family}</span>
+						<span class="detail">{font.role}</span>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+
+	<div class="block">
+		<h3>{t('work.identity.piece')}</h3>
+		<Piece lang={lang} />
+	</div>
+</div>
+
+<style>
+	.specimen {
+		display: grid;
+		gap: 2.5rem;
+	}
+
+	.block {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 1rem;
+	}
+
+	h3 {
+		font-size: var(--step-0);
+	}
+
+	.palette,
+	.fonts {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1.25rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.palette li {
+		display: flex;
+		flex-direction: column;
+		width: 6.5rem;
+	}
+
+	.swatch {
+		height: 3.6rem;
+		margin-bottom: 0.5rem;
+		border-radius: 2px;
+		/* Un filet pour que la pastille la plus claire ne se perde pas sur le mur. */
+		box-shadow: inset 0 0 0 1px var(--rule);
+	}
+
+	.name {
+		font-weight: 600;
+		font-size: var(--step--1);
+	}
+
+	.detail {
+		font-size: var(--step--2);
+		color: var(--ink-muted);
+		font-variant-numeric: tabular-nums;
+	}
+
+	.fonts li {
+		display: flex;
+		flex-direction: column;
+		min-width: 8rem;
+	}
+
+	.sample {
+		font-size: var(--step-5);
+		line-height: 1.1;
+		margin-bottom: 0.35rem;
+	}
+
+	@media (min-width: 50em) {
+		.specimen {
+			grid-template-columns: auto auto;
+			column-gap: 4rem;
+		}
+
+		.block:last-child {
+			grid-column: 1 / -1;
+		}
+	}
+</style>
