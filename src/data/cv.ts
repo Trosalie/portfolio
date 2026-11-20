@@ -125,11 +125,11 @@ export const cv: Record<Lang, CvData> = {
 				date: '2026',
 				url: 'https://www.chronopotes.fr',
 				bullets: [
-					'Développement fullstack en React 19, TypeScript strict et Tailwind CSS (PWA)',
-					'Architecture backend Supabase / PostgreSQL : fonctions RPC, triggers et Row Level Security (RLS)',
-					'Synchronisation multijoueur et duels en temps réel via Supabase Realtime (WebSockets)',
+					'Développement fullstack en React 19 et TypeScript strict, PWA installable avec notifications Web Push',
+					'Architecture backend Supabase / PostgreSQL : fonctions RPC, triggers, Row Level Security (RLS) et Edge Functions',
+					'Duels asynchrones et écrans mis à jour en direct via Supabase Realtime (WebSockets)',
 					'Back-office complet d’administration : modération, gestion des défis, communication et métriques',
-					'Fiabilisation et qualité : tests unitaires/intégration (Vitest) et tests E2E (Playwright)',
+					'Fiabilisation et qualité : tests unitaires/intégration (Vitest), E2E (Playwright) et base de données (pgTAP)',
 				],
 			},
 			{
@@ -235,11 +235,11 @@ export const cv: Record<Lang, CvData> = {
 				date: '2026',
 				url: 'https://www.chronopotes.fr',
 				bullets: [
-					'Fullstack development with React 19, strict TypeScript, and Tailwind CSS (PWA)',
-					'Supabase / PostgreSQL backend: RPC functions, triggers, and Row Level Security (RLS)',
-					'Real-time multiplayer synchronization and duels via Supabase Realtime (WebSockets)',
+					'Fullstack development with React 19 and strict TypeScript, installable PWA with Web Push notifications',
+					'Supabase / PostgreSQL backend: RPC functions, triggers, Row Level Security (RLS), and Edge Functions',
+					'Asynchronous duels and live screen updates via Supabase Realtime (WebSockets)',
 					'Complete administration back-office: moderation, challenge management, communication, and metrics',
-					'Reliability and quality: unit/integration testing (Vitest) and E2E testing (Playwright)',
+					'Reliability and quality: unit/integration (Vitest), E2E (Playwright), and database (pgTAP) testing',
 				],
 			},
 			{
