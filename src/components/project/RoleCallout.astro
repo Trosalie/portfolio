@@ -4,11 +4,25 @@ interface Props {
 }
 
 const { text } = Astro.props;
+
+// Une ligne vide separe deux paragraphes, comme en Markdown : un role qui
+// raconte d'abord le contexte puis la technique se lit mieux en deux temps.
+const paragraphs = text.trim().split(/\n\s*\n/);
 ---
 
-<p class="role">{text}</p>
+<div class="role">
+	{paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+</div>
 
 <style>
+	.role p {
+		margin: 0;
+	}
+
+	.role p + p {
+		margin-top: 0.75em;
+	}
+
 	.role {
 		margin: 0;
 		padding: 1.25rem 1.5rem;
