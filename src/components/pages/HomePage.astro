@@ -1,0 +1,108 @@
+---
+/**
+ * La page d'accueil, pour les deux langues : ce que fait Thibault, puis ses
+ * projets en vitrine.
+ *
+ * `src/pages/index.astro` et `src/pages/en/index.astro` etaient deux copies de
+ * 332 lignes, identiques aux chemins d'import pres ; elles ne declarent plus
+ * que leur route.
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContactCTA from '../ContactCTA.astro';
+import ProjectTile from '../work/ProjectTile.astro';
+import { getWorkCollection, workBasePath } from '../../data/work';
+import { getLangFromUrl, useTranslations } from '../../i18n/ui';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const prefix = lang === 'en' ? '/en' : '';
+
+// Les quatre projets les plus recents, dans la langue de la page. Le tri et le
+// controle de parite FR/EN vivent dans src/data/work.ts.
+const projects = (await getWorkCollection(lang)).slice(0, 4);
+---
+
+<BaseLayout>
+	<main id="main-content" tabindex="-1" class="wrapper home">
+		<div class="intro">
+			<h1>{t('index.hero.title')}</h1>
+			<p class="lede">{t('index.hero.tagline')}</p>
+			<div class="actions">
+				<a class="button" href={prefix + '/cv/'}>{t('cta.cv')}</a>
+				<a href={prefix + '/contact/'}>{t('cta.contact')}</a>
+			</div>
+		</div>
+
+		<ul class="tiles">
+			{
+				projects.map((entry) => (
+					<li>
+						<ProjectTile entry={entry} lang={lang} />
+					</li>
+				))
+			}
+		</ul>
+
+		<p class="all-projects">
+			<a href={workBasePath(lang)}>{t('index.projects.cta')}</a>
+		</p>
+	</main>
+	<ContactCTA />
+</BaseLayout>
+
+<style>
+	.home {
+		display: flex;
+		flex-direction: column;
+		gap: 3.5rem;
+	}
+
+	.intro {
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+	}
+
+	h1 {
+		max-width: 22ch;
+		font-size: clamp(var(--step-4), 4vw, var(--step-5));
+		letter-spacing: -0.02em;
+	}
+
+	.lede {
+		max-width: var(--measure);
+		font-size: var(--step-1);
+		color: var(--ink-muted);
+	}
+
+	.actions {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 1.5rem;
+		margin-top: 0.5rem;
+		font-weight: 600;
+	}
+
+	.button {
+		padding: 0.7em 1.2em;
+		border-radius: var(--radius);
+		background: var(--ink);
+		color: #fff;
+		text-decoration: none;
+	}
+
+	.button:hover {
+		background: #000;
+	}
+
+	.all-projects {
+		font-weight: 600;
+	}
+
+	@media (min-width: 50em) {
+		.home {
+			gap: 5rem;
+		}
+	}
+</style>

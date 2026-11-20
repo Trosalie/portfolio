@@ -23,8 +23,11 @@ export const ui = {
 		'nav.contact': 'Me contacter',
 
 		// ContactCTA
-		'contactcta.title': 'Intéressé par une collaboration ?',
-		'contactcta.cta': 'Envoyez-moi un message',
+		'contactcta.title': "Vous recrutez un développeur full stack ?",
+
+		// Actions communes (accueil, bloc de contact, à propos)
+		'cta.cv': 'Lire le CV',
+		'cta.contact': "M'écrire",
 
 
 		// Page 404
@@ -40,34 +43,16 @@ export const ui = {
 		'wip.back': '← Retour à l\'accueil',
 
 		// Page d'accueil
-		'index.hero.title': "Bonjour, je m'appelle Thibault ROSALIE",
-		'index.hero.tagline': "Développeur full stack diplômé d'un BUT Informatique, je recherche un poste où mettre en pratique ce que j'ai appris.",
+		'index.hero.title': "Je conçois et je développe des applications web, de la base de données jusqu'au dernier détail de l'interface.",
+		'index.hero.tagline': "Diplômé du BUT Informatique à Bayonne, je cherche un premier poste de développeur full stack.",
 		'index.hero.portrait.alt': 'Photo de profil de Thibault ROSALIE',
-		'index.hero.role.dev': 'Développeur',
-		'index.hero.role.fullstack': 'Full Stack',
-		'index.hero.cta': 'Voir mon CV',
-		'index.projects.title': 'Projets sélectionnés',
-		'index.projects.desc': 'Découvrez ci-dessous une sélection de mes projets récents réalisés dans le cadre de mes études et de mes projets personnels.',
 		'index.projects.cta': 'Voir tous les projets',
-		'index.skills.title': 'Compétences',
-		'index.skills.desc': "Le BUT Informatique m'a permis de développer mes compétences dans différents domaines du développement logiciel et web.",
-		'index.skills.backend': 'Back-end',
-		'index.skills.frontend': 'Front-end',
-		'index.skills.tools': 'Outils & Méthodes',
 
-		// Encart compétences (composant Skills)
-		'skills.backend.text':
-			"PHP, Laravel, Python : développement d'applications web robustes, tests unitaires avec PHPUnit et conception orientée objet.",
-		'skills.frontend.text':
-			"Angular, HTML/CSS : création d'interfaces modernes et responsives, avec une approche mobile-first et un souci du détail.",
-		'skills.tools.text':
-			'Git, Docker, MySQL, SCRUM : environnements conteneurisés, versioning collaboratif et gestion de projet agile.',
 
 		// Projets
 		'work.title': 'Projets',
 		'work.meta.title': 'Mes Projets | Thibault ROSALIE',
 		'work.meta.desc': 'Découvrez les projets récents de Thibault ROSALIE',
-		'work.card.featured': 'Projet le plus récent',
 		'work.back': 'Retour aux projets',
 		'work.github': 'Voir sur GitHub',
 		'work.demo': 'Voir la démo',
@@ -146,8 +131,11 @@ export const ui = {
 		'nav.contact': 'Contact me',
 
 		// ContactCTA
-		'contactcta.title': 'Interested in collaborating?',
-		'contactcta.cta': 'Send me a message',
+		'contactcta.title': "Hiring a full stack developer?",
+
+		// Shared actions (home, contact block, about)
+		'cta.cv': 'Read my resume',
+		'cta.contact': 'Get in touch',
 
 
 		// Page 404
@@ -163,34 +151,16 @@ export const ui = {
 		'wip.back': '← Back to home',
 
 		// Page d'accueil
-		'index.hero.title': "Hello, my name is Thibault ROSALIE",
-		'index.hero.tagline': 'Full stack developer who recently graduated with a Computer Science degree, I am looking for a position where I can put what I have learned into practice.',
+		'index.hero.title': "I design and build web applications, from the database to the last detail of the interface.",
+		'index.hero.tagline': "I hold a Computer Science degree (BUT) from Bayonne and I'm looking for my first full stack developer role.",
 		'index.hero.portrait.alt': 'Profile picture of Thibault ROSALIE',
-		'index.hero.role.dev': 'Developer',
-		'index.hero.role.fullstack': 'Full Stack',
-		'index.hero.cta': 'View my Resume',
-		'index.projects.title': 'Selected Projects',
-		'index.projects.desc': 'Discover below a selection of my recent projects completed as part of my studies and personal projects.',
 		'index.projects.cta': 'View all projects',
-		'index.skills.title': 'Skills',
-		'index.skills.desc': 'My Computer Science degree let me develop my skills across various areas of software and web development.',
-		'index.skills.backend': 'Back-end',
-		'index.skills.frontend': 'Front-end',
-		'index.skills.tools': 'Tools & Methods',
 
-		// Skills box (Skills component)
-		'skills.backend.text':
-			'PHP, Laravel, Python: building robust web applications, unit testing with PHPUnit and object-oriented design.',
-		'skills.frontend.text':
-			'Angular, HTML/CSS: building modern, responsive interfaces with a mobile-first approach and an eye for detail.',
-		'skills.tools.text':
-			'Git, Docker, MySQL, SCRUM: containerised environments, collaborative versioning and agile project management.',
 
 		// Projects
 		'work.title': 'Projects',
 		'work.meta.title': 'My Projects | Thibault ROSALIE',
 		'work.meta.desc': 'Discover the recent projects of Thibault ROSALIE',
-		'work.card.featured': 'Most recent project',
 		'work.back': 'Back to projects',
 		'work.github': 'View on GitHub',
 		'work.demo': 'View demo',
