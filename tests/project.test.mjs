@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { chunk, page, text } from './helpers.mjs';
+import { chunk, page, srcFiles, text } from './helpers.mjs';
 
 const order = (html, titles) => titles.map((t) => html.indexOf(`>${t}</h2>`));
 
@@ -61,6 +61,9 @@ test('ni pilules, ni points médians, ni icônes de fonctionnalité', () => {
 	}
 });
 
+// Plus aucun projet n'est sans capture : la regle est verifiee dans la mise en
+// page, qui n'affiche la couverture que si le projet a une image.
 test('pas de couverture vide pour un projet sans capture', () => {
-	assert.ok(!page('/work/projet-chat/').includes('data-frame='));
+	const layout = srcFiles(['.astro']).find((f) => f.path.endsWith('layouts/ProjectLayout.astro')).content;
+	assert.match(layout, /\{entry\.data\.img && <ProjectCover entry=\{entry\} \/>\}/);
 });

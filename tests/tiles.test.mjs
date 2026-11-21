@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { chunk, page, pageCss, text } from './helpers.mjs';
+import { chunk, page, pageCss, srcFiles, text } from './helpers.mjs';
 
 const tile = (route, slug) => chunk(page(route), `href="${route}${slug}"`);
 
@@ -25,10 +25,21 @@ test('un projet sans identité prend le cadre encre', () => {
 	assert.match(tile('/work/', 'bluepoint-waste-identifier'), /data-frame="ink"/);
 });
 
-test('un projet sans capture montre son titre en grand, sans image', () => {
-	const t = tile('/work/', 'projet-chat');
-	assert.ok(!t.includes('<img'));
-	assert.match(t, /class="frame-name"[^>]*>\s*Projet Chat Multi-Channels/);
+test('chaque projet a sa couverture', () => {
+	const html = page('/work/');
+	const slugs = [...html.matchAll(/class="tile[" ][^>]*href="\/work\/([^"]+)"|href="\/work\/([^"]+)"[^>]*class="tile[" ]/g)].map(
+		(m) => m[1] ?? m[2],
+	);
+	assert.equal(slugs.length, 6, slugs.join(', '));
+	for (const slug of slugs) assert.ok(tile('/work/', slug).includes('<img'), slug);
+});
+
+// Plus aucun projet n'est sans capture : le comportement prevu pour ce cas est
+// verifie dans le code. Le titre en grand remplace l'image et reste cache aux
+// lecteurs d'ecran, le lien etant deja nomme par l'etiquette.
+test('un projet sans capture montrerait son titre en grand, caché aux lecteurs d’écran', () => {
+	const frame = srcFiles(['.astro']).find((f) => f.path.endsWith('work/ProjectFrame.astro')).content;
+	assert.match(frame, /<span class="frame-name" aria-hidden="true">/);
 });
 
 test('l’étiquette suit la convention du cartel', () => {
@@ -45,12 +56,6 @@ test('le nom dans le cadre est caché aux lecteurs d’écran', () => {
 
 test('les liens anglais restent en anglais', () => {
 	assert.ok(page('/en/work/').includes('href="/en/work/seenit"'));
-});
-
-// Le lien de la vignette est nomme par son etiquette : le titre en grand du
-// cadre le doublait pour les lecteurs d'ecran.
-test('le titre en grand d’un projet sans capture est caché aux lecteurs d’écran', () => {
-	assert.match(tile('/work/', 'projet-chat'), /class="frame-name"[^>]*aria-hidden="true"/);
 });
 
 test('l’étiquette du projet mis en avant se pose au pied de son cadre', () => {
