@@ -9,8 +9,18 @@ tags:
   - TypeScript
   - Docker
 githubUrl: https://github.com/Trosalie/projetsportpxl
-img: ../../assets/projets/boardpxl.png
-img_alt: "Photographer list in the SportPXL dashboard: revenue, credits and invoice status for each. Client names, emails and amounts are blurred."
+img: ../../assets/projets/sportpxl/couverture.webp
+img_alt: "SportPXL dashboard photographer list with the menu open: revenue, remaining credits and invoice status for each. The photographers are fictional."
+gallery:
+  - src: ../../assets/projets/sportpxl/graphique.webp
+    alt: "General chart: credit sales from July to September 2026, filters on the left, and totals for revenue and credits sold."
+    caption: The general chart tracks credit sales and revenue.
+  - src: ../../assets/projets/sportpxl/factures.webp
+    alt: "A photographer's invoice history: credit purchases and revenue payouts, with amount, credits, Paid or Unpaid status and due date."
+    caption: Each photographer has an invoice history, filterable by status, type and period.
+  - src: ../../assets/projets/sportpxl/releves.webp
+    alt: "September 2026 settlement statements: amount, commission and advance for each photographer, with a download button."
+    caption: Settlement statements work out SportPXL's commission and the advance to pay out.
 period: 2025 – 2026
 context: SAÉ project, BUT Computer Science
 team: Team of 5

@@ -9,8 +9,18 @@ tags:
   - TypeScript
   - Docker
 githubUrl: https://github.com/Trosalie/projetsportpxl
-img: ../../assets/projets/boardpxl.png
-img_alt: "Liste des photographes du tableau de bord SportPXL : pour chacun, son chiffre d'affaires, ses crédits et le statut de ses factures. Les noms, e-mails et montants des clients sont floutés."
+img: ../../assets/projets/sportpxl/couverture.webp
+img_alt: "Liste des photographes du tableau de bord SportPXL, menu ouvert : pour chacun, le chiffre d'affaires, les crédits restants et le statut des factures. Les photographes sont fictifs."
+gallery:
+  - src: ../../assets/projets/sportpxl/graphique.webp
+    alt: "Graphique général : courbe des ventes de crédits de juillet à septembre 2026, filtres à gauche, et totaux du chiffre d'affaires et des crédits vendus."
+    caption: Le graphique général suit les ventes de crédits et le chiffre d'affaires.
+  - src: ../../assets/projets/sportpxl/factures.webp
+    alt: "Historique des factures d'un photographe : achats de crédits et versements de chiffre d'affaires, avec montant, crédits, statut Payée ou Non payée et échéance."
+    caption: Chaque photographe a son historique de factures, filtrable par statut, type et période.
+  - src: ../../assets/projets/sportpxl/releves.webp
+    alt: "Liste des relevés d'encaissement de septembre 2026 : pour chaque photographe, le montant, la commission et l'acompte, avec un bouton de téléchargement."
+    caption: Les relevés d'encaissement calculent la commission de SportPXL et l'acompte à verser.
 period: 2025 – 2026
 context: SAÉ de BUT Informatique
 team: Équipe de 5
