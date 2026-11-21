@@ -12,7 +12,7 @@ const prefix = lang === 'en' ? '/en' : '';
 const textLinks: { label: string; href: string }[] = [
 	{ label: t('nav.home'), href: prefix + '/' },
 	{ label: t('nav.work'), href: prefix + '/work/' },
-	{ label: t('nav.about'), href: prefix + '/about/' },
+	// « À propos » est masquée tant que son texte n'est pas écrit (src/pages/_about.astro).
 	{ label: t('nav.cv'), href: prefix + '/cv/' },
 	{ label: t('nav.contact'), href: prefix + '/contact/' },
 ];

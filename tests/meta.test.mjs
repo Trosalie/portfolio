@@ -21,8 +21,6 @@ test('chaque page a un titre propre et nommé', () => {
 		'/en/cv/': 'Resume | Thibault Rosalie',
 		'/contact/': 'Contact | Thibault Rosalie',
 		'/en/contact/': 'Contact | Thibault Rosalie',
-		'/about/': 'À propos | Thibault Rosalie',
-		'/en/about/': 'About | Thibault Rosalie',
 		'/404': 'Page introuvable | Thibault Rosalie',
 		'/cv-print/': 'CV | Thibault Rosalie (impression)',
 		'/en/cv-print/': 'Resume | Thibault Rosalie (print)',
@@ -33,7 +31,7 @@ test('chaque page a un titre propre et nommé', () => {
 // « ROSALIE » en capitales reste une convention du CV ; le site ecrit le nom
 // normalement, et « FullStack » n'existe plus.
 test('titres, descriptions et nom du site écrivent « Thibault Rosalie »', () => {
-	const routes = ['/', '/en/', '/work/', '/en/work/', '/cv/', '/en/cv/', '/contact/', '/en/contact/', '/about/', '/en/about/', '/404'];
+	const routes = ['/', '/en/', '/work/', '/en/work/', '/cv/', '/en/cv/', '/contact/', '/en/contact/', '/404'];
 	for (const route of routes) {
 		const fields = [title(route), meta(route, 'name', 'description'), meta(route, 'property', 'og:site_name')];
 		for (const field of fields) {

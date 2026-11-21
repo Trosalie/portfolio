@@ -134,6 +134,10 @@ justifie l'intervention, et l'action proposée.
   Avancement (2026-11-20, direction visuelle « La vitrine ») : la carte de chantier est
   remplacée par une page provisoire (portrait, phrase de disponibilité, liens vers le CV et le
   contact). Le texte de la page reste à écrire.
+  Mise à jour (2026-11-21) : la page est masquée en attendant son texte. Elle n'est plus dans
+  le menu et n'est plus construite : ses routes sont `src/pages/_about.astro` et
+  `src/pages/en/_about.astro`, qu'Astro ignore grâce au « _ ». Retirer ce préfixe et remettre
+  l'entrée `nav.about` dans `Nav.astro` la remet en ligne.
 
 ## P4 — Outillage et dépôt
 

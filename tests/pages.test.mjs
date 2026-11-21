@@ -1,16 +1,20 @@
 import assert from 'node:assert/strict';
+import { existsSync } from 'node:fs';
 import { test } from 'node:test';
 
-import { page, text } from './helpers.mjs';
+import { chunk, page, text } from './helpers.mjs';
 
-test('À propos montre le portrait, la disponibilité et deux liens, sans chantier', () => {
-	const html = page('/about/');
-	assert.match(html, /<img[^>]*alt="Portrait de Thibault Rosalie"/);
-	const t = text(html);
-	assert.ok(t.includes("Diplômé d'un BUT Informatique de l'IUT de Bayonne"), t);
-	assert.ok(!/construction|🚧/.test(t), t);
-	assert.match(html, /href="\/cv\/"[^>]*>\s*Lire le CV/);
-	assert.ok(page('/en/about/').includes('href="/en/contact/"'));
+// La page « À propos » est masquée tant que son texte n'est pas écrit : ni
+// construite, ni dans le menu. Ses routes sont dans src/pages/_about.astro et
+// src/pages/en/_about.astro ; retirer le « _ » la remet en ligne.
+test('la page À propos est masquée', () => {
+	for (const file of ['about/index.html', 'en/about/index.html']) {
+		assert.ok(!existsSync(new URL(`../dist/${file}`, import.meta.url)), file);
+	}
+	for (const route of ['/', '/en/', '/work/', '/en/contact/']) {
+		const nav = chunk(page(route), '<nav', '</nav>');
+		assert.ok(!/href="(\/en)?\/about\/"/.test(nav), route);
+	}
 });
 
 test('le formulaire de contact garde son fonctionnement', () => {
