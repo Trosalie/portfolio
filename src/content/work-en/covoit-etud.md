@@ -36,5 +36,7 @@ stack:
   - layer: Docs
     items: [Doxygen]
 role: |
-  Full-stack development as part of a 5-person team within the BUT Computer Science programme. Contributed to all layers of the application: models, controllers, templates, and styles.
+  A five-person BUT Computer Science project, run end to end: our group came up with the idea, wrote the design and the specification, then built the final application.
+
+  I was mainly a developer, working across every layer of the PHP application: models, controllers, Twig templates and styles.
 ---

@@ -36,5 +36,7 @@ stack:
   - layer: CI/CD
     items: [GitHub Actions]
 role: |
-  Développement fullstack en équipe de 5 personnes dans le cadre du BUT Informatique (SAÉ). Participation à l'ensemble du cycle de développement : conception, implémentation, tests et déploiement.
+  Projet de BUT Informatique mené à cinq pour SportPXL, qui nous a confié le sujet. Nous avons pris en charge tout le reste : le recueil des besoins, les cahiers des charges fonctionnel et technique, les maquettes, le développement et la livraison finale.
+
+  Chaque membre de l'équipe tenait un rôle Scrum : j'ai été Scrum Master, en plus de développer.
 ---

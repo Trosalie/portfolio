@@ -36,5 +36,7 @@ stack:
   - layer: Documentation
     items: [Doxygen]
 role: |
-  Développement fullstack en équipe de 5 personnes dans le cadre du BUT Informatique. Contribution à l'ensemble des couches de l'application : modèles, contrôleurs, templates et styles.
+  Projet de BUT Informatique mené à cinq, de bout en bout : l'idée vient de notre groupe, qui en a écrit la conception et le cahier des charges avant de développer l'application finale.
+
+  J'y ai surtout été développeur, sur toutes les couches de l'application PHP : modèles, contrôleurs, templates Twig et styles.
 ---

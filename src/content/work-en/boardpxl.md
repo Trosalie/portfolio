@@ -36,5 +36,7 @@ stack:
   - layer: CI/CD
     items: [GitHub Actions]
 role: |
-  Full-stack development as part of a 5-person team within the BUT Computer Science programme (SAÉ). Involved in the complete development cycle: design, implementation, testing, and deployment.
+  A five-person BUT Computer Science project for SportPXL, who gave us the brief. We handled everything else: gathering requirements, writing the functional and technical specifications, designing the mockups, building the dashboard and delivering the final version.
+
+  Each team member held a Scrum role: I was Scrum Master, as well as a developer.
 ---
