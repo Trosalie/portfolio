@@ -23,7 +23,7 @@
   },
   "cv": {
     "fr": {
-      "jobTitle": "Développeur FullStack",
+      "jobTitle": "Développeur full stack",
       "ageUnit": "ans",
       "aria": {
         "document": "Curriculum Vitae de Thibault ROSALIE",
@@ -41,7 +41,7 @@
         "experience": "Expérience professionnelle"
       },
       "profile": [
-        "Diplômé d'un BUT Informatique, je recherche un poste de développeur Fullstack pour mettre en pratique et approfondir mes compétences.",
+        "Diplômé d'un BUT Informatique, je recherche un poste de développeur full stack pour mettre en pratique et approfondir mes compétences.",
         "Curieux et rigoureux, je conçois des applications web complètes, performantes et fiables, du modèle de données jusqu’à l’interface utilisateur."
       ],
       "address": [
@@ -95,11 +95,11 @@
       "projects": [
         {
           "title": "Application Web Temps Réel & PWA",
-          "subtitle": "React 19 / TypeScript / Supabase — ChronoPotes",
+          "subtitle": "ChronoPotes (React 19, TypeScript, Supabase)",
           "place": "Projet personnel en production (chronopotes.fr)",
           "date": "2026",
           "bullets": [
-            "Développement fullstack en React 19 et TypeScript strict, PWA installable avec notifications Web Push",
+            "Développement full stack en React 19 et TypeScript strict, PWA installable avec notifications Web Push",
             "Architecture backend Supabase / PostgreSQL : fonctions RPC, triggers, Row Level Security (RLS) et Edge Functions",
             "Duels asynchrones et écrans mis à jour en direct via WebSockets",
             "Back-office complet d’administration",
@@ -109,23 +109,23 @@
         },
         {
           "title": "Application Web Responsive",
-          "subtitle": "Laravel / Angular — SportPxl Dashboard",
+          "subtitle": "SportPXL Dashboard (Laravel, Angular)",
           "place": "IUT de Bayonne et du Pays Basque",
           "date": "2025 – 2026",
           "bullets": [
             "Gestion de projet agile SCRUM",
-            "Architecture MVC — POO",
+            "Architecture MVC et POO",
             "Conteneurisation Docker",
             "Gestion et sécurisation de base de données MySQL"
           ]
         },
         {
           "title": "Application Web Locale",
-          "subtitle": "React / TypeScript / Node.js / SQLite — Seenit",
+          "subtitle": "Seenit (React, TypeScript, Node.js, SQLite)",
           "place": "Projet personnel",
           "date": "2026",
           "bullets": [
-            "Développement fullstack en React 19 et TypeScript strict, serveur Node.js sans dépendance (node:http, node:sqlite)",
+            "Développement full stack en React 19 et TypeScript strict, serveur Node.js sans dépendance (node:http, node:sqlite)",
             "Logique métier en fonctions pures testées : filtres, statistiques, recommandations, calendrier",
             "Stockage des données via SQLite",
             "Relais de l'API TMDb côté serveur",
@@ -135,8 +135,8 @@
       ],
       "experience": [
         {
-          "title": "Stagiaire développement — Vision par ordinateur",
-          "place": "Compositadour — Projet européen BluePoint",
+          "title": "Stagiaire développeur en vision par ordinateur",
+          "place": "Compositadour (projet européen BluePoint)",
           "date": "Avr. – Juil. 2026",
           "bullets": [
             "Conception et développement d'une application Python/PyQt6 de suivi d'objets en temps réel, architecture MVC",
@@ -219,11 +219,11 @@
       "projects": [
         {
           "title": "Real-Time Web Application & PWA",
-          "subtitle": "React 19 / TypeScript / Supabase — ChronoPotes",
-          "place": "Live Personal Project (chronopotes.fr)",
+          "subtitle": "ChronoPotes (React 19, TypeScript, Supabase)",
+          "place": "Live personal project (chronopotes.fr)",
           "date": "2026",
           "bullets": [
-            "Fullstack development with React 19 and strict TypeScript, installable PWA with Web Push notifications",
+            "Full stack development with React 19 and strict TypeScript, installable PWA with Web Push notifications",
             "Supabase / PostgreSQL backend: RPC functions, triggers, Row Level Security (RLS), and Edge Functions",
             "Asynchronous duels and live screen updates via WebSockets",
             "Complete administration back-office",
@@ -233,23 +233,23 @@
         },
         {
           "title": "Responsive Web Application",
-          "subtitle": "Laravel / Angular — SportPxl Dashboard",
+          "subtitle": "SportPXL Dashboard (Laravel, Angular)",
           "place": "IUT of Bayonne and the Basque Country",
           "date": "2025 – 2026",
           "bullets": [
             "Agile SCRUM Project Management",
-            "MVC Architecture — OOP",
+            "MVC architecture and OOP",
             "Docker Containerization",
             "MySQL Database Management and Security"
           ]
         },
         {
           "title": "Local Web Application",
-          "subtitle": "React / TypeScript / Node.js / SQLite — Seenit",
+          "subtitle": "Seenit (React, TypeScript, Node.js, SQLite)",
           "place": "Personal Project",
           "date": "2026",
           "bullets": [
-            "Fullstack development with React 19 and strict TypeScript, dependency-free Node.js server (node:http, node:sqlite)",
+            "Full stack development with React 19 and strict TypeScript, dependency-free Node.js server (node:http, node:sqlite)",
             "Business logic as tested pure functions: filters, statistics, recommendations, calendar",
             "Data storage via SQLite",
             "Server-side TMDb API proxy",
@@ -259,8 +259,8 @@
       ],
       "experience": [
         {
-          "title": "Development Intern — Computer Vision",
-          "place": "Compositadour — BluePoint European project",
+          "title": "Computer vision development intern",
+          "place": "Compositadour (BluePoint European project)",
           "date": "April – July 2026",
           "bullets": [
             "Design and development of a Python/PyQt6 real-time object tracking application, MVC architecture",
