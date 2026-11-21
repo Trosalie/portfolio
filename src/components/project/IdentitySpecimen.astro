@@ -106,6 +106,9 @@ const Piece = pieces[identity.specimen];
 	}
 
 	.swatch {
+		/* En contraste eleve, le navigateur retire les fonds : la pastille garde
+		   sa couleur, c'est son seul contenu. */
+		forced-color-adjust: none;
 		height: 3.6rem;
 		margin-bottom: 0.5rem;
 		border-radius: 2px;

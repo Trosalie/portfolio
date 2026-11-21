@@ -56,7 +56,9 @@ const widths = isCover ? [640, 1024, 1600] : [480, 800, 1200];
 				decoding="async"
 			/>
 		) : (
-			<span class="frame-name">{data.title}</span>
+			<span class="frame-name" aria-hidden="true">
+				{data.title}
+			</span>
 		)
 	}
 </div>

@@ -28,5 +28,8 @@
     "@astrojs/check": "^0.9.10",
     "puppeteer": "^24.38.0",
     "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=22.18"
   }
 }

@@ -27,18 +27,6 @@
 	font-weight: 600;
 }
 
-.cv-button {
-	padding: 0.7em 1.2em;
-	border-radius: var(--radius);
-	background: var(--ink);
-	color: #fff;
-	text-decoration: none;
-}
-
-.cv-button:hover {
-	background: #000;
-}
-
 /* ── CV Card ── */
 /* La feuille posee sur le mur, dans les polices du PDF. */
 .cv {
@@ -112,7 +100,6 @@
 	gap: 1.75rem;
 }
 
-
 /* ── Colonne droite ── */
 .cv-main {
 	padding: 1.75rem 2rem;
@@ -141,13 +128,10 @@
 	margin: 0;
 }
 
-
-
 .cv-section-title--main {
 	color: #1C2230;
 	border-bottom-color: #C8C9C3;
 }
-
 
 /* ── Profil ── */
 .cv-profile-text {
@@ -217,8 +201,6 @@
 	letter-spacing: 0.03em;
 }
 
-
-
 /* ── Langues ── */
 .cv-lang-list {
 	list-style: none;
@@ -284,7 +266,6 @@
 	border-left: 3px solid #C8C9C3;
 }
 
-
 .cv-entry-header {
 	display: flex;
 	justify-content: space-between;
@@ -318,7 +299,6 @@
 	text-decoration-thickness: 2px;
 }
 
-
 .cv-entry-place {
 	font-size: 0.875rem;
 	color: #555C6B;
@@ -336,7 +316,6 @@
 	border-radius: 999px;
 	white-space: nowrap;
 }
-
 
 .cv-entry-list {
 	margin: 0;

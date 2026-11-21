@@ -138,8 +138,9 @@ export async function getWorkCollection(lang: Lang): Promise<WorkEntry[]> {
 	if (gaps.length > 0) {
 		throw new Error(
 			`Les deux versions de certains projets ont diverge (${gaps.join(' ; ')}). ` +
-				'Les fonctionnalites et les couches de stack sont desormais des donnees : ' +
-				'chaque ajout dans une langue doit etre reporte dans l\'autre. Voir src/data/work.ts.',
+				'Les fonctionnalites, les couches de stack, les captures et l\'identite visuelle ' +
+				'sont des donnees : chaque ajout ou correction dans une langue doit etre reporte ' +
+				'dans l\'autre. Voir src/data/work.ts et src/data/identity.ts.',
 		);
 	}
 

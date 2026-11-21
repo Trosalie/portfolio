@@ -91,14 +91,14 @@ const nextUrl = new URL(`${prefix}/contact/?${successParam}=1`, Astro.site).href
 					<textarea id="message" name="message" rows="6" placeholder={t('contact.message.placeholder')} required></textarea>
 				</div>
 
-				<button type="submit" class="submit-btn">
+				<button type="submit" class="button submit-btn">
 					{t('contact.submit')}
 				</button>
 			</form>
 
 			{/* Coordonnees lues dans src/data/profile.ts, qui alimente deja le CV :
 			    elles etaient codees en dur ici, donc libres de diverger. */}
-			<aside class="contact-info stack gap-6">
+			<aside class="contact-info">
 				<div class="info-block">
 					<h2>{t('contact.details')}</h2>
 					<ul class="info-list">
@@ -234,18 +234,6 @@ const nextUrl = new URL(`${prefix}/contact/?${successParam}=1`, Astro.site).href
 
 	.submit-btn {
 		align-self: flex-start;
-		padding: 0.7em 1.2em;
-		border: 0;
-		border-radius: var(--radius);
-		background: var(--ink);
-		color: #fff;
-		font: inherit;
-		font-weight: 600;
-		cursor: pointer;
-	}
-
-	.submit-btn:hover {
-		background: #000;
 	}
 
 	.contact-info {

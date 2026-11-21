@@ -50,8 +50,12 @@ const { entry, lang, featured = false, withDescription = false } = Astro.props;
 		.tile.featured {
 			display: grid;
 			grid-template-columns: 3fr 2fr;
-			align-items: end;
 			gap: 2.5rem;
+		}
+
+		/* Mis en avant, le cartel se pose au pied de l'oeuvre, a cote d'elle. */
+		.tile.featured > :global(.cartel) {
+			align-self: end;
 		}
 	}
 </style>

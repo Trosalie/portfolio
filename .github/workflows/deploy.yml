@@ -19,7 +19,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       # 3. Installe Chrome sans Snap (plus rapide/stable sur GitHub Actions)
@@ -44,11 +44,16 @@ jobs:
         env:
           PUPPETEER_EXECUTABLE_PATH: ${{ steps.chrome.outputs.chrome-path }}
 
-      # 7. Installe sshpass pour l'authentification par mot de passe
+      # 7. Tests du site construit : textes, couleurs, polices, structure des pages.
+      #    Ils lisent dist/ et importent du TypeScript, d'ou Node 22.18 ou plus.
+      - name: Tests
+        run: npm test
+
+      # 8. Installe sshpass pour l'authentification par mot de passe
       - name: Installer sshpass
         run: sudo apt-get install -y sshpass
 
-      # 8. Déploie le dossier dist/ vers Alwaysdata via rsync + mot de passe
+      # 9. Déploie le dossier dist/ vers Alwaysdata via rsync + mot de passe
       - name: Déployer via rsync
         env:
           SSHPASS: ${{ secrets.SSH_PASSWORD }}

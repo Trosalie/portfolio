@@ -213,6 +213,24 @@ h5 {
 	}
 }
 
+/* Le bouton principal du site : un aplat encre, le seul element plein du cadre. */
+.button {
+	display: inline-block;
+	padding: 0.7em 1.2em;
+	border: 0;
+	border-radius: var(--radius);
+	background: var(--ink);
+	color: #fff;
+	font: inherit;
+	font-weight: 600;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.button:hover {
+	background: #000;
+}
+
 /* Grille des vignettes de projet (accueil, liste des projets). */
 .tiles {
 	display: grid;

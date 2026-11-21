@@ -31,7 +31,7 @@ const printHref = lang === 'fr' ? '/cv-print/' : `/${lang}/cv-print/`;
 <BaseLayout title={t('cv.meta.title')} description={t('cv.meta.desc')}>
 	<main id="main-content" tabindex="-1" class="cv-wrapper">
 		<div class="cv-actions">
-			<a href={pdfHref} download class="cv-button">{t('cv.download')}</a>
+			<a href={pdfHref} download class="button">{t('cv.download')}</a>
 			<a href={printHref} target="_blank" rel="noopener">{t('cv.save')}</a>
 		</div>
 

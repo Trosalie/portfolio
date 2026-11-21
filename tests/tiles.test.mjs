@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { chunk, page, text } from './helpers.mjs';
+import { chunk, page, pageCss, text } from './helpers.mjs';
 
 const tile = (route, slug) => chunk(page(route), `href="${route}${slug}"`);
 
@@ -45,4 +45,14 @@ test('le nom dans le cadre est caché aux lecteurs d’écran', () => {
 
 test('les liens anglais restent en anglais', () => {
 	assert.ok(page('/en/work/').includes('href="/en/work/seenit"'));
+});
+
+// Le lien de la vignette est nomme par son etiquette : le titre en grand du
+// cadre le doublait pour les lecteurs d'ecran.
+test('le titre en grand d’un projet sans capture est caché aux lecteurs d’écran', () => {
+	assert.match(tile('/work/', 'projet-chat'), /class="frame-name"[^>]*aria-hidden="true"/);
+});
+
+test('l’étiquette du projet mis en avant se pose au pied de son cadre', () => {
+	assert.match(pageCss('/work/'), /\.featured(\[[^\]]*\])?\s*>\s*\.cartel\s*{[^}]*align-self:\s*(end|flex-end)/);
 });

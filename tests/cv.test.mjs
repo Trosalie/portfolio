@@ -3,7 +3,8 @@ import { test } from 'node:test';
 
 import { distFiles, page, pageCss } from './helpers.mjs';
 
-const VIOLETS = /7611a6|c561f6|1c0056|197,\s*97,\s*246|118,\s*17,\s*166/i;
+// Le violet du thème Astro existait aussi sous la forme hsla(280, 89 %, 67 %, …).
+const VIOLETS = /7611a6|c561f6|1c0056|197,\s*97,\s*246|118,\s*17,\s*166|hsla?\(\s*28[01]\b/i;
 
 test('plus de violet dans le CV, à l’écran comme à l’impression', () => {
 	for (const f of distFiles()) assert.ok(!VIOLETS.test(f.content), f.path);

@@ -10,19 +10,26 @@ import { getAlternateLangPath, getLangFromUrl, type Lang } from '../i18n/ui';
 const lang = getLangFromUrl(Astro.url);
 const alternatePath = getAlternateLangPath(Astro.url);
 
-const languages: { code: Lang; label: string }[] = [
-	{ code: 'fr', label: 'FR' },
-	{ code: 'en', label: 'EN' },
+// La page d'erreur n'existe que sous la forme 404.html : son lien courant
+// mene a l'accueil, comme le fait deja le lien de l'autre langue.
+const isErrorPage = /\/404\/?$/.test(Astro.url.pathname);
+const currentPath = isErrorPage ? (lang === 'en' ? '/en/' : '/') : Astro.url.pathname;
+
+// Le nom complet est lu par les lecteurs d'ecran ; il commence par les deux
+// lettres visibles, ce qui garde l'etiquette visible dans le nom (WCAG 2.5.3).
+const languages: { code: Lang; label: string; name: string }[] = [
+	{ code: 'fr', label: 'FR', name: 'Français' },
+	{ code: 'en', label: 'EN', name: 'English' },
 ];
 ---
 
 <div class="lang">
 	{
-		languages.map(({ code, label }) =>
+		languages.map(({ code, label, name }) =>
 			code === lang ? (
-				<a href={Astro.url.pathname} hreflang={code} lang={code} aria-current="page">{label}</a>
+				<a href={currentPath} hreflang={code} lang={code} aria-current="page" aria-label={name}>{label}</a>
 			) : (
-				<a href={alternatePath} hreflang={code} lang={code}>{label}</a>
+				<a href={alternatePath} hreflang={code} lang={code} aria-label={name}>{label}</a>
 			),
 		)
 	}
