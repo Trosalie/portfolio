@@ -236,3 +236,75 @@ justifie l'intervention, et l'action proposée.
   remplacé par un `outline` sur `:focus-visible`. Et les liens de `.info-list` avaient
   exactement la couleur du texte qui les entoure, sans soulignement — rien ne les signalait
   comme liens (WCAG 1.4.1) : soulignés.
+
+## P6 : Interface (audit du 21 novembre 2026)
+
+Audit front-end mené sur le site construit, à 1440 px et à 375 px, après la direction visuelle
+« La vitrine ». Classé du plus urgent au moins urgent. Les points 1, 2 et 4 sont les trois
+retenus en premier.
+
+- [ ] **1. La vitrine ne marche que pour 2 projets sur 6.** BluePoint, Projet Chat, SportPXL et
+  Covoit'Etud retombent sur le même cadre encre et la police du site
+  (`src/components/work/ProjectFrame.astro:27`) : sur `/work/`, quatre vignettes identiques sur
+  six, et l'idée forte du site s'efface. Chacun a pourtant une identité visible dans ses
+  captures (logo et orange de SportPXL, bleu pervenche de Covoit'Etud, interface industrielle
+  sombre de BluePoint, terminal du Chat).
+  → Séparer le cadre du nuancier (le schéma impose aujourd'hui palette, polices et pièce
+  d'interface à toute identité) et donner un cadre à chacun, avec au besoin de nouveaux styles
+  de titre dans `src/data/identity.ts:15`.
+
+- [ ] **2. Sur téléphone, les vignettes sont des miniatures d'écran de bureau.** Les captures
+  sont recadrées en 16:10 (`ProjectFrame.astro:88`) : à 375 px, l'accueil de Seenit ou le flux
+  de BluePoint font 300 px de large et ne se lisent plus. Le titre de l'accueil prend sept
+  lignes et le premier projet n'apparaît qu'au bas du premier écran. Les recruteurs ouvrent
+  souvent le lien depuis LinkedIn, sur téléphone.
+  → Un recadrage propre au mobile (`<picture>`) sur un détail parlant de chaque produit, et un
+  titre d'accueil plus petit sous 50em.
+
+- [ ] **3. Aucune capture ne s'agrandit.** La couverture et la galerie n'ouvrent rien ; un clic
+  sur une voisine la centre seulement (`src/components/project/ProjectGallery.astro:169`).
+  → Une visionneuse plein écran sur `<dialog>` natif : Échap, flèches du clavier, zoom au
+  pincement.
+
+- [ ] **4. Les pages projet ne mènent nulle part et laissent une colonne vide.** Sur grand
+  écran, le tiers droit reste vide pendant que période, cadre et équipe tiennent en trois
+  lignes grises (`src/components/project/ProjectHero.astro:26`) et que la stack est tout en bas
+  (`src/layouts/ProjectLayout.astro:72`). La page finit sur le bloc de contact, sans suite.
+  → Une fiche du projet (période, cadre, équipe, stack, liens) qui occupe ce côté, et un lien
+  « Projet suivant » en bas de page, présenté dans le cadre de ce projet.
+
+- [ ] **5. La liste des projets finit sur une vignette orpheline et ne hiérarchise rien.** Un
+  projet en vedette puis cinq en grille de deux (`src/styles/global.css:245`) : Covoit'Etud
+  reste seul avec un trou à droite, et un TP en C pèse autant que Seenit.
+  → Deux niveaux : les projets phares en grand, les projets de BUT en rangée de trois plus
+  compacte.
+
+- [ ] **6. Rien ne relie la vignette à sa page.** Le produit ne réapparaît qu'à la couverture,
+  après une page grise.
+  → Transitions entre pages en CSS seul (`@view-transition { navigation: auto; }` et un
+  `view-transition-name` par projet sur la vignette et la couverture), coupées sous
+  `prefers-reduced-motion`.
+
+- [ ] **7. La pièce d'interface du nuancier est figée.** L'affichage à palettes de ChronoPotes
+  (`src/components/project/specimens/ChronoFlaps.astro:18`) est une image en HTML.
+  → La rendre jouable : on arrête le chrono à l'aveugle, les palettes tournent jusqu'au résultat
+  et à sa mention. Espace au clavier, résultat en `aria-live`, affichage direct en mouvement
+  réduit.
+
+- [ ] **8. La typographie française n'est pas finie.** Aucune espace insécable dans les
+  sources (« full stack ? », « projet : ce formulaire », `src/i18n/ui.ts:26` et `:80`, et les
+  contenus Markdown) : la ponctuation peut se retrouver seule en début de ligne. Aucun
+  `text-wrap` : le titre de l'accueil coupe « de la / base de données ».
+  → Espace fine insécable (U+202F) avant `? ! : ;` au rendu, textes traduits et Markdown
+  compris ; `text-wrap: balance` sur les titres, `pretty` sur les paragraphes.
+
+- [ ] **9. Le menu mobile ne se ferme qu'avec son bouton.** Ni Échap ni clic extérieur
+  (`src/components/Nav.astro:127`).
+  → Fermer sur Échap en rendant le focus au bouton, et au clic extérieur.
+
+- [ ] **10. Les alignements.** Les filets du bloc de contact et du pied de page dépassent la
+  colonne de texte de 48 px de chaque côté, la bordure étant posée sur une boîte plus large que
+  son contenu (`src/components/ContactCTA.astro:22`, `src/components/Footer.astro:23`). Sur
+  `/contact/`, le bouton d'envoi touche le filet du pied de page, faute de marge sous le
+  `<main>` (`src/components/ContactPage.astro:123`). Sur `/cv/`, un grand vide sépare le menu
+  des boutons, alignés à droite alors que le site s'aligne à gauche.
