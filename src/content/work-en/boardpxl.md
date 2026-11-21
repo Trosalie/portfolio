@@ -10,7 +10,7 @@ tags:
   - Docker
 githubUrl: https://github.com/Trosalie/projetsportpxl
 img: ../../assets/projets/boardpxl.png
-img_alt: SportPXL dashboard interface showing a photographer's transaction list and credit balance.
+img_alt: "Photographer list in the SportPXL dashboard: revenue, credits and invoice status for each. Client names, emails and amounts are blurred."
 period: 2025 – 2026
 context: SAÉ project, BUT Computer Science
 team: Team of 5

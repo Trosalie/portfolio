@@ -10,7 +10,7 @@ tags:
   - Docker
 githubUrl: https://github.com/Trosalie/projetsportpxl
 img: ../../assets/projets/boardpxl.png
-img_alt: Interface du tableau de bord SportPXL affichant la liste des transactions et le solde de crédits d'un photographe.
+img_alt: "Liste des photographes du tableau de bord SportPXL : pour chacun, son chiffre d'affaires, ses crédits et le statut de ses factures. Les noms, e-mails et montants des clients sont floutés."
 period: 2025 – 2026
 context: SAÉ de BUT Informatique
 team: Équipe de 5
