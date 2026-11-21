@@ -26,6 +26,7 @@ texte du CV se rédige dans un outil local à part, `candidatures` (voir plus ba
 | `npm run build`        | Compile le site **et** génère les PDF du CV dans `dist/`            |
 | `npm run build:fast`   | Compile le site seul, sans Puppeteer — pour itérer rapidement       |
 | `npm run preview`      | Sert le `dist/` compilé                                             |
+| `npm test`             | Tests du site compilé (`dist/`) : lancer un build avant. Node 22.18+ |
 
 > `build:fast` produit un site dont les deux boutons « Télécharger le PDF » pointent dans le
 > vide : les PDF ne sont créés que par `npm run build`. C'est la commande de déploiement.
@@ -42,8 +43,12 @@ src/
 ├── pages/         Routes publiées. Les pages EN vivent sous pages/en/
 └── styles/        global.css + les feuilles du CV
 scripts/
-└── generate-cv-pdf.mjs   Sert dist/ en local, imprime les pages A4 du CV, vérifie qu'elles
-                          tiennent sur une page
+├── generate-cv-pdf.mjs     Sert dist/ en local, imprime les pages A4 du CV, vérifie qu'elles
+│                           tiennent sur une page
+└── generate-og-images.mjs  Cartes de partage public/og-fr.jpg et og-en.jpg, commitées :
+                            à relancer à la main après un changement de la phrase
+                            d'accueil ou d'une couverture de ChronoPotes ou Seenit
+tests/                      Tests node --test sur dist/ et sur les modules TypeScript purs
 docs/
 └── AMELIORATIONS.md      Backlog d'audit, points traités cochés
 ```

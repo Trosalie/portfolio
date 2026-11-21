@@ -10,6 +10,7 @@ export const ui = {
 		// Métadonnées par défaut (pages sans title/description explicites)
 		'meta.default.title': "Thibault Rosalie, développeur full stack",
 		'meta.default.description': "Thibault Rosalie, développeur full stack diplômé du BUT Informatique à Bayonne : ses projets, son CV et ses coordonnées.",
+		'meta.og.alt': "Thibault Rosalie, développeur full stack, avec ses projets ChronoPotes et Seenit",
 
 		// Accessibilite
 		'a11y.skipToContent': 'Aller au contenu',
@@ -122,6 +123,7 @@ export const ui = {
 		// Métadonnées par défaut (pages sans title/description explicites)
 		'meta.default.title': "Thibault Rosalie, full stack developer",
 		'meta.default.description': "Thibault Rosalie, full stack developer with a Computer Science degree (BUT) from Bayonne: projects, resume and contact details.",
+		'meta.og.alt': "Thibault Rosalie, full stack developer, with the ChronoPotes and Seenit projects",
 
 		// Accessibility
 		'a11y.skipToContent': 'Skip to content',
