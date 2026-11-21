@@ -56,8 +56,9 @@ body {
 	display: inline-flex;
 	align-items: center;
 	gap: 0.4rem;
-	background: #1C2230;
-	color: #fff;
+	/* Le bouton principal se detache de la barre encre : blanc, texte encre. */
+	background: #fff;
+	color: #1C2230;
 	border: none;
 	border-radius: 999px;
 	padding: 0.45rem 1.1rem;

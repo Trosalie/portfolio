@@ -22,6 +22,18 @@ test('le nom du CV à l’écran reste lisible sur le bandeau', () => {
 	assert.match(pageCss('/cv/'), /\.cv-name(\[[^\]]*\])?\s*{[^}]*color:\s*inherit/);
 });
 
+// La barre et le bouton principal de /cv-print/ avaient pris la meme encre :
+// « Imprimer / Sauvegarder en PDF » se fondait dans la barre.
+test('le bouton d’impression se détache de sa barre', () => {
+	const css = pageCss('/cv-print/');
+	const background = (selector) =>
+		css.match(new RegExp(`${selector}\\s*{[^}]*?background:\\s*([^;}]+)`))?.[1].trim().toLowerCase();
+	const bar = background('\\.print-toolbar');
+	const button = background('\\.btn-print');
+	assert.ok(bar && button, `${bar} / ${button}`);
+	assert.notEqual(button, bar);
+});
+
 test('les deux boutons du CV existent toujours', () => {
 	assert.ok(page('/cv/').includes('href="/assets/pdf/CV_Thibault_Rosalie_FR.pdf"'));
 	assert.ok(page('/en/cv/').includes('href="/en/cv-print/"'));
