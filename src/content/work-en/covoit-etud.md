@@ -9,6 +9,18 @@ tags:
   - Bootstrap
   - MySQL
 githubUrl: https://github.com/kevin-oulai/COVOIT-ETUD
+img: ../../assets/projets/covoit-etud/couverture.webp
+img_alt: "Covoit'Etud search results: three trips between Biarritz and Anglet on 24 November, with times, seats left and price. The people and trips are fictional."
+gallery:
+  - src: ../../assets/projets/covoit-etud/reservations.webp
+    alt: "My bookings page: two booked trips, each with the driver's name, route, time, number of seats booked and price."
+    caption: Passengers find their upcoming and past bookings.
+  - src: ../../assets/projets/covoit-etud/mes-trajets.webp
+    alt: "Your trips page: the two trips offered by the driver, each with Edit and Delete buttons, below an Add a trip button."
+    caption: Drivers manage the trips they offer.
+  - src: ../../assets/projets/covoit-etud/proposer.webp
+    alt: "Save a trip form: departure and arrival fields on the left, an OpenStreetMap map of Biarritz and Anglet on the right."
+    caption: The addresses entered are placed on the map before the trip is saved.
 period: 2024 – 2025
 context: SAÉ project, BUT Computer Science
 team: Team of 5

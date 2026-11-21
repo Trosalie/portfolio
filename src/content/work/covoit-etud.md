@@ -9,6 +9,18 @@ tags:
   - Bootstrap
   - MySQL
 githubUrl: https://github.com/kevin-oulai/COVOIT-ETUD
+img: ../../assets/projets/covoit-etud/couverture.webp
+img_alt: "Résultats de recherche de Covoit'Etud : trois trajets du 24 novembre entre Biarritz et Anglet, avec leurs horaires, les places restantes et le prix. Les personnes et les trajets sont fictifs."
+gallery:
+  - src: ../../assets/projets/covoit-etud/reservations.webp
+    alt: "Page Mes réservations : deux trajets réservés, chacun avec le nom du conducteur, l'itinéraire, l'horaire, le nombre de places réservées et le prix."
+    caption: Le passager retrouve ses réservations à venir et passées.
+  - src: ../../assets/projets/covoit-etud/mes-trajets.webp
+    alt: "Page Vos trajets : les deux trajets proposés par la conductrice, chacun avec ses boutons Modifier et Supprimer, sous un bouton Ajouter un trajet."
+    caption: Le conducteur gère les trajets qu'il propose.
+  - src: ../../assets/projets/covoit-etud/proposer.webp
+    alt: "Formulaire Enregistrer un trajet : lieux de départ et d'arrivée à gauche, carte OpenStreetMap de Biarritz et d'Anglet à droite."
+    caption: Les adresses saisies sont placées sur la carte avant d'enregistrer le trajet.
 period: 2024 – 2025
 context: SAÉ de BUT Informatique
 team: Équipe de 5

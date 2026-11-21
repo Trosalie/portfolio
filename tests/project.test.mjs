@@ -62,5 +62,5 @@ test('ni pilules, ni points médians, ni icônes de fonctionnalité', () => {
 });
 
 test('pas de couverture vide pour un projet sans capture', () => {
-	assert.ok(!page('/work/covoit-etud/').includes('data-frame='));
+	assert.ok(!page('/work/projet-chat/').includes('data-frame='));
 });
