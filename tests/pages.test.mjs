@@ -5,7 +5,7 @@ import { page, text } from './helpers.mjs';
 
 test('À propos montre le portrait, la disponibilité et deux liens, sans chantier', () => {
 	const html = page('/about/');
-	assert.match(html, /<img[^>]*alt="Photo de profil de Thibault ROSALIE"/);
+	assert.match(html, /<img[^>]*alt="Portrait de Thibault Rosalie"/);
 	const t = text(html);
 	assert.ok(t.includes("Diplômé d'un BUT Informatique de l'IUT de Bayonne"), t);
 	assert.ok(!/construction|🚧/.test(t), t);

@@ -8,9 +8,8 @@ export const defaultLang = 'fr';
 export const ui = {
 	fr: {
 		// Métadonnées par défaut (pages sans title/description explicites)
-		'meta.default.title': 'ThibaultROSALIE- Portfolio',
-		'meta.default.description':
-			'Portfolio de Thibault ROSALIE, développeur web full stack issu du BUT Informatique, en recherche de poste.',
+		'meta.default.title': "Thibault Rosalie, développeur full stack",
+		'meta.default.description': "Thibault Rosalie, développeur full stack diplômé du BUT Informatique à Bayonne : ses projets, son CV et ses coordonnées.",
 
 		// Accessibilite
 		'a11y.skipToContent': 'Aller au contenu',
@@ -31,7 +30,7 @@ export const ui = {
 
 
 		// Page 404
-		'404.meta.title': 'Page introuvable | Thibault ROSALIE',
+		'404.meta.title': "Page introuvable | Thibault Rosalie",
 		'404.meta.desc': "Erreur 404 : cette page n'existe pas ou a été déplacée.",
 		'404.title': 'Page introuvable',
 		'404.tagline': "Cette page n'existe pas ou a été déplacée.",
@@ -41,14 +40,14 @@ export const ui = {
 		// Page d'accueil
 		'index.hero.title': "Je conçois et je développe des applications web, de la base de données jusqu'au dernier détail de l'interface.",
 		'index.hero.tagline': "Diplômé du BUT Informatique à Bayonne, je cherche un premier poste de développeur full stack.",
-		'index.hero.portrait.alt': 'Photo de profil de Thibault ROSALIE',
+		'index.hero.portrait.alt': "Portrait de Thibault Rosalie",
 		'index.projects.cta': 'Voir tous les projets',
 
 
 		// Projets
 		'work.title': 'Projets',
-		'work.meta.title': 'Mes Projets | Thibault ROSALIE',
-		'work.meta.desc': 'Découvrez les projets récents de Thibault ROSALIE',
+		'work.meta.title': "Projets | Thibault Rosalie",
+		'work.meta.desc': "Les projets de Thibault Rosalie, développeur full stack : ChronoPotes, Seenit, BluePoint et les projets du BUT Informatique.",
 		'work.back': 'Retour aux projets',
 		'work.github': 'Voir sur GitHub',
 		'work.demo': 'Voir la démo',
@@ -77,7 +76,7 @@ export const ui = {
 
 		// Contact
 		'contact.title': 'Me contacter',
-		'contact.subtitle': "Une question, une opportunité, un projet ? N'hésitez pas à m'écrire, je vous répondrai dans les plus brefs délais.",
+		'contact.subtitle': "Un poste à pourvoir ou une question sur un projet : ce formulaire m'arrive directement par e-mail.",
 		'contact.name': 'Nom',
 		'contact.email': 'Adresse e-mail',
 		'contact.subject': 'Sujet',
@@ -90,8 +89,8 @@ export const ui = {
 		'contact.details': 'Coordonnées',
 		'contact.availability': 'Disponibilité',
 		'contact.availability.text': "Diplômé d'un BUT Informatique de l'IUT de Bayonne. À la recherche d'un poste de développeur full stack.",
-		'contact.meta.title': 'Me contacter | Thibault ROSALIE',
-		'contact.meta.desc': 'Envoyez-moi un message pour toute proposition de collaboration ou question.',
+		'contact.meta.title': "Contact | Thibault Rosalie",
+		'contact.meta.desc': "Écrire à Thibault Rosalie, développeur full stack, pour un poste ou une question sur un projet.",
 		// Sujet de l'e-mail que Formspree envoie : les deux langues partagent le
 		// meme endpoint, c'est lui qui distingue les demandes dans la boite mail.
 		'contact.mail.subject': 'Portfolio (FR) : nouveau message',
@@ -102,8 +101,8 @@ export const ui = {
 		'contact.honeypot': 'Ne remplissez pas ce champ si vous êtes humain',
 
 		// À propos
-		'about.meta.title': 'À propos | Thibault ROSALIE',
-		'about.meta.desc': 'À propos de Thibault ROSALIE- Développeur full stack issu du BUT Informatique',
+		'about.meta.title': "À propos | Thibault Rosalie",
+		'about.meta.desc': "Thibault Rosalie, développeur full stack diplômé du BUT Informatique à Bayonne, cherche un premier poste.",
 		'about.title': "À propos",
 
 		// Barre des pages d'impression du CV
@@ -113,17 +112,16 @@ export const ui = {
 		// CV
 		'cv.save': 'Sauvegarder en PDF',
 		'cv.download': 'Télécharger le PDF',
-		'cv.meta.title': 'CV | Thibault ROSALIE',
-		'cv.meta.desc': 'Curriculum Vitae de ThibaultROSALIE- Développeur FullStack issu du BUT Informatique',
-		'cv.print.title': 'CV – Thibault ROSALIE(impression)',
-		'cv.print.toolbar': 'Aperçu avant impression du CV de Thibault ROSALIE',
+		'cv.meta.title': "CV | Thibault Rosalie",
+		'cv.meta.desc': "CV de Thibault Rosalie, développeur full stack diplômé du BUT Informatique, à lire en ligne ou à télécharger en PDF.",
+		'cv.print.title': "CV | Thibault Rosalie (impression)",
+		'cv.print.toolbar': "Aperçu avant impression du CV de Thibault Rosalie",
 
 	},
 	en: {
 		// Métadonnées par défaut (pages sans title/description explicites)
-		'meta.default.title': 'Thibault ROSALIE- Portfolio',
-		'meta.default.description':
-			'Portfolio of Thibault ROSALIE, graduate full stack web developer looking for a position.',
+		'meta.default.title': "Thibault Rosalie, full stack developer",
+		'meta.default.description': "Thibault Rosalie, full stack developer with a Computer Science degree (BUT) from Bayonne: projects, resume and contact details.",
 
 		// Accessibility
 		'a11y.skipToContent': 'Skip to content',
@@ -144,7 +142,7 @@ export const ui = {
 
 
 		// Page 404
-		'404.meta.title': 'Page not found | Thibault ROSALIE',
+		'404.meta.title': "Page not found | Thibault Rosalie",
 		'404.meta.desc': '404 error: this page does not exist or has been moved.',
 		'404.title': 'Page not found',
 		'404.tagline': 'This page does not exist or has been moved.',
@@ -154,14 +152,14 @@ export const ui = {
 		// Page d'accueil
 		'index.hero.title': "I design and build web applications, from the database to the last detail of the interface.",
 		'index.hero.tagline': "I hold a Computer Science degree (BUT) from Bayonne and I'm looking for my first full stack developer role.",
-		'index.hero.portrait.alt': 'Profile picture of Thibault ROSALIE',
+		'index.hero.portrait.alt': "Portrait of Thibault Rosalie",
 		'index.projects.cta': 'View all projects',
 
 
 		// Projects
 		'work.title': 'Projects',
-		'work.meta.title': 'My Projects | Thibault ROSALIE',
-		'work.meta.desc': 'Discover the recent projects of Thibault ROSALIE',
+		'work.meta.title': "Projects | Thibault Rosalie",
+		'work.meta.desc': "Projects by Thibault Rosalie, full stack developer: ChronoPotes, Seenit, BluePoint and university projects.",
 		'work.back': 'Back to projects',
 		'work.github': 'View on GitHub',
 		'work.demo': 'View demo',
@@ -188,7 +186,7 @@ export const ui = {
 
 		// Contact
 		'contact.title': 'Contact me',
-		'contact.subtitle': "A question, an opportunity, a project? Don't hesitate to write to me, I'll get back to you as soon as possible.",
+		'contact.subtitle': "A role to fill or a question about a project: this form goes straight to my inbox.",
 		'contact.name': 'Name',
 		'contact.email': 'Email address',
 		'contact.subject': 'Subject',
@@ -201,16 +199,16 @@ export const ui = {
 		'contact.details': 'Contact details',
 		'contact.availability': 'Availability',
 		'contact.availability.text': 'Graduated with a Computer Science degree from IUT de Bayonne. Looking for a full stack developer position.',
-		'contact.meta.title': 'Contact me | Thibault ROSALIE',
-		'contact.meta.desc': 'Send me a message for any collaboration proposal or question.',
+		'contact.meta.title': "Contact | Thibault Rosalie",
+		'contact.meta.desc': "Write to Thibault Rosalie, full stack developer, about a role or a question on a project.",
 		'contact.mail.subject': 'Portfolio (EN): new message',
 		'contact.sent.title': 'Message sent',
 		'contact.sent.text': 'Thank you, your message is on its way. I will get back to you as soon as possible.',
 		'contact.honeypot': 'Leave this field empty if you are human',
 
 		// About
-		'about.meta.title': 'About | Thibault ROSALIE',
-		'about.meta.desc': 'About Thibault ROSALIE- Full stack developer with a Computer Science degree',
+		'about.meta.title': "About | Thibault Rosalie",
+		'about.meta.desc': "Thibault Rosalie, full stack developer with a Computer Science degree (BUT) from Bayonne, looking for a first role.",
 		'about.title': "About",
 
 		// Resume print page toolbar
@@ -220,10 +218,10 @@ export const ui = {
 		// Resume
 		'cv.save': 'Save as PDF',
 		'cv.download': 'Download the PDF',
-		'cv.meta.title': 'Resume | Thibault ROSALIE',
-		'cv.meta.desc': 'Curriculum Vitae of ThibaultROSALIE- FullStack Developer with a Computer Science degree',
-		'cv.print.title': 'Resume – Thibault ROSALIE(print)',
-		'cv.print.toolbar': "Print preview of Thibault ROSALIE's resume",
+		'cv.meta.title': "Resume | Thibault Rosalie",
+		'cv.meta.desc': "Resume of Thibault Rosalie, full stack developer with a Computer Science degree, to read online or download as a PDF.",
+		'cv.print.title': "Resume | Thibault Rosalie (print)",
+		'cv.print.toolbar': "Print preview of Thibault Rosalie's resume",
 
 	},
 } as const;
