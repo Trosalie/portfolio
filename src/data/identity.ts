@@ -10,9 +10,10 @@
 /**
  * Le style du nom du projet dans son cadre. Une liste fermee plutot que du CSS
  * libre dans le contenu : chaque entree correspond a une classe et a une police
- * chargee par ProjectFrame.astro.
+ * chargee par ProjectFrame.astro. `site` reprend la police du portfolio, pour les
+ * produits qui s'en remettent aux polices du systeme (Bootstrap, Qt).
  */
-export const titleStyles = ['oswald-caps', 'playfair-italic'] as const;
+export const titleStyles = ['oswald-caps', 'playfair-italic', 'site', 'jost-caps', 'dm-mono'] as const;
 
 /** Les polices de produit que le nuancier sait afficher, toutes installees avec le site. */
 export const specimenFonts = ['Playfair Display', 'DM Sans', 'DM Mono', 'Oswald', 'Space Mono'] as const;

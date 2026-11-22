@@ -24,6 +24,12 @@ gallery:
 period: 2025 – 2026
 context: SAÉ project, BUT Computer Science
 team: Team of 5
+identity:
+  frame:
+    background: "#E8EAF6"
+    border: "#0A2D44"
+    titleColor: "#0A2D44"
+    titleStyle: jost-caps
 intro: |
   SportPXL Dashboard is a full-stack web application built to centralise financial flow management for the SportPXL platform. It gives photographers and administrators a dedicated space to track transactions, manage credits, and review their financial history clearly and efficiently.
 features:

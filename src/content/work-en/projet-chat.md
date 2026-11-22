@@ -12,6 +12,12 @@ img: ../../assets/projets/projet-chat/couverture.webp
 img_alt: "Three terminals during a real chat session: the server logs connections and messages on the general channel, lea chats with hugo, and ines, on arrival, receives the history of the five previous messages."
 period: "2026"
 context: Coursework, BUT Computer Science
+identity:
+  frame:
+    background: "#17181C"
+    border: "#3C3F47"
+    titleColor: "#81B07A"
+    titleStyle: dm-mono
 intro: |
   Multi-Channel Chat Project is a network application in C implementing a command-line messaging system. The architecture is based on a main server, connected clients, and dynamic channel management to separate conversations.
 features:

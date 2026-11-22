@@ -14,6 +14,11 @@ img_alt: "BluePoint WasteIdentifier main window: a plastic container tracked by 
 period: April – August 2026
 context: End-of-degree internship at Compositadour
 team: Sole developer on the application
+identity:
+  frame:
+    background: "#1F1F1F"
+    titleColor: "#338CD2"
+    titleStyle: site
 intro: |
   BluePoint WasteIdentifier identifies waste travelling along a sorting conveyor, in real time. Two acquisition chains run in parallel: an industrial RGB camera, where a YOLO model detects and tracks every object, and a hyperspectral camera, whose spectrum reveals the material: PET, HDPE, cardboard. A queue reconciles the two: by the end of the belt, each tracked object finally carries its material name, and the application drives the actuator that ejects it into the right bin.
 features:

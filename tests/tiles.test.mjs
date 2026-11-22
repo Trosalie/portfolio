@@ -5,6 +5,28 @@ import { chunk, page, pageCss, srcFiles, text } from './helpers.mjs';
 
 const tile = (route, slug) => chunk(page(route), `href="${route}${slug}"`);
 
+const SLUGS = ['chronopotes', 'seenit', 'bluepoint-waste-identifier', 'projet-chat', 'boardpxl', 'covoit-etud'];
+
+/** Rapport de contraste WCAG 2 entre deux couleurs #RRGGBB. */
+function contrast(a, b) {
+	const luminance = (hex) => {
+		const [r, g, bl] = [1, 3, 5]
+			.map((i) => parseInt(hex.slice(i, i + 2), 16) / 255)
+			.map((c) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4));
+		return 0.2126 * r + 0.7152 * g + 0.0722 * bl;
+	};
+	const [light, dark] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+	return (light + 0.05) / (dark + 0.05);
+}
+
+/** Le cadre d'une vignette de /work/ et ses trois couleurs. */
+const frameOf = (slug) => {
+	const html = tile('/work/', slug);
+	const style = html.match(/style="([^"]*--frame-bg[^"]*)"/)[1];
+	const value = (name) => style.match(new RegExp(`--${name}:\s*([^;]+)`))[1].trim();
+	return { html, bg: value('frame-bg'), border: value('frame-border'), title: value('frame-title') };
+};
+
 test('la liste a un titre court et pas de phrase d’introduction', () => {
 	assert.match(page('/work/'), /<h1[^>]*>\s*Projets\s*<\/h1>/);
 	assert.match(page('/en/work/'), /<h1[^>]*>\s*Projects\s*<\/h1>/);
@@ -21,8 +43,42 @@ test('ChronoPotes et Seenit dans leur identité', () => {
 	assert.match(s, /title--playfair-italic/);
 });
 
-test('un projet sans identité prend le cadre encre', () => {
-	assert.match(tile('/work/', 'bluepoint-waste-identifier'), /data-frame="ink"/);
+test('les six projets sont dans leur identité', () => {
+	for (const slug of SLUGS) assert.match(tile('/work/', slug), /data-frame="identity"/, slug);
+	const sport = frameOf('boardpxl');
+	assert.equal(sport.bg.toUpperCase(), '#E8EAF6');
+	assert.equal(sport.border.toUpperCase(), '#0A2D44');
+	assert.match(sport.html, /title--jost-caps/);
+	const covoit = frameOf('covoit-etud');
+	assert.equal(covoit.bg.toUpperCase(), '#ABC4FF');
+	assert.equal(covoit.title.toUpperCase(), '#31429A');
+	assert.doesNotMatch(covoit.html, /\bbordered\b/);
+	assert.match(covoit.html, /title--site/);
+	const blue = frameOf('bluepoint-waste-identifier');
+	assert.equal(blue.bg.toUpperCase(), '#1F1F1F');
+	assert.equal(blue.title.toUpperCase(), '#338CD2');
+	const chat = frameOf('projet-chat');
+	assert.equal(chat.border.toUpperCase(), '#3C3F47');
+	assert.match(chat.html, /title--dm-mono/);
+});
+
+test('le cadre encre reste le repli d’un projet sans identité', () => {
+	const frame = srcFiles(['.astro']).find((f) => f.path.endsWith('work/ProjectFrame.astro')).content;
+	assert.match(frame, /'var\(--ink\)'/);
+	assert.match(frame, /'identity' : 'ink'/);
+});
+
+test('le titre de chaque cadre atteint 4,5:1 sur son fond', () => {
+	assert.equal(contrast('#000000', '#FFFFFF').toFixed(1), '21.0');
+	assert.ok(contrast('#4357BD', '#ABC4FF') < 4.5);
+	for (const slug of SLUGS) {
+		const { bg, title } = frameOf(slug);
+		assert.ok(contrast(title, bg) >= 4.5, `${slug} : ${contrast(title, bg).toFixed(2)}:1`);
+	}
+});
+
+test('Jost est servie par le site, pas par Google Fonts', () => {
+	assert.match(pageCss('/work/'), /font-family:\s*["']?Jost["']?[^}]*jost-latin-500-normal[^)]*\.woff2/);
 });
 
 test('chaque projet a sa couverture', () => {

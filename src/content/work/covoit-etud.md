@@ -24,6 +24,11 @@ gallery:
 period: 2024 – 2025
 context: SAÉ de BUT Informatique
 team: Équipe de 5
+identity:
+  frame:
+    background: "#ABC4FF"
+    titleColor: "#31429A"
+    titleStyle: site
 intro: |
   Covoit'Etud est une application web fullstack de covoiturage pensée pour les étudiants. Elle facilite la mise en relation entre conducteurs et passagers, avec un système de gestion de trajets, de profils et de notation.
 features:

@@ -24,6 +24,12 @@ gallery:
 period: 2025 – 2026
 context: SAÉ de BUT Informatique
 team: Équipe de 5
+identity:
+  frame:
+    background: "#E8EAF6"
+    border: "#0A2D44"
+    titleColor: "#0A2D44"
+    titleStyle: jost-caps
 intro: |
   SportPXL Dashboard est une application web fullstack conçue pour centraliser la gestion des flux financiers de la plateforme SportPXL. Elle offre aux photographes et aux administrateurs un espace dédié pour suivre leurs transactions, gérer leurs crédits et consulter leur historique financier de manière claire et efficace.
 features:

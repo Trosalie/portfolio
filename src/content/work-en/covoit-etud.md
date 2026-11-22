@@ -24,6 +24,11 @@ gallery:
 period: 2024 – 2025
 context: SAÉ project, BUT Computer Science
 team: Team of 5
+identity:
+  frame:
+    background: "#ABC4FF"
+    titleColor: "#31429A"
+    titleStyle: site
 intro: |
   Covoit'Etud is a full-stack carpooling web application designed for students. It makes it easy to connect drivers and passengers, with a system for managing rides, profiles, and ratings.
 features:

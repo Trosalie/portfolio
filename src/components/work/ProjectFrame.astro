@@ -1,5 +1,7 @@
 ---
 import { Image } from 'astro:assets';
+import '@fontsource/dm-mono/latin-500.css';
+import '@fontsource/jost/latin-500.css';
 import '@fontsource/oswald/latin-600.css';
 import '@fontsource/playfair-display/latin-600-italic.css';
 
@@ -125,6 +127,20 @@ const widths = isCover ? [640, 1024, 1600] : [480, 800, 1200];
 	.title--site :is(.frame-title, .frame-name) {
 		font-family: var(--font-sans);
 		font-weight: 600;
+	}
+
+	/* Jost, libre et dessinee d'apres Futura, la police de SportPXL : Futura
+	   est commerciale et n'est pas reprise. */
+	.title--jost-caps :is(.frame-title, .frame-name) {
+		font-family: 'Jost', sans-serif;
+		font-weight: 500;
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+	}
+
+	.title--dm-mono :is(.frame-title, .frame-name) {
+		font-family: 'DM Mono', monospace;
+		font-weight: 500;
 	}
 
 	@media (min-width: 50em) {

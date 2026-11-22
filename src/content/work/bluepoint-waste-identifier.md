@@ -14,6 +14,11 @@ img_alt: "Fenêtre principale de BluePoint WasteIdentifier : un bidon plastique 
 period: Avril – août 2026
 context: Stage de fin de BUT chez Compositadour
 team: Seul sur l'application
+identity:
+  frame:
+    background: "#1F1F1F"
+    titleColor: "#338CD2"
+    titleStyle: site
 intro: |
   BluePoint WasteIdentifier identifie les déchets qui défilent sur un convoyeur de tri, en temps réel. Deux chaînes d'acquisition tournent en parallèle : une caméra industrielle RGB, où un modèle YOLO détecte et suit chaque objet, et une caméra hyperspectrale, dont le spectre révèle la matière (PET, PETG, PE, ...). Une file d'attente réconcilie les deux : au bout du convoyeur, chaque objet suivi porte enfin le nom de sa matière, et l'application regroupe les données par déchet dans un JSON transmis par TCP.
 features:

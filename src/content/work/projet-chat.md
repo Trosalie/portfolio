@@ -12,6 +12,12 @@ img: ../../assets/projets/projet-chat/couverture.webp
 img_alt: "Trois terminaux pendant une vraie session du chat : le serveur journalise les connexions et les messages du channel general, lea y échange avec hugo, et ines reçoit à son arrivée l'historique des cinq messages précédents."
 period: "2026"
 context: Projet de cours en BUT Informatique
+identity:
+  frame:
+    background: "#17181C"
+    border: "#3C3F47"
+    titleColor: "#81B07A"
+    titleStyle: dm-mono
 intro: |
   Projet Chat Multi-Channels est une application réseau en C qui implémente un système de messagerie en ligne de commande. L'architecture repose sur un serveur principal, des clients connectés et une gestion de channels dynamiques pour séparer les conversations.
 features:
