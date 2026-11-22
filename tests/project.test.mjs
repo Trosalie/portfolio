@@ -100,3 +100,34 @@ test('la fiche est en tête, avant la couverture, et remplace la liste grise', (
 test('à partir de 50em, la fiche se pose à droite sans écraser le titre', () => {
 	assert.match(pageCss('/work/seenit/'), /grid-template-columns:\s*minmax\(0,\s*1fr\)\s+minmax\(14rem,\s*18rem\)/);
 });
+
+/** Les slugs des projets, dans l'ordre de la liste d'une langue. */
+const slugsOf = (base) => [...new Set([...page(base).matchAll(new RegExp(`href="${base}([^"/]+)"`, 'g'))].map((m) => m[1]))];
+
+for (const [base, label] of [['/work/', 'Projet suivant : '], ['/en/work/', 'Next project: ']]) {
+	test(`chaque projet mène au suivant, le dernier au premier (${base})`, () => {
+		const slugs = slugsOf(base);
+		assert.equal(slugs.length, 6, slugs.join(', '));
+		slugs.forEach((slug, i) => {
+			const next = slugs[(i + 1) % slugs.length];
+			const link = chunk(page(`${base}${slug}/`), 'class="next-project', '</a>');
+			assert.match(link, new RegExp(`href="${base}${next}"`), slug);
+			const title = text(chunk(page(`${base}${next}/`), '<h1', '</h1>'));
+			assert.equal(text(link.match(/aria-label="([^"]*)"/)[1]), `${label}${title}`, slug);
+			assert.doesNotMatch(link, /aria-hidden/, slug);
+			assert.ok(!text(link).includes('→'), slug);
+		});
+	});
+}
+
+test('le lien vient après la dernière section, avant le bloc de contact', () => {
+	const html = page('/work/seenit/');
+	const at = html.indexOf('class="next-project');
+	assert.ok(html.indexOf('>En images</h2>') < at && at < html.indexOf('</main>'));
+});
+
+test('le bandeau reste un bloc et son titre passe à la ligne', () => {
+	const css = pageCss('/work/seenit/');
+	assert.match(css, /\.next-project[^{]*\{[^}]*display:\s*(block|flex)/);
+	assert.match(css, /\.band[^{]*\.frame-title[^{]*\{[^}]*overflow-wrap:\s*anywhere/);
+});

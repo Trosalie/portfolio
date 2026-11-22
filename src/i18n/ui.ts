@@ -57,6 +57,8 @@ export const ui = {
 		'work.fact.context': 'Cadre',
 		'work.fact.team': 'Équipe',
 		'work.fact.tech': 'Technologies',
+		'work.next': 'Projet suivant',
+		'work.next.label': 'Projet suivant : {title}',
 		// Les intitulés de section vivent ici et non dans le contenu : les deux
 		// versions d'un projet ne peuvent plus les nommer différemment.
 		'work.section.about': 'Le projet',
@@ -174,6 +176,8 @@ export const ui = {
 		'work.fact.context': 'Context',
 		'work.fact.team': 'Team',
 		'work.fact.tech': 'Technologies',
+		'work.next': 'Next project',
+		'work.next.label': 'Next project: {title}',
 		'work.section.about': 'The project',
 		'work.section.features': 'Features',
 		'work.section.stack': 'Tech stack',

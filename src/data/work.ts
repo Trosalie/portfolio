@@ -40,6 +40,16 @@ export function normalizeFeatures(features: WorkEntry['data']['features']): Proj
 	);
 }
 
+/**
+ * Le projet qui suit `id` dans la liste, le premier apres le dernier. Rien si la
+ * liste n'a qu'un projet : un lien vers la page ou l'on est deja ne mene nulle part.
+ */
+export function nextEntry<T extends { id: string }>(entries: T[], id: string): T | undefined {
+	const index = entries.findIndex((entry) => entry.id === id);
+	if (entries.length < 2 || index === -1) return undefined;
+	return entries[(index + 1) % entries.length];
+}
+
 /** Annee de publication, seule granularite affichee sur les cartes. */
 export function projectYear(entry: WorkEntry): string {
 	return String(entry.data.publishDate.getFullYear());

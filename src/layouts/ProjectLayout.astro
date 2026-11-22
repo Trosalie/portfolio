@@ -4,6 +4,7 @@ import { render, type CollectionEntry } from 'astro:content';
 import ContactCTA from '../components/ContactCTA.astro';
 import FeatureGrid from '../components/project/FeatureGrid.astro';
 import IdentitySpecimen from '../components/project/IdentitySpecimen.astro';
+import NextProject from '../components/project/NextProject.astro';
 import ProjectCover from '../components/project/ProjectCover.astro';
 import ProjectGallery from '../components/project/ProjectGallery.astro';
 import ProjectHero from '../components/project/ProjectHero.astro';
@@ -12,7 +13,7 @@ import RoleCallout from '../components/project/RoleCallout.astro';
 import StackTable from '../components/project/StackTable.astro';
 import BaseLayout from './BaseLayout.astro';
 import { hasSpecimen } from '../data/identity';
-import { normalizeFeatures, type WorkEntry } from '../data/work';
+import { getWorkCollection, nextEntry, normalizeFeatures, type WorkEntry } from '../data/work';
 import { useTranslations, type Lang } from '../i18n/ui';
 
 /**
@@ -40,6 +41,9 @@ const { Content } = await render(entry as CollectionEntry<'work'>);
 const hasExtraContent = Boolean(entry.body?.trim());
 
 const features = normalizeFeatures(entry.data.features);
+
+// La page se termine sur le projet suivant de la liste, le premier apres le dernier.
+const next = nextEntry(await getWorkCollection(lang), entry.id);
 ---
 
 <BaseLayout title={`${entry.data.title} | Thibault Rosalie`} description={entry.data.description}>
@@ -91,6 +95,8 @@ const features = normalizeFeatures(entry.data.features);
 					</ProjectSection>
 				)
 			}
+
+			{next && <NextProject entry={next} lang={lang} />}
 		</div>
 	</main>
 	<ContactCTA />

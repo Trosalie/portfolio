@@ -16,10 +16,12 @@ import type { WorkEntry } from '../../data/work';
  * est nomme par l'etiquette), capture recadree au meme format pour toutes ;
  * sous 50em, un detail de l'interface (`img_mobile`) remplace la capture.
  * `cover` : la couverture d'une page projet, capture entiere et decrite.
+ * `band` : le bandeau du lien « Projet suivant », sans capture ; le nom y est
+ * le contenu du lien et n'est donc pas cache aux lecteurs d'ecran.
  */
 interface Props {
 	entry: WorkEntry;
-	variant: 'tile' | 'cover';
+	variant: 'tile' | 'cover' | 'band';
 	featured?: boolean;
 }
 
@@ -58,9 +60,10 @@ const mobile = mobileImage
 	data-frame={identity ? 'identity' : 'ink'}
 	style={style}
 >
-	{!isCover && data.img && <span class="frame-title" aria-hidden="true">{data.title}</span>}
+	{variant === 'band' && <span class="frame-title">{data.title}</span>}
+	{variant === 'tile' && data.img && <span class="frame-title" aria-hidden="true">{data.title}</span>}
 	{
-		data.img ? (
+		variant === 'band' ? null : data.img ? (
 			<picture>
 				{mobile && mobileImage && (
 					<source
@@ -124,6 +127,19 @@ const mobile = mobileImage
 		color: var(--frame-title);
 	}
 
+	/* Le bandeau « Projet suivant » : environ la moitie d'une vignette, le nom
+	   pose en bas comme sur une vignette sans capture. */
+	.band {
+		justify-content: flex-end;
+		min-height: 7rem;
+	}
+
+	.band .frame-title {
+		margin-bottom: 0;
+		font-size: var(--step-3);
+		overflow-wrap: anywhere;
+	}
+
 	/* Sans capture, le nom occupe la place de l'image, au meme format. */
 	.frame-name {
 		flex: 1;
@@ -171,6 +187,10 @@ const mobile = mobileImage
 	@media (min-width: 50em) {
 		.project-frame {
 			padding: 1.6rem;
+		}
+
+		.band {
+			min-height: 10rem;
 		}
 
 		.cover {
