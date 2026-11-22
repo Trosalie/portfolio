@@ -40,7 +40,7 @@ const CROPS = [
 	// Deux lignes de la liste des photographes, chiffre d'affaires compris.
 	{ project: 'sportpxl', source: 'couverture.webp', left: 282, top: 250, width: 560 },
 	// Deux cartes de trajet : arrivee, horaires, date et prix.
-	{ project: 'covoit-etud', source: 'couverture.webp', left: 573, top: 386, width: 724 },
+	{ project: 'covoit-etud', source: 'couverture.webp', left: 572, top: 386, width: 736 },
 ];
 
 for (const { project, source, left, top, width } of CROPS) {
