@@ -52,6 +52,11 @@ export const ui = {
 		'work.back': 'Retour aux projets',
 		'work.github': 'Voir sur GitHub',
 		'work.demo': 'Voir la démo',
+		// La fiche en tete de la page projet.
+		'work.fact.period': 'Période',
+		'work.fact.context': 'Cadre',
+		'work.fact.team': 'Équipe',
+		'work.fact.tech': 'Technologies',
 		// Les intitulés de section vivent ici et non dans le contenu : les deux
 		// versions d'un projet ne peuvent plus les nommer différemment.
 		'work.section.about': 'Le projet',
@@ -165,6 +170,10 @@ export const ui = {
 		'work.back': 'Back to projects',
 		'work.github': 'View on GitHub',
 		'work.demo': 'View demo',
+		'work.fact.period': 'Date',
+		'work.fact.context': 'Context',
+		'work.fact.team': 'Team',
+		'work.fact.tech': 'Technologies',
 		'work.section.about': 'The project',
 		'work.section.features': 'Features',
 		'work.section.stack': 'Tech stack',

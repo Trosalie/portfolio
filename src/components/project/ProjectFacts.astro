@@ -1,0 +1,60 @@
+---
+import type { WorkEntry } from '../../data/work';
+import { useTranslations, type Lang } from '../../i18n/ui';
+
+/**
+ * La fiche d'un projet, en tete de sa page : quand, dans quel cadre, avec qui,
+ * avec quoi. Sur le modele du cartel des vignettes, fond papier et texte
+ * sobre ; une ligne sans valeur n'apparait pas (Projet Chat n'a pas d'equipe).
+ * La stack detaillee, par couche, reste en bas de page.
+ */
+interface Props {
+	entry: WorkEntry;
+	lang: Lang;
+}
+
+const { entry, lang } = Astro.props;
+const { data } = entry;
+const t = useTranslations(lang);
+
+const rows = [
+	{ label: t('work.fact.period'), value: data.period },
+	{ label: t('work.fact.context'), value: data.context },
+	{ label: t('work.fact.team'), value: data.team },
+	{ label: t('work.fact.tech'), value: data.tags.join(', ') },
+].filter((row) => Boolean(row.value));
+---
+
+<dl class="facts">
+	{
+		rows.map((row) => (
+			<>
+				<dt>{row.label}</dt>
+				<dd>{row.value}</dd>
+			</>
+		))
+	}
+</dl>
+
+<style>
+	.facts {
+		display: grid;
+		grid-template-columns: max-content minmax(0, 1fr);
+		column-gap: 1.5rem;
+		row-gap: 0.35rem;
+		margin: 0;
+		padding: 0.9rem 1.1rem 1rem;
+		background: var(--paper);
+		font-size: var(--step--1);
+		line-height: 1.5;
+	}
+
+	dt {
+		font-weight: 600;
+	}
+
+	dd {
+		margin: 0;
+		color: var(--ink-muted);
+	}
+</style>

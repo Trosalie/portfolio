@@ -1,6 +1,7 @@
 ---
 import { workBasePath, type WorkEntry } from '../../data/work';
 import { useTranslations, type Lang } from '../../i18n/ui';
+import ProjectFacts from './ProjectFacts.astro';
 
 interface Props {
 	entry: WorkEntry;
@@ -10,50 +11,58 @@ interface Props {
 const { entry, lang } = Astro.props;
 const { data } = entry;
 const t = useTranslations(lang);
-
-// Periode, cadre et equipe, une ligne chacun : recomposer une phrase obligerait
-// a mettre en minuscule le debut de chaque element, et « SAÉ de BUT »
-// deviendrait « sAÉ de BUT ».
-const meta = [data.period, data.context, data.team].filter(Boolean) as string[];
 ---
 
 <div class="project-hero">
 	<a class="back-link" href={workBasePath(lang)}>{t('work.back')}</a>
-	<h1>{data.title}</h1>
-	<p class="description">{data.description}</p>
-	{
-		meta.length > 0 && (
-			<ul class="meta">
-				{meta.map((item) => (
-					<li>{item}</li>
-				))}
-			</ul>
-		)
-	}
-	{
-		(data.githubUrl || data.demoUrl) && (
-			<div class="actions">
-				{data.demoUrl && (
-					<a class="button" href={data.demoUrl} target="_blank" rel="noopener noreferrer">
-						{t('work.demo')}
-					</a>
-				)}
-				{data.githubUrl && (
-					<a href={data.githubUrl} target="_blank" rel="noopener noreferrer">
-						{t('work.github')}
-					</a>
-				)}
-			</div>
-		)
-	}
+	<div class="hero-main">
+		<h1>{data.title}</h1>
+		<p class="description">{data.description}</p>
+		{
+			(data.githubUrl || data.demoUrl) && (
+				<div class="actions">
+					{data.demoUrl && (
+						<a class="button" href={data.demoUrl} target="_blank" rel="noopener noreferrer">
+							{t('work.demo')}
+						</a>
+					)}
+					{data.githubUrl && (
+						<a href={data.githubUrl} target="_blank" rel="noopener noreferrer">
+							{t('work.github')}
+						</a>
+					)}
+				</div>
+			)
+		}
+	</div>
+	<ProjectFacts entry={entry} lang={lang} />
 </div>
 
 <style>
-	.project-hero {
+	.project-hero,
+	.hero-main {
 		display: flex;
 		flex-direction: column;
 		align-items: flex-start;
 		gap: 1.25rem;
+	}
+
+	/* Sous 50em, la fiche suit les liens, dans l'ordre du document. A partir de
+	   50em, elle se pose a droite du titre ; la colonne du texte garde la place
+	   restante, la fiche est bornee pour ne pas l'ecraser. */
+	@media (min-width: 50em) {
+		.project-hero {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr) minmax(14rem, 18rem);
+			column-gap: clamp(2rem, 4vw, 3rem);
+			row-gap: 1.25rem;
+			align-items: start;
+		}
+
+		.back-link {
+			grid-column: 1 / -1;
+			justify-self: start;
+		}
 	}
 
 	.back-link {
@@ -73,14 +82,6 @@ const meta = [data.period, data.context, data.team].filter(Boolean) as string[];
 	.description {
 		max-width: var(--measure);
 		font-size: var(--step-1);
-	}
-
-	.meta {
-		margin: 0;
-		padding: 0;
-		list-style: none;
-		font-size: var(--step--1);
-		color: var(--ink-muted);
 	}
 
 	.actions {

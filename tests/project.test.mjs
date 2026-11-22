@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { chunk, page, srcFiles, text } from './helpers.mjs';
+import { chunk, page, pageCss, srcFiles, text } from './helpers.mjs';
 
 const order = (html, titles) => titles.map((t) => html.indexOf(`>${t}</h2>`));
 
@@ -71,4 +71,32 @@ test('ni pilules, ni points médians, ni icônes de fonctionnalité', () => {
 test('pas de couverture vide pour un projet sans capture', () => {
 	const layout = srcFiles(['.astro']).find((f) => f.path.endsWith('layouts/ProjectLayout.astro')).content;
 	assert.match(layout, /\{entry\.data\.img && <ProjectCover entry=\{entry\} \/>\}/);
+});
+
+// Le fragment commence au milieu de la balise ouvrante : on retire ce reste avant d'en lire le texte.
+const facts = (route) => text(chunk(page(route), 'class="facts', '</dl>').replace(/^[^>]*>/, ''));
+
+test('la fiche du projet, en français et en anglais', () => {
+	assert.equal(
+		facts('/work/seenit/'),
+		'Période Novembre 2026 Cadre Projet personnel Équipe Seul Technologies React, TypeScript, Node.js, SQLite, API TMDb',
+	);
+	assert.ok(facts('/en/work/seenit/').includes('Date November 2026 Context Personal project Team Solo Technologies React'));
+});
+
+test('une ligne sans valeur n’apparaît pas dans la fiche', () => {
+	const chat = facts('/work/projet-chat/');
+	assert.ok(chat.includes('Cadre Projet de cours en BUT Informatique'), chat);
+	assert.ok(!chat.includes('Équipe'), chat);
+});
+
+test('la fiche est en tête, avant la couverture, et remplace la liste grise', () => {
+	const html = page('/work/seenit/');
+	const at = html.indexOf('class="facts');
+	assert.ok(at > 0 && at < html.indexOf('class="project-frame'));
+	assert.ok(!html.includes('class="meta'));
+});
+
+test('à partir de 50em, la fiche se pose à droite sans écraser le titre', () => {
+	assert.match(pageCss('/work/seenit/'), /grid-template-columns:\s*minmax\(0,\s*1fr\)\s+minmax\(14rem,\s*18rem\)/);
 });
