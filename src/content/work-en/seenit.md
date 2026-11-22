@@ -11,6 +11,7 @@ tags:
   - TMDb API
 img: ../../assets/projets/seenit/couverture.webp
 img_alt: "Seenit home screen: the Now Showing marquee lists three planned screenings, above the search field, the filters, and the start of the shelf of recent viewings."
+img_mobile: ../../assets/projets/seenit/vignette-mobile.webp
 period: November 2026
 context: Personal project
 team: Solo

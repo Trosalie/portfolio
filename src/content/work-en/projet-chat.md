@@ -10,6 +10,7 @@ tags:
 githubUrl: https://github.com/Trosalie/projetChat
 img: ../../assets/projets/projet-chat/couverture.webp
 img_alt: "Three terminals during a real chat session: the server logs connections and messages on the general channel, lea chats with hugo, and ines, on arrival, receives the history of the five previous messages."
+img_mobile: ../../assets/projets/projet-chat/vignette-mobile.webp
 period: "2026"
 context: Coursework, BUT Computer Science
 identity:

@@ -84,6 +84,10 @@ function listStructuralGaps(fr: WorkEntry[], en: WorkEntry[]): string[] {
 			gaps.push(`${frShots} capture(s) de galerie en francais contre ${enShots} en anglais`);
 		}
 
+		if (frEntry.data.img_mobile?.src !== enEntry.data.img_mobile?.src) {
+			gaps.push('recadrage mobile différent');
+		}
+
 		const frLayers = frEntry.data.stack.map((group) => group.layer);
 		const enLayers = enEntry.data.stack.map((group) => group.layer);
 		if (frLayers.length !== enLayers.length) {

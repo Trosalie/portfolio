@@ -12,6 +12,7 @@ tags:
 demoUrl: https://www.chronopotes.fr
 img: ../../assets/projets/chronopotes/couverture.webp
 img_alt: "Three ChronoPotes screens side by side: the home screen with the daily challenge and the five Free Play modes, the result of a Classic game rated Masterclass, and the summary of a Survival game."
+img_mobile: ../../assets/projets/chronopotes/vignette-mobile.webp
 period: June – November 2026
 context: Personal project, live
 team: Solo

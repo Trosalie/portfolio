@@ -110,6 +110,19 @@ test('le nom dans le cadre est caché aux lecteurs d’écran', () => {
 	assert.match(tile('/work/', 'seenit'), /class="frame-title[^"]*"[^>]*aria-hidden="true"/);
 });
 
+test('chaque vignette sert un recadrage sous 50em', () => {
+	for (const slug of SLUGS) {
+		const source = tile('/work/', slug).match(/<source[^>]*>/)?.[0] ?? '';
+		assert.ok(source.includes('media="(max-width: 49.99em)"'), slug);
+		assert.match(source, /srcset="[^"]*\.webp/, slug);
+	}
+	assert.ok(tile('/en/work/', 'seenit').includes('<source'));
+});
+
+test('la couverture d’une page projet n’est pas recadrée', () => {
+	assert.ok(!page('/work/seenit/').includes('<source'));
+});
+
 test('les liens anglais restent en anglais', () => {
 	assert.ok(page('/en/work/').includes('href="/en/work/seenit"'));
 });

@@ -11,6 +11,7 @@ tags:
 githubUrl: https://github.com/kevin-oulai/COVOIT-ETUD
 img: ../../assets/projets/covoit-etud/couverture.webp
 img_alt: "Résultats de recherche de Covoit'Etud : trois trajets du 24 novembre entre Biarritz et Anglet, avec leurs horaires, les places restantes et le prix. Les personnes et les trajets sont fictifs."
+img_mobile: ../../assets/projets/covoit-etud/vignette-mobile.webp
 gallery:
   - src: ../../assets/projets/covoit-etud/reservations.webp
     alt: "Page Mes réservations : deux trajets réservés, chacun avec le nom du conducteur, l'itinéraire, l'horaire, le nombre de places réservées et le prix."

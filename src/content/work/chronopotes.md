@@ -12,6 +12,7 @@ tags:
 demoUrl: https://www.chronopotes.fr
 img: ../../assets/projets/chronopotes/couverture.webp
 img_alt: "Trois écrans de ChronoPotes côte à côte : l'accueil avec le défi du jour et les cinq modes du Jeu libre, le résultat d'une partie de Classique notée Masterclass, et le bilan d'une partie de Survie."
+img_mobile: ../../assets/projets/chronopotes/vignette-mobile.webp
 period: Juin – novembre 2026
 context: Projet personnel, en ligne
 team: Seul

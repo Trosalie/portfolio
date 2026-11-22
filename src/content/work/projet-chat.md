@@ -10,6 +10,7 @@ tags:
 githubUrl: https://github.com/Trosalie/projetChat
 img: ../../assets/projets/projet-chat/couverture.webp
 img_alt: "Trois terminaux pendant une vraie session du chat : le serveur journalise les connexions et les messages du channel general, lea y échange avec hugo, et ines reçoit à son arrivée l'historique des cinq messages précédents."
+img_mobile: ../../assets/projets/projet-chat/vignette-mobile.webp
 period: "2026"
 context: Projet de cours en BUT Informatique
 identity:

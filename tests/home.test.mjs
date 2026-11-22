@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { chunk, page, text } from './helpers.mjs';
+import { chunk, page, pageCss, text } from './helpers.mjs';
 
 test('l’en-tête dit ce que fait Thibault', () => {
 	assert.equal(
@@ -37,4 +37,8 @@ test('ni compétences, ni portrait, ni salutation', () => {
 test('le bloc de contact est une phrase et un lien', () => {
 	assert.ok(text(page('/')).includes("Vous recrutez un développeur full stack ? M'écrire"));
 	assert.ok(text(page('/en/')).includes('Hiring a full stack developer? Get in touch'));
+});
+
+test('le titre de l’accueil se resserre sur téléphone', () => {
+	assert.match(pageCss('/'), /h1[^{]*\{[^}]*font-size:\s*1\.75rem/);
 });

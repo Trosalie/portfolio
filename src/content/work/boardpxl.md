@@ -11,6 +11,7 @@ tags:
 githubUrl: https://github.com/Trosalie/projetsportpxl
 img: ../../assets/projets/sportpxl/couverture.webp
 img_alt: "Liste des photographes du tableau de bord SportPXL, menu ouvert : pour chacun, le chiffre d'affaires, les crédits restants et le statut des factures. Les photographes sont fictifs."
+img_mobile: ../../assets/projets/sportpxl/vignette-mobile.webp
 gallery:
   - src: ../../assets/projets/sportpxl/graphique.webp
     alt: "Graphique général : courbe des ventes de crédits de juillet à septembre 2026, filtres à gauche, et totaux du chiffre d'affaires et des crédits vendus."

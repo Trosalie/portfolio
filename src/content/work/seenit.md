@@ -11,6 +11,7 @@ tags:
   - API TMDb
 img: ../../assets/projets/seenit/couverture.webp
 img_alt: "Accueil de Seenit : le fronton À l'affiche annonce trois séances prévues, au-dessus de la recherche, des filtres et du début de l'étagère des derniers visionnages."
+img_mobile: ../../assets/projets/seenit/vignette-mobile.webp
 period: Novembre 2026
 context: Projet personnel
 team: Seul

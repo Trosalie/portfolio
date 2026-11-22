@@ -89,6 +89,10 @@ const workSchema = ({ image }: SchemaContext) =>
 			tags: z.array(z.string()),
 			img: image().optional(),
 			img_alt: z.string().optional(),
+			// Sous 50em, la vignette montre ce detail de l'interface plutot que la
+			// capture entiere, illisible a 290 px de large. Decoupe par
+			// scripts/crop-mobile-tiles.mjs, au meme format que la vignette (16:10).
+			img_mobile: image().optional(),
 			githubUrl: z.string().url().optional(),
 			demoUrl: z.string().url().optional(),
 

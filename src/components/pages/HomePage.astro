@@ -63,9 +63,11 @@ const projects = (await getWorkCollection(lang)).slice(0, 4);
 		gap: 1.25rem;
 	}
 
+	/* Sur telephone, un titre plus court laisse voir le premier projet des le
+	   premier ecran. */
 	h1 {
 		max-width: 22ch;
-		font-size: clamp(var(--step-4), 4vw, var(--step-5));
+		font-size: 1.75rem;
 		letter-spacing: -0.02em;
 	}
 
@@ -92,6 +94,10 @@ const projects = (await getWorkCollection(lang)).slice(0, 4);
 	@media (min-width: 50em) {
 		.home {
 			gap: 5rem;
+		}
+
+		h1 {
+			font-size: clamp(var(--step-4), 4vw, var(--step-5));
 		}
 	}
 </style>

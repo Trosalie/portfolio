@@ -11,6 +11,7 @@ tags:
   - Modbus TCP
 img: ../../assets/projets/bluepoint/flux-detection.webp
 img_alt: "BluePoint WasteIdentifier main window: a plastic container tracked by an oriented box on the conveyor feed, the list of classified objects, and the spectral curve of the identified material."
+img_mobile: ../../assets/projets/bluepoint/vignette-mobile.webp
 period: April – August 2026
 context: End-of-degree internship at Compositadour
 team: Sole developer on the application

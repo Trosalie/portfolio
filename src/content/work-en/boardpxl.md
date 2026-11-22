@@ -11,6 +11,7 @@ tags:
 githubUrl: https://github.com/Trosalie/projetsportpxl
 img: ../../assets/projets/sportpxl/couverture.webp
 img_alt: "SportPXL dashboard photographer list with the menu open: revenue, remaining credits and invoice status for each. The photographers are fictional."
+img_mobile: ../../assets/projets/sportpxl/vignette-mobile.webp
 gallery:
   - src: ../../assets/projets/sportpxl/graphique.webp
     alt: "General chart: credit sales from July to September 2026, filters on the left, and totals for revenue and credits sold."

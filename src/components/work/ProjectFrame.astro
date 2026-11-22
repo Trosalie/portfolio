@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { getImage, Image } from 'astro:assets';
 import '@fontsource/dm-mono/latin-500.css';
 import '@fontsource/jost/latin-500.css';
 import '@fontsource/oswald/latin-600.css';
@@ -13,7 +13,8 @@ import type { WorkEntry } from '../../data/work';
  * identite prend un cadre encre et le nom dans la police du site.
  *
  * `tile` : la vignette des listes, nom du produit en tete (decoratif, le lien
- * est nomme par l'etiquette), capture recadree au meme format pour toutes.
+ * est nomme par l'etiquette), capture recadree au meme format pour toutes ;
+ * sous 50em, un detail de l'interface (`img_mobile`) remplace la capture.
  * `cover` : la couverture d'une page projet, capture entiere et decrite.
  */
 interface Props {
@@ -39,6 +40,17 @@ const sizes = isCover
 		? '(min-width: 50em) 40rem, 100vw'
 		: '(min-width: 50em) 34rem, 100vw';
 const widths = isCover ? [640, 1024, 1600] : [480, 800, 1200];
+
+// Le recadrage mobile est etroit par choix (voir scripts/crop-mobile-tiles.mjs) :
+// on ne demande jamais une largeur superieure a celle du fichier.
+const mobileImage = variant === 'tile' ? data.img_mobile : undefined;
+const mobile = mobileImage
+	? await getImage({
+			src: mobileImage,
+			widths: [...new Set([640, 960].map((width) => Math.min(width, mobileImage.width)))],
+			format: 'webp',
+		})
+	: undefined;
 ---
 
 <div
@@ -49,14 +61,26 @@ const widths = isCover ? [640, 1024, 1600] : [480, 800, 1200];
 	{!isCover && data.img && <span class="frame-title" aria-hidden="true">{data.title}</span>}
 	{
 		data.img ? (
-			<Image
-				src={data.img}
-				alt={isCover ? data.img_alt! : ''}
-				widths={widths}
-				sizes={sizes}
-				loading={isCover ? 'eager' : 'lazy'}
-				decoding="async"
-			/>
+			<picture>
+				{mobile && mobileImage && (
+					<source
+						media="(max-width: 49.99em)"
+						srcset={mobile.srcSet.attribute}
+						sizes="100vw"
+						width={mobileImage.width}
+						height={mobileImage.height}
+						type="image/webp"
+					/>
+				)}
+				<Image
+					src={data.img}
+					alt={isCover ? data.img_alt! : ''}
+					widths={widths}
+					sizes={sizes}
+					loading={isCover ? 'eager' : 'lazy'}
+					decoding="async"
+				/>
+			</picture>
 		) : (
 			<span class="frame-name" aria-hidden="true">
 				{data.title}
@@ -77,6 +101,7 @@ const widths = isCover ? [640, 1024, 1600] : [480, 800, 1200];
 		border: 0.35rem solid var(--frame-border);
 	}
 
+	picture,
 	img {
 		display: block;
 		width: 100%;

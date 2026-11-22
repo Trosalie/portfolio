@@ -11,6 +11,7 @@ tags:
   - Modbus TCP
 img: ../../assets/projets/bluepoint/flux-detection.webp
 img_alt: "Fenêtre principale de BluePoint WasteIdentifier : un bidon plastique suivi par une boîte orientée sur le flux du convoyeur, la liste des objets classés et la courbe spectrale de la matière identifiée."
+img_mobile: ../../assets/projets/bluepoint/vignette-mobile.webp
 period: Avril – août 2026
 context: Stage de fin de BUT chez Compositadour
 team: Seul sur l'application
