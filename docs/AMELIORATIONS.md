@@ -243,35 +243,39 @@ Audit front-end mené sur le site construit, à 1440 px et à 375 px, après la 
 « La vitrine ». Classé du plus urgent au moins urgent. Les points 1, 2 et 4 sont les trois
 retenus en premier.
 
-- [ ] **1. La vitrine ne marche que pour 2 projets sur 6.** BluePoint, Projet Chat, SportPXL et
+- [x] **1. La vitrine ne marche que pour 2 projets sur 6.** BluePoint, Projet Chat, SportPXL et
   Covoit'Etud retombent sur le même cadre encre et la police du site
   (`src/components/work/ProjectFrame.astro:27`) : sur `/work/`, quatre vignettes identiques sur
   six, et l'idée forte du site s'efface. Chacun a pourtant une identité visible dans ses
   captures (logo et orange de SportPXL, bleu pervenche de Covoit'Etud, interface industrielle
   sombre de BluePoint, terminal du Chat).
-  → Séparer le cadre du nuancier (le schéma impose aujourd'hui palette, polices et pièce
-  d'interface à toute identité) et donner un cadre à chacun, avec au besoin de nouveaux styles
-  de titre dans `src/data/identity.ts:15`.
+  → Le nuancier est devenu facultatif mais entier, et les six projets ont un cadre. Trois
+  styles de titre s'ajoutent : la police du site (Covoit'Etud, BluePoint), Jost en capitales
+  (SportPXL, à la place de Futura, commerciale) et DM Mono (Projet Chat). Un test exige 4,5:1
+  entre chaque titre et son fond. Le liseré de SportPXL est marine : l'orange des boutons lisait
+  comme un état sélectionné.
 
-- [ ] **2. Sur téléphone, les vignettes sont des miniatures d'écran de bureau.** Les captures
+- [x] **2. Sur téléphone, les vignettes sont des miniatures d'écran de bureau.** Les captures
   sont recadrées en 16:10 (`ProjectFrame.astro:88`) : à 375 px, l'accueil de Seenit ou le flux
   de BluePoint font 300 px de large et ne se lisent plus. Le titre de l'accueil prend sept
   lignes et le premier projet n'apparaît qu'au bas du premier écran. Les recruteurs ouvrent
   souvent le lien depuis LinkedIn, sur téléphone.
-  → Un recadrage propre au mobile (`<picture>`) sur un détail parlant de chaque produit, et un
-  titre d'accueil plus petit sous 50em.
+  → Sous 50em, chaque vignette sert un détail de l'interface (`img_mobile`, découpé par
+  `scripts/crop-mobile-tiles.mjs`, de 460 à 820 px de large pour que le texte reste lisible).
+  Le titre de l'accueil passe à 1,75rem : le premier projet apparaît dans le premier écran.
 
 - [ ] **3. Aucune capture ne s'agrandit.** La couverture et la galerie n'ouvrent rien ; un clic
   sur une voisine la centre seulement (`src/components/project/ProjectGallery.astro:169`).
   → Une visionneuse plein écran sur `<dialog>` natif : Échap, flèches du clavier, zoom au
   pincement.
 
-- [ ] **4. Les pages projet ne mènent nulle part et laissent une colonne vide.** Sur grand
+- [x] **4. Les pages projet ne mènent nulle part et laissent une colonne vide.** Sur grand
   écran, le tiers droit reste vide pendant que période, cadre et équipe tiennent en trois
   lignes grises (`src/components/project/ProjectHero.astro:26`) et que la stack est tout en bas
   (`src/layouts/ProjectLayout.astro:72`). La page finit sur le bloc de contact, sans suite.
-  → Une fiche du projet (période, cadre, équipe, stack, liens) qui occupe ce côté, et un lien
-  « Projet suivant » en bas de page, présenté dans le cadre de ce projet.
+  → Une fiche (période, cadre, équipe, technologies) à droite du titre à partir de 50em, sous
+  les liens en dessous ; la stack détaillée reste en bas. La page finit sur « Projet suivant »,
+  un bandeau dans le cadre du projet suivant, le premier après le dernier.
 
 - [ ] **5. La liste des projets finit sur une vignette orpheline et ne hiérarchise rien.** Un
   projet en vedette puis cinq en grille de deux (`src/styles/global.css:245`) : Covoit'Etud
