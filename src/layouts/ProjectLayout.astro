@@ -11,6 +11,7 @@ import ProjectSection from '../components/project/ProjectSection.astro';
 import RoleCallout from '../components/project/RoleCallout.astro';
 import StackTable from '../components/project/StackTable.astro';
 import BaseLayout from './BaseLayout.astro';
+import { hasSpecimen } from '../data/identity';
 import { normalizeFeatures, type WorkEntry } from '../data/work';
 import { useTranslations, type Lang } from '../i18n/ui';
 
@@ -19,7 +20,8 @@ import { useTranslations, type Lang } from '../i18n/ui';
  *
  * L'ordre des sections sert la personne qui recrute : ce qu'est le projet,
  * puis ce que Thibault y a fait, avant le detail des fonctionnalites. Le
- * nuancier n'apparait que pour un projet qui a une identite visuelle.
+ * nuancier n'apparait que pour un projet qui en declare un : un cadre seul ne
+ * suffit pas.
  */
 interface Props {
 	entry: WorkEntry;
@@ -57,7 +59,7 @@ const features = normalizeFeatures(entry.data.features);
 			</ProjectSection>
 
 			{
-				entry.data.identity && (
+				hasSpecimen(entry.data.identity) && (
 					<ProjectSection title={t('work.section.identity')}>
 						<IdentitySpecimen identity={entry.data.identity} lang={lang} />
 					</ProjectSection>

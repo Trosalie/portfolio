@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { identityGaps } from '../src/data/identity.ts';
+import { hasSpecimen, identityGaps, isPartialSpecimen } from '../src/data/identity.ts';
 
 const base = {
 	frame: { background: '#101216', titleColor: '#F5C518', titleStyle: 'oswald-caps' },
@@ -63,4 +63,32 @@ test('cadre, polices ou pièce différents', () => {
 	const c = structuredClone(base);
 	c.specimen = 'seenit-ticket';
 	assert.deepEqual(identityGaps(base, c), ["pièce d'interface différente"]);
+});
+
+const frameOnly = { frame: { background: '#1F1F1F', titleColor: '#338CD2', titleStyle: 'site' } };
+
+test('un cadre seul, identique dans les deux langues : aucun écart', () => {
+	assert.deepEqual(identityGaps(frameOnly, structuredClone(frameOnly)), []);
+});
+
+test('un cadre seul qui diffère entre les langues', () => {
+	const en = structuredClone(frameOnly);
+	en.frame.titleColor = '#338CD3';
+	assert.deepEqual(identityGaps(frameOnly, en), ['cadre différent']);
+});
+
+test('un nuancier dans une seule langue', () => {
+	const fr = { ...structuredClone(base), frame: structuredClone(frameOnly.frame) };
+	assert.deepEqual(identityGaps(fr, frameOnly), ['nuancier présent dans une seule langue']);
+	assert.deepEqual(identityGaps(frameOnly, fr), ['nuancier présent dans une seule langue']);
+});
+
+test('le nuancier est entier ou absent', () => {
+	assert.equal(hasSpecimen(base), true);
+	assert.equal(hasSpecimen(frameOnly), false);
+	assert.equal(hasSpecimen(undefined), false);
+	assert.equal(isPartialSpecimen(base), false);
+	assert.equal(isPartialSpecimen(frameOnly), false);
+	const { specimen, ...partial } = base;
+	assert.equal(isPartialSpecimen(partial), true);
 });

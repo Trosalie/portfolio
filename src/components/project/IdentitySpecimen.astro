@@ -5,7 +5,7 @@ import '@fontsource/oswald/latin-600.css';
 import '@fontsource/playfair-display/latin-600.css';
 import '@fontsource/space-mono/latin-700.css';
 
-import type { ProjectIdentity } from '../../data/identity';
+import type { ProjectSpecimen } from '../../data/identity';
 import { useTranslations, type Lang } from '../../i18n/ui';
 import ChronoFlaps from './specimens/ChronoFlaps.astro';
 import SeenitTicket from './specimens/SeenitTicket.astro';
@@ -16,7 +16,7 @@ import SeenitTicket from './specimens/SeenitTicket.astro';
  * de les affirmer.
  */
 interface Props {
-	identity: ProjectIdentity;
+	identity: ProjectSpecimen;
 	lang: Lang;
 }
 

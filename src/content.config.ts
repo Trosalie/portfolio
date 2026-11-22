@@ -1,7 +1,7 @@
 import { defineCollection, z, type SchemaContext } from 'astro:content';
 import { glob } from 'astro/loaders';
 
-import { specimenFonts, specimens, titleStyles } from './data/identity';
+import { isPartialSpecimen, specimenFonts, specimens, titleStyles } from './data/identity';
 
 /**
  * Une fonctionnalite s'ecrit en une ligne, ou en objet quand elle merite une
@@ -33,18 +33,32 @@ const galleryItemSchema = ({ image }: SchemaContext) =>
 /** Un code couleur hexadecimal a six chiffres. */
 const hex = z.string().regex(/^#[0-9A-Fa-f]{6}$/);
 
-/** Voir src/data/identity.ts : les listes fermees et le controle entre les langues y vivent. */
-const identitySchema = z.object({
-	frame: z.object({
-		background: hex,
-		border: hex.optional(),
-		titleColor: hex,
-		titleStyle: z.enum(titleStyles),
-	}),
-	palette: z.array(z.object({ name: z.string(), hex })).min(2).max(6),
-	fonts: z.array(z.object({ family: z.enum(specimenFonts), role: z.string() })).min(1),
-	specimen: z.enum(specimens),
-});
+/**
+ * Voir src/data/identity.ts : les listes fermees et le controle entre les langues y vivent.
+ * Le cadre est requis ; le nuancier (palette, polices, piece) est facultatif mais
+ * se declare en entier : un nuancier a moitie rempli afficherait une section boiteuse.
+ */
+const identitySchema = z
+	.object({
+		frame: z.object({
+			background: hex,
+			border: hex.optional(),
+			titleColor: hex,
+			titleStyle: z.enum(titleStyles),
+		}),
+		palette: z.array(z.object({ name: z.string(), hex })).min(2).max(6).optional(),
+		fonts: z.array(z.object({ family: z.enum(specimenFonts), role: z.string() })).min(1).optional(),
+		specimen: z.enum(specimens).optional(),
+	})
+	.superRefine((identity, ctx) => {
+		if (isPartialSpecimen(identity)) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				path: ['specimen'],
+				message: 'Le nuancier (palette, fonts, specimen) se déclare en entier ou pas du tout.',
+			});
+		}
+	});
 
 /** Une couche de la stack et les technologies qui la composent. */
 const stackGroupSchema = z.object({

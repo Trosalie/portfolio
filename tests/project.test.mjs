@@ -53,6 +53,11 @@ test('pas de nuancier pour un projet sans identité', () => {
 	assert.ok(!page('/work/bluepoint-waste-identifier/').includes('Identité visuelle'));
 });
 
+test('le nuancier dépend du nuancier, pas du cadre', () => {
+	const layout = srcFiles(['.astro']).find((f) => f.path.endsWith('layouts/ProjectLayout.astro')).content;
+	assert.match(layout, /hasSpecimen\(entry\.data\.identity\)/);
+});
+
 test('ni pilules, ni points médians, ni icônes de fonctionnalité', () => {
 	for (const slug of ['seenit', 'covoit-etud']) {
 		const html = page(`/work/${slug}/`);
