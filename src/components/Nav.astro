@@ -126,12 +126,28 @@ const isCurrentPage = (href: string) => {
 			// Toggle menu visibility when the menu button is clicked.
 			btn.addEventListener('click', () => setExpanded(menu.hidden));
 
+			// Au-dela de 50em le menu est toujours affiche : rien ne l'y ferme.
+			const mediaQueries = window.matchMedia('(min-width: 50em)');
+			const canClose = () => !mediaQueries.matches && !menu.hidden;
+
+			document.addEventListener('keydown', (event) => {
+				if (event.key !== 'Escape' || !canClose()) return;
+				setExpanded(false);
+				btn.focus();
+			});
+
+			const nav = this.closest('nav')!;
+			// `pointerdown` et non `click` : iOS n'envoie pas de clic au document quand on
+			// touche un element qui ne se clique pas.
+			document.addEventListener('pointerdown', (event) => {
+				if (canClose() && !nav.contains(event.target as Node)) setExpanded(false);
+			});
+
 			// Hide menu button for large screens.
 			const handleViewports = (e: MediaQueryList | MediaQueryListEvent) => {
 				setExpanded(e.matches);
 				btn.hidden = e.matches;
 			};
-			const mediaQueries = window.matchMedia('(min-width: 50em)');
 			handleViewports(mediaQueries);
 			mediaQueries.addEventListener('change', handleViewports);
 		}
