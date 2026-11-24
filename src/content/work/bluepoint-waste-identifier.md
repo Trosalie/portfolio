@@ -1,5 +1,6 @@
 ---
 title: BluePoint WasteIdentifier
+level: featured
 publishDate: 2026-08-01 00:00:00
 description: |
   Application desktop d'identification et de suivi de déchets en temps réel sur convoyeur réalisé dans le cadre du projet européen BluePoint. Elle croise une caméra industrielle, un modèle YOLO et une caméra hyperspectrale pour reconnaître la matière de chaque objet, pour transmettre des trames TCP pour chaque déchet.

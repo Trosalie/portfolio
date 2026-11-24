@@ -2,6 +2,7 @@ import { defineCollection, z, type SchemaContext } from 'astro:content';
 import { glob } from 'astro/loaders';
 
 import { isPartialSpecimen, specimenFonts, specimens, titleStyles } from './data/identity';
+import { projectLevels } from './data/levels';
 
 /**
  * Une fonctionnalite s'ecrit en une ligne, ou en objet quand elle merite une
@@ -84,6 +85,9 @@ const workSchema = ({ image }: SchemaContext) =>
 	z
 		.object({
 			title: z.string(),
+			// Voir src/data/levels.ts. Obligatoire : un projet oublie tomberait au
+			// mauvais endroit de la liste sans que rien ne le signale.
+			level: z.enum(projectLevels),
 			description: z.string(),
 			publishDate: z.coerce.date(),
 			tags: z.array(z.string()),

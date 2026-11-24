@@ -1,5 +1,6 @@
 ---
 title: Covoit'Etud
+level: university
 publishDate: 2024-10-08 00:00:00
 description: |
   Responsive carpooling web app for students that lets them propose or join rides, manage driver profiles, and cut travel costs.

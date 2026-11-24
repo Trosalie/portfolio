@@ -1,5 +1,6 @@
 ---
 title: SportPXL Dashboard
+level: university
 publishDate: 2025-09-15 00:00:00
 description: |
   Tableau de bord financier pour SportPXL, qui permet aux photographes et administrateurs de gérer les transactions, crédits et historiques financiers de manière centralisée.

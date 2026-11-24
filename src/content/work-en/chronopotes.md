@@ -1,5 +1,6 @@
 ---
 title: ChronoPotes
+level: featured
 publishDate: 2026-11-20 00:00:00
 description: |
   A daily web game about timing, rebuilt from scratch: stop a timer blind, as close as possible to a target. One shared challenge a day, duels between friends, groups, and an installable app.

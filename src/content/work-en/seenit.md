@@ -1,5 +1,6 @@
 ---
 title: Seenit
+level: featured
 publishDate: 2026-11-19 00:00:00
 description: |
   A local web app for keeping a film diary: a library laid out as a shelf, a watchlist, a screenings calendar, statistics, and recommendations powered by TMDb.

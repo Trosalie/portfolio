@@ -1,5 +1,6 @@
 ---
 title: Seenit
+level: featured
 publishDate: 2026-11-19 00:00:00
 description: |
   Application web locale pour tenir le journal de ses films : une bibliothèque en forme d'étagère, une liste à voir, un calendrier de séances, des statistiques et des recommandations nourries par TMDb.

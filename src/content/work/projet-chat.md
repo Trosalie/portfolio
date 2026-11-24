@@ -1,5 +1,6 @@
 ---
 title: Projet Chat Multi-Channels
+level: university
 publishDate: 2026-03-19 00:00:00
 description: |
   Application de chat client/serveur en C avec channels dynamiques, historique des messages et gestion multi-clients via threads POSIX.

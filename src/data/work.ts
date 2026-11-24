@@ -94,6 +94,8 @@ function listStructuralGaps(fr: WorkEntry[], en: WorkEntry[]): string[] {
 			gaps.push(`${frShots} capture(s) de galerie en francais contre ${enShots} en anglais`);
 		}
 
+		if (frEntry.data.level !== enEntry.data.level) gaps.push('niveau différent');
+
 		if (frEntry.data.img_mobile?.src !== enEntry.data.img_mobile?.src) {
 			gaps.push('recadrage mobile différent');
 		}

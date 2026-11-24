@@ -1,5 +1,6 @@
 ---
 title: BluePoint WasteIdentifier
+level: featured
 publishDate: 2026-08-01 00:00:00
 description: |
   Desktop application for real-time waste identification on a conveyor belt. It combines an industrial camera, a YOLO model, and a hyperspectral camera to recognise each object's material, then drives the sorting actuators.

@@ -1,5 +1,6 @@
 ---
 title: ChronoPotes
+level: featured
 publishDate: 2026-11-20 00:00:00
 description: |
   Jeu web quotidien de précision temporelle, reconstruit de zéro : arrêter un chronomètre à l'aveugle au plus près d'une cible. Un défi commun chaque jour, des duels entre amis, des groupes et une application installable.

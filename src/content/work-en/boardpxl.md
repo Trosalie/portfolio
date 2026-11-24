@@ -1,5 +1,6 @@
 ---
 title: SportPXL Dashboard
+level: university
 publishDate: 2025-09-15 00:00:00
 description: |
   Financial dashboard for SportPXL that lets photographers and admins manage transactions, credits, and financial history from a single centralised interface.

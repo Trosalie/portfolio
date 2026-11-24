@@ -1,5 +1,6 @@
 ---
 title: Covoit'Etud
+level: university
 publishDate: 2024-10-08 00:00:00
 description: |
   Application web responsive de covoiturage dédiée aux étudiants, qui permet de proposer ou rejoindre des trajets, gérer son profil conducteur et réduire les frais de déplacement.
