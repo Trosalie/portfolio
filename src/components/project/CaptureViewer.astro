@@ -215,7 +215,16 @@ const numbered = (key: 'work.viewer.position' | 'work.gallery.position', index: 
 			else goTo(current + step);
 		});
 
-		dialog.addEventListener('close', () => opener?.focus({ preventScroll: true }));
+		// Ouverte depuis la galerie, la visionneuse y laisse la derniere capture vue ;
+		// le focus suit, sauf si l'on etait parti du bouton « Agrandir ».
+		dialog.addEventListener('close', () => {
+			const last = opener
+				?.closest('[data-gallery]')
+				?.querySelector<HTMLElement>(`a[data-viewer-open="${current}"]`);
+			last?.dispatchEvent(new CustomEvent('gallery:show', { bubbles: true }));
+			const target = opener?.matches('a') ? (last ?? opener) : opener;
+			target?.focus({ preventScroll: true });
+		});
 
 		new ResizeObserver(() => dialog.open && resize()).observe(stage);
 	}

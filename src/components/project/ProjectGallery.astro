@@ -117,6 +117,11 @@ const position = (index: number) =>
 		<button type="button" class="arrow" data-next aria-label={t('work.gallery.next')}>
 			<Icon icon="arrow-right" size="1.25rem" />
 		</button>
+
+		{/* Ouvre la capture centrale : le script tient l'index a jour. */}
+		<button type="button" class="enlarge" data-enlarge data-viewer-open={viewerIndexes[0]}>
+			{t('work.viewer.open')}
+		</button>
 	</div>
 
 	{/* La position change sans que rien ne bouge dans le focus : sans annonce,
@@ -133,6 +138,7 @@ const position = (index: number) =>
 		const live = gallery.querySelector<HTMLElement>('[data-live]');
 		const prev = gallery.querySelector<HTMLButtonElement>('[data-prev]');
 		const next = gallery.querySelector<HTMLButtonElement>('[data-next]');
+		const enlarge = gallery.querySelector<HTMLButtonElement>('[data-enlarge]');
 		const dots = [...gallery.querySelectorAll<HTMLButtonElement>('[data-dot]')];
 		if (!track || !controls || !prev || !next) return;
 
@@ -153,9 +159,11 @@ const position = (index: number) =>
 				if (i === index) dot.setAttribute('aria-current', 'true');
 				else dot.removeAttribute('aria-current');
 			});
+			const link = slides[index]?.querySelector<HTMLElement>('a[data-viewer-open]');
+			if (enlarge && link) enlarge.dataset.viewerOpen = link.dataset.viewerOpen;
 		};
 
-		const goTo = (index: number) => {
+		const goTo = (index: number, instant = false) => {
 			const target = Math.max(0, Math.min(index, slides.length - 1));
 			const slide = slides[target]!;
 			// La diapositive est plus etroite que la piste : on l'amene au centre.
@@ -163,7 +171,7 @@ const position = (index: number) =>
 			// remplissage, si bien que la premiere retombe bien sur zero.
 			track.scrollTo({
 				left: slide.offsetLeft - (track.clientWidth - slide.offsetWidth) / 2,
-				behavior: REDUCED.matches ? 'auto' : 'smooth',
+				behavior: instant || REDUCED.matches ? 'instant' : 'smooth',
 			});
 			render(target);
 			if (live) live.textContent = dots[target]?.getAttribute('aria-label') ?? '';
@@ -176,11 +184,25 @@ const position = (index: number) =>
 		// Une voisine visible a demi appelle le clic. L'affordance est au pointeur
 		// seulement : elle double des commandes deja atteignables au clavier — les
 		// fleches, les pastilles, et la piste elle-meme qui prend le focus.
-		slides.forEach((slide, index) =>
-			slide.addEventListener('click', () => {
-				if (index !== current) goTo(index);
-			}),
-		);
+		// Le clic retenu n'ouvre pas la visionneuse. Entree sur le lien (`detail` a
+		// zero) et les clics avec une touche, qui ouvrent un onglet, passent.
+		slides.forEach((slide, index) => {
+			slide.addEventListener('click', (event) => {
+				const modified = event.ctrlKey || event.metaKey || event.shiftKey || event.altKey;
+				if (index === current || event.detail === 0 || modified) return;
+				event.preventDefault();
+				goTo(index);
+			});
+
+			// Au clavier seulement : un clic donne aussi le focus, et centrer des
+			// l'appui ferait ouvrir la voisine au relachement.
+			slide.addEventListener('focusin', (event) => {
+				if (index !== current && (event.target as Element).matches(':focus-visible')) goTo(index);
+			});
+
+			// La visionneuse se ferme sur cette capture.
+			slide.addEventListener('gallery:show', () => goTo(index, true));
+		});
 
 		// Le defilement au doigt ou a la molette ne passe par aucun bouton : les
 		// pastilles suivent ce que l'utilisateur regarde, pas ce qu'il a clique.
@@ -355,8 +377,34 @@ const position = (index: number) =>
 		color: var(--ink-muted);
 	}
 
+	/* `display: flex` l'emporterait sur l'attribut : sans JavaScript, la barre
+	   s'afficherait avec des boutons sans effet. */
+	.controls[hidden] {
+		display: none;
+	}
+
+	.enlarge {
+		min-height: 2.75rem;
+		padding: 0 0.25rem;
+		border: 0;
+		background: none;
+		color: inherit;
+		font: inherit;
+		font-size: var(--step--1);
+		font-weight: 600;
+		text-decoration: underline;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 0.2em;
+		cursor: zoom-in;
+	}
+
+	.enlarge:hover {
+		text-decoration-thickness: 2px;
+	}
+
 	.controls {
 		display: flex;
+		flex-wrap: wrap;
 		align-items: center;
 		justify-content: center;
 		gap: 1rem;

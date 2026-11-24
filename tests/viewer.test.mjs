@@ -74,3 +74,8 @@ test('pas de visionneuse ailleurs', () => {
 		assert.ok(!page(route).includes('data-viewer'), route);
 	}
 });
+
+test('« Agrandir » est dans la barre de la galerie', () => {
+	assert.ok(text(chunk(page('/work/seenit/'), 'class="controls', '</section>')).includes('Agrandir'));
+	assert.ok(text(chunk(page('/en/work/seenit/'), 'class="controls', '</section>')).includes('Enlarge'));
+});

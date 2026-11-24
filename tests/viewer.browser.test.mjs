@@ -192,8 +192,10 @@ onPage('ferme par Échap, par le bouton et par le fond', '/work/seenit/', {}, as
 });
 
 onPage('rend le focus à la couverture, sans faire défiler la page', '/work/seenit/', {}, async (page) => {
-	await page.evaluate(() => scrollTo(0, 150));
-	await openCover(page);
+	// La couverture sort par le haut : y remettre le focus ne doit pas la ramener.
+	await page.evaluate(() => scrollTo(0, 700));
+	await page.mouse.click(700, 120);
+	assert.equal((await state(page)).open, true);
 	const before = await page.evaluate(() => scrollY);
 	await page.mouse.move(720, 450);
 	await page.mouse.wheel({ deltaY: 600 });
@@ -269,4 +271,126 @@ test('aucune erreur de script sur les pages', async () => {
 		assert.deepEqual(page.errors, [], path);
 		await page.close();
 	}
+});
+
+// La galerie et la visionneuse.
+
+const activeSlide = (page) =>
+	page.evaluate(() => [...document.querySelectorAll('.slide')].findIndex((el) => el.hasAttribute('data-active')));
+const isOpen = (page) => page.$eval('dialog', (el) => el.open);
+const until = (page, index) =>
+	page.waitForFunction((i) => document.querySelectorAll('.slide')[i].hasAttribute('data-active'), {}, index);
+
+/** Amene la galerie a l'ecran, defilement termine. */
+async function toGallery(page) {
+	await page.$eval('.track', (el) => el.scrollIntoView({ block: 'center', behavior: 'instant' }));
+	await settle(page);
+}
+
+/** Clique la partie visible d'une capture, qui deborde de l'ecran quand elle est voisine. */
+async function clickSlide(page, index, options = {}) {
+	const point = await page.evaluate((i) => {
+		const r = document.querySelectorAll('.slide .frame')[i].getBoundingClientRect();
+		const left = Math.max(r.left, 0);
+		const right = Math.min(r.right, innerWidth);
+		return { x: (left + right) / 2, y: r.top + r.height / 2 };
+	}, index);
+	await page.mouse.click(point.x, point.y, options);
+	await settle(page);
+}
+
+onPage('galerie : un clic sur la capture centrale l’ouvre', '/work/seenit/', {}, async (page) => {
+	await toGallery(page);
+	await clickSlide(page, 0);
+	const s = await state(page);
+	assert.deepEqual([s.open, s.index], [true, 1]);
+});
+
+onPage('galerie : un clic sur une voisine la centre', '/work/seenit/', {}, async (page) => {
+	await toGallery(page);
+	await clickSlide(page, 1);
+	assert.equal(await isOpen(page), false);
+	await until(page, 1);
+});
+
+onPage('galerie : Ctrl+clic garde le comportement du lien', '/work/seenit/', {}, async (page) => {
+	// Le nouvel onglet est retenu au bout de la chaine : on ne regarde que la page.
+	await page.evaluate(() => {
+		window.prevented = [];
+		window.addEventListener('click', (event) => {
+			window.prevented.push(event.defaultPrevented);
+			event.preventDefault();
+		});
+	});
+	await toGallery(page);
+	await page.keyboard.down('Control');
+	await clickSlide(page, 0);
+	await clickSlide(page, 1);
+	await page.keyboard.up('Control');
+	assert.equal(await isOpen(page), false);
+	assert.equal(await activeSlide(page), 0);
+	assert.deepEqual(await page.evaluate(() => window.prevented), [false, false]);
+});
+
+onPage('galerie : le clavier centre puis ouvre une voisine', '/work/seenit/', {}, async (page) => {
+	await toGallery(page);
+	await page.focus('.track');
+	await page.keyboard.press('Tab');
+	await page.keyboard.press('Tab');
+	await until(page, 1);
+	await page.keyboard.press('Enter');
+	const s = await state(page);
+	assert.deepEqual([s.open, s.index], [true, 2]);
+});
+
+onPage('galerie : le bouton « Agrandir » ouvre la capture centrale et retrouve le focus', '/work/seenit/', {}, async (page) => {
+	await toGallery(page);
+	await page.click('[data-gallery] [data-next]');
+	await until(page, 1);
+	await page.click('[data-enlarge]');
+	assert.equal((await state(page)).index, 2);
+	await page.keyboard.press('Escape');
+	assert.ok((await focusedData(page)).includes('enlarge'));
+});
+
+onPage('galerie : fermer revient à la dernière capture vue', '/work/seenit/', {}, async (page) => {
+	await toGallery(page);
+	await clickSlide(page, 0);
+	await page.click('dialog [data-next]');
+	await page.click('dialog [data-next]');
+	const before = await page.evaluate(() => scrollY);
+	await page.keyboard.press('Escape');
+	await until(page, 2);
+	await settle(page);
+	assert.equal(await activeSlide(page), 2);
+	const focused = await page.evaluate(() => document.activeElement.closest('.slide')?.matches(':nth-child(3)'));
+	assert.equal(focused, true);
+	assert.equal(await page.evaluate(() => scrollY), before);
+	const centred = await page.evaluate(() => {
+		const r = document.querySelector('.slide:nth-child(3)').getBoundingClientRect();
+		const track = document.querySelector('.track').getBoundingClientRect();
+		return Math.abs((r.left + r.right) / 2 - (track.left + track.right) / 2);
+	});
+	assert.ok(centred < 3, String(centred));
+});
+
+onPage('galerie : si la dernière vue n’y est pas, le focus revient au départ', '/work/seenit/', {}, async (page) => {
+	await toGallery(page);
+	await clickSlide(page, 0);
+	await page.click('dialog [data-prev]');
+	assert.equal((await state(page)).index, 0);
+	await page.keyboard.press('Escape');
+	assert.equal(await page.evaluate(() => document.activeElement.closest('.slide')?.matches(':first-child')), true);
+});
+
+onPage('BluePoint : depuis la couverture, le focus revient à la couverture', '/work/bluepoint-waste-identifier/', {}, async (page) => {
+	await openCover(page);
+	await page.click('dialog [data-next]');
+	await page.keyboard.press('Escape');
+	assert.equal(await focus(page), 'cover-link');
+});
+
+onPage('galerie sans JavaScript : pas de commandes, cinq liens', '/work/seenit/', { js: false }, async (page) => {
+	assert.equal((await page.$$('.slide a[data-viewer-open]')).length, 5);
+	assert.equal(await page.$eval('.controls', (el) => getComputedStyle(el).display), 'none');
 });
