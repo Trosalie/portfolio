@@ -9,6 +9,11 @@ export const projectLevels = ['featured', 'university'] as const;
 
 export type ProjectLevel = (typeof projectLevels)[number];
 
+/** L'ecart de niveau entre les deux versions d'un projet, pour le controle du build. */
+export function levelGaps(fr: ProjectLevel, en: ProjectLevel): string[] {
+	return fr === en ? [] : ['niveau différent'];
+}
+
 /** Les projets par niveau, chacun dans l'ordre de la liste. */
 export function byLevel<T extends { data: { level: ProjectLevel } }>(entries: T[]): Record<ProjectLevel, T[]> {
 	const of = (level: ProjectLevel) => entries.filter((entry) => entry.data.level === level);

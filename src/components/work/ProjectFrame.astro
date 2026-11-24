@@ -47,7 +47,11 @@ const tileSizes: Record<TileSize, string> = {
 	small: '(min-width: 50em) 19rem, 100vw',
 };
 const sizes = isCover ? '(min-width: 50em) 66rem, 100vw' : tileSizes[size];
-const widths = isCover ? [640, 1024, 1600] : [320, 480, 640, 800, 1200];
+const widths = isCover
+	? [640, 1024, 1600]
+	: size === 'wide'
+		? [640, 800, 1200, 1600, 1920]
+		: [320, 480, 640, 800, 1200];
 
 // Le recadrage mobile est etroit par choix (voir scripts/crop-mobile-tiles.mjs) :
 // on ne demande jamais une largeur superieure a celle du fichier.

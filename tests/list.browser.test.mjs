@@ -48,7 +48,29 @@ const content = (page) =>
 		return el.clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight);
 	});
 
-const overflows = (page) => page.evaluate(() => document.documentElement.scrollWidth > innerWidth);
+/**
+ * Ce qui sort de sa place. `body` rogne ce qui depasse : la largeur du document ne
+ * dit donc rien, on regarde les boites elles-memes.
+ */
+const strays = (page) =>
+	page.evaluate(() => {
+		const width = document.documentElement.clientWidth;
+		const out = [];
+		for (const el of document.querySelectorAll('main *')) {
+			const { left, right } = el.getBoundingClientRect();
+			if (left < -1 || right > width + 1) out.push(`${el.className || el.tagName} hors de l'écran (${Math.round(right)})`);
+		}
+		for (const item of document.querySelectorAll('.tiles > li')) {
+			const place = item.getBoundingClientRect();
+			for (const el of item.querySelectorAll('a.tile, .project-frame, .cartel, .frame-title, .cartel p')) {
+				const box = el.getBoundingClientRect();
+				if (box.right > place.right + 1 || el.scrollWidth > el.clientWidth + 1) {
+					out.push(`${el.className || el.tagName} hors de sa place : ${el.textContent.trim().slice(0, 20)}`);
+				}
+			}
+		}
+		return out;
+	});
 const same = (values, message) => values.forEach((value) => near(value, values[0], message));
 
 /** Des vignettes sur une meme rangee : cadres egaux, captures et cartels alignes. */
@@ -77,7 +99,7 @@ for (const path of ['/work/', '/en/work/']) {
 	for (const width of WIDTHS) {
 		test(`${path} à ${width} px`, () =>
 			at(path, width, async (page) => {
-				assert.equal(await overflows(page), false, 'défilement horizontal');
+				assert.deepEqual(await strays(page), []);
 
 				const wide = await tiles(page, '.tiles--wide');
 				assert.equal(wide.length, 3);
@@ -106,14 +128,39 @@ test('à 1440 px, un phare fait 648 px et le BUT est plus loin qu’un phare de 
 		assert.ok(heading - wide[2].frame.bottom > between, `${heading - wide[2].frame.bottom} et ${between}`);
 	}));
 
-test('texte à 200 % : aucun nom ne déborde de son cadre', () =>
-	at('/work/', 820, async (page) => {
-		await page.evaluate(() => (document.documentElement.style.fontSize = '200%'));
-		const titles = await page.$$eval('.frame-title', (els) => els.map((el) => [el.textContent, el.scrollWidth, el.clientWidth]));
-		assert.equal(titles.length, 6);
-		titles.forEach(([name, scroll, client]) => assert.ok(scroll <= client, `${name} : ${scroll} dans ${client}`));
-		assert.equal(await overflows(page), false);
-	}));
+for (const path of ['/work/', '/en/work/', '/', '/en/']) {
+	for (const width of [800, 820, 1024]) {
+		for (const size of ['160%', '200%']) {
+			test(`${path} à ${width} px, texte à ${size} : rien ne sort de sa place`, () =>
+				at(path, width, async (page) => {
+					await page.evaluate((value) => (document.documentElement.style.fontSize = value), size);
+					assert.deepEqual(await strays(page), []);
+				}));
+		}
+	}
+}
+
+// Un phare prend toute la largeur entre 50em et 64em : net aussi sur un ecran 2x.
+for (const width of [820, 1023, 1440]) {
+	test(`/work/ à ${width} px, écran 2x : les phares restent nets`, () =>
+		at('/work/', width, async (page) => {
+			await page.setViewport({ width, height: 900, deviceScaleFactor: 2 });
+			await page.reload({ waitUntil: 'networkidle0' });
+			const images = await page.$$eval('.tiles--wide img', async (els) =>
+				Promise.all(
+					els.map(async (img) => {
+						img.loading = 'eager';
+						await img.decode();
+						const file = new Image();
+						file.src = img.currentSrc;
+						await file.decode();
+						return [img.currentSrc, file.naturalWidth / (img.getBoundingClientRect().width * 2)];
+					}),
+				),
+			);
+			images.forEach(([src, ratio]) => assert.ok(ratio >= 0.99 && ratio <= 1.7, `${src} : ${ratio.toFixed(2)}`));
+		}));
+}
 
 for (const path of ['/work/', '/']) {
 	test(`${path} à 1440 px : des images à la taille de leur place`, () =>
@@ -143,7 +190,7 @@ for (const path of ['/', '/en/']) {
 	for (const width of WIDTHS) {
 		test(`${path} à ${width} px`, () =>
 			at(path, width, async (page) => {
-				assert.equal(await overflows(page), false, 'défilement horizontal');
+				assert.deepEqual(await strays(page), []);
 				const pair = await tiles(page, '.tiles--pair');
 				assert.deepEqual(pair.map((t) => t.slug), ['chronopotes', 'seenit', 'bluepoint-waste-identifier']);
 				same(pair.map((t) => t.frame.width), 'cadres de même largeur');

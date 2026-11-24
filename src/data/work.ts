@@ -15,6 +15,7 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import type { Lang } from '../i18n/ui';
 import { identityGaps } from './identity';
+import { levelGaps } from './levels';
 
 export type WorkEntry = CollectionEntry<'work'> | CollectionEntry<'work-en'>;
 
@@ -94,7 +95,7 @@ function listStructuralGaps(fr: WorkEntry[], en: WorkEntry[]): string[] {
 			gaps.push(`${frShots} capture(s) de galerie en francais contre ${enShots} en anglais`);
 		}
 
-		if (frEntry.data.level !== enEntry.data.level) gaps.push('niveau différent');
+		gaps.push(...levelGaps(frEntry.data.level, enEntry.data.level));
 
 		if (frEntry.data.img_mobile?.src !== enEntry.data.img_mobile?.src) {
 			gaps.push('recadrage mobile différent');
@@ -154,7 +155,7 @@ export async function getWorkCollection(lang: Lang): Promise<WorkEntry[]> {
 	if (gaps.length > 0) {
 		throw new Error(
 			`Les deux versions de certains projets ont diverge (${gaps.join(' ; ')}). ` +
-				'Les fonctionnalites, les couches de stack, les captures et l\'identite visuelle ' +
+				'Le niveau, les fonctionnalites, les couches de stack, les captures et l\'identite visuelle ' +
 				'sont des donnees : chaque ajout ou correction dans une langue doit etre reporte ' +
 				'dans l\'autre. Voir src/data/work.ts et src/data/identity.ts.',
 		);

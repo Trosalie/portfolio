@@ -31,6 +31,8 @@ const { data } = entry;
 		background: var(--paper);
 		font-size: var(--step--1);
 		line-height: 1.5;
+		/* En texte agrandi, un long mot elargirait la vignette jusque sur sa voisine. */
+		overflow-wrap: anywhere;
 	}
 
 	.cartel-head {

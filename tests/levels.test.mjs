@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { test } from 'node:test';
 
-import { byLevel } from '../src/data/levels.ts';
+import { byLevel, levelGaps } from '../src/data/levels.ts';
 
 const entry = (id, level) => ({ id, data: { level } });
 const ids = (list) => list.map((e) => e.id);
@@ -12,6 +12,22 @@ test('les projets se répartissent sans changer d’ordre', () => {
 	assert.deepEqual(ids(groups.featured), ['a', 'c']);
 	assert.deepEqual(ids(groups.university), ['b']);
 	assert.deepEqual(byLevel([]), { featured: [], university: [] });
+});
+
+test('un niveau différent entre les deux langues est un écart', () => {
+	assert.deepEqual(levelGaps('featured', 'featured'), []);
+	assert.deepEqual(levelGaps('featured', 'university'), ['niveau différent']);
+	// Le controle du build : sans cet appel, l'ecart ne serait jamais signale.
+	const work = readFileSync(new URL('../src/data/work.ts', import.meta.url), 'utf8');
+	assert.match(work, /gaps\.push\(\.\.\.levelGaps\(frEntry\.data\.level, enEntry\.data\.level\)\)/);
+});
+
+test('tous les fichiers de contenu ont le même niveau dans les deux langues', () => {
+	const root = new URL('../src/content/', import.meta.url);
+	const level = (dir, file) => readFileSync(new URL(`${dir}/${file}`, root), 'utf8').match(/^level: (\w+)\r?$/m)?.[1];
+	const files = readdirSync(new URL('work/', root));
+	assert.ok(files.length >= 6);
+	for (const file of files) assert.equal(level('work', file), level('work-en', file), file);
 });
 
 // Le contenu : memes niveaux dans les deux langues, sur les fichiers eux-memes.
