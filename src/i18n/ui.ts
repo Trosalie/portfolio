@@ -39,7 +39,7 @@ export const ui = {
 
 
 		// Page d'accueil
-		'index.hero.title': "Je conçois et je développe des applications web, de la base de données jusqu'au dernier détail de l'interface.",
+		'index.hero.title': "Je conçois et je développe des applications web, de\u00a0la\u00a0base de données jusqu'au dernier détail de l'interface.",
 		'index.hero.tagline': "Diplômé du BUT Informatique à Bayonne, je cherche un premier poste de développeur full stack.",
 		'index.hero.portrait.alt': "Portrait de Thibault Rosalie",
 		'index.projects.cta': 'Voir tous les projets',

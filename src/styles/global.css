@@ -69,6 +69,15 @@ a {
 	text-underline-offset: 0.2em;
 }
 
+/* Le CV garde ses coupures : il doit se lire comme son PDF. */
+:is(h1, h2, h3):not(.cv *) {
+	text-wrap: balance;
+}
+
+:is(p, li, dd, figcaption):not(.cv *) {
+	text-wrap: pretty;
+}
+
 h1,
 h2,
 h3,
