@@ -99,6 +99,130 @@ const numbered = (key: 'work.viewer.position' | 'work.gallery.position', index: 
 	<p class="sr-only" aria-live="polite" data-live-region></p>
 </dialog>
 
+<script>
+	import { captureSizes } from '../../data/captures';
+
+	const SMALL = window.matchMedia('(max-width: 49.99em), (max-height: 29.99em)');
+	const PAN = 120;
+
+	const modified = (event: MouseEvent | KeyboardEvent) =>
+		event.ctrlKey || event.metaKey || event.shiftKey || event.altKey;
+
+	function setupViewer(dialog: HTMLDialogElement) {
+		const find = <T extends HTMLElement>(name: string) => dialog.querySelector<T>(`[data-${name}]`);
+		const stage = find('stage')!;
+		const toggle = find<HTMLButtonElement>('toggle')!;
+		const position = find('position');
+		const live = find('live-region')!;
+		const prev = find('prev');
+		const next = find('next');
+		const captures = [...dialog.querySelectorAll<HTMLElement>('[data-capture]')];
+		const captions = [...dialog.querySelectorAll<HTMLElement>('[data-caption]')];
+
+		let current = 0;
+		let zoomed = false;
+		let opener: HTMLElement | null = null;
+
+		const image = () => captures[current]!.querySelector('img')!;
+
+		// La zone se mesure barres de defilement comprises : leur apparition ne doit
+		// pas changer la taille qui les a fait apparaitre.
+		const sizes = () => {
+			const { width, height } = captures[current]!.dataset;
+			return captureSizes(
+				stage.getBoundingClientRect(),
+				{ width: Number(width), height: Number(height) },
+				SMALL.matches,
+			);
+		};
+
+		const resize = () => {
+			const { fit, zoom, canZoom } = sizes();
+			image().style.width = `${zoomed ? zoom : fit}px`;
+			toggle.hidden = !canZoom;
+			toggle.textContent = (zoomed ? toggle.dataset.fitLabel : toggle.dataset.zoomLabel) ?? '';
+			dialog.dataset.size = zoomed && canZoom ? 'zoom' : 'fit';
+			dialog.toggleAttribute('data-zoomable', canZoom);
+		};
+
+		const show = (index: number) => {
+			current = index;
+			dialog.dataset.index = String(index);
+			captures.forEach((capture, i) => (capture.hidden = i !== index));
+			captions.forEach((caption, i) => (caption.hidden = i !== index || !caption.textContent?.trim()));
+			if (position) position.textContent = captures[index]!.dataset.positionLabel ?? '';
+			prev?.setAttribute('aria-disabled', String(index === 0));
+			next?.setAttribute('aria-disabled', String(index === captures.length - 1));
+			// La legende vient de changer, et la zone avec elle : on mesure apres.
+			zoomed = sizes().opensZoomed;
+			resize();
+			stage.scrollTo(0, 0);
+		};
+
+		const goTo = (index: number) => {
+			if (index === current || index < 0 || index >= captures.length) return;
+			show(index);
+			live.textContent = captures[index]!.dataset.live ?? '';
+		};
+
+		// `at` : le point touche, en fraction de l'image, a garder sous les yeux.
+		const setZoom = (value: boolean, at?: { x: number; y: number }) => {
+			zoomed = value;
+			resize();
+			if (!at || !value) return;
+			const { width, height } = image().getBoundingClientRect();
+			stage.scrollTo(at.x * width - stage.clientWidth / 2, at.y * height - stage.clientHeight / 2);
+		};
+
+		document.querySelectorAll('a[data-viewer-open]').forEach((link) => link.setAttribute('aria-haspopup', 'dialog'));
+
+		// Ecoute sur le document : la galerie passe avant et retient le clic qui ne
+		// sert qu'a centrer une capture voisine.
+		document.addEventListener('click', (event) => {
+			const trigger = (event.target as Element).closest<HTMLElement>('[data-viewer-open]');
+			if (!trigger || event.defaultPrevented || event.button !== 0 || modified(event)) return;
+			event.preventDefault();
+			opener = trigger;
+			live.textContent = '';
+			dialog.showModal();
+			show(Number(trigger.dataset.viewerOpen));
+		});
+
+		dialog.addEventListener('click', (event) => {
+			// Le second clic d'un double-clic sur la page arrive ici : il n'a rien demande.
+			if (event.detail > 1) return;
+			const target = event.target as Element;
+			if (target === image()) {
+				if (!sizes().canZoom) return;
+				const box = image().getBoundingClientRect();
+				setZoom(!zoomed, { x: (event.clientX - box.left) / box.width, y: (event.clientY - box.top) / box.height });
+				return;
+			}
+			const onScrollbar =
+				target === stage && (event.offsetX >= stage.clientWidth || event.offsetY >= stage.clientHeight);
+			if ((target === dialog || target === stage) && !onScrollbar) dialog.close();
+		});
+
+		toggle.addEventListener('click', () => setZoom(!zoomed));
+		prev?.addEventListener('click', () => goTo(current - 1));
+		next?.addEventListener('click', () => goTo(current + 1));
+
+		dialog.addEventListener('keydown', (event) => {
+			const step = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
+			if (!step || modified(event)) return;
+			event.preventDefault();
+			if (dialog.dataset.size === 'zoom') stage.scrollBy({ left: step * PAN });
+			else goTo(current + step);
+		});
+
+		dialog.addEventListener('close', () => opener?.focus({ preventScroll: true }));
+
+		new ResizeObserver(() => dialog.open && resize()).observe(stage);
+	}
+
+	document.querySelectorAll<HTMLDialogElement>('[data-viewer]').forEach(setupViewer);
+</script>
+
 <style>
 	/* La page derriere ne defile pas tant que la visionneuse est ouverte. */
 	:global(html:has(dialog.viewer[open])) {

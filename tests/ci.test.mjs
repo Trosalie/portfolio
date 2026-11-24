@@ -18,3 +18,8 @@ test('la CI lance les tests avant de déployer', () => {
 	const deployStep = workflow.indexOf('rsync');
 	assert.ok(testStep > 0 && testStep < deployStep, 'npm test absent ou après le déploiement');
 });
+
+test('les tests de la CI trouvent Chrome', () => {
+	const step = read('.github/workflows/deploy.yml').split('- name: Tests')[1].split('- name:')[0];
+	assert.ok(step.includes('PUPPETEER_EXECUTABLE_PATH: ${{ steps.chrome.outputs.chrome-path }}'), step);
+});

@@ -48,6 +48,8 @@ jobs:
       #    Ils lisent dist/ et importent du TypeScript, d'ou Node 22.18 ou plus.
       - name: Tests
         run: npm test
+        env:
+          PUPPETEER_EXECUTABLE_PATH: ${{ steps.chrome.outputs.chrome-path }}
 
       # 8. Installe sshpass pour l'authentification par mot de passe
       - name: Installer sshpass
