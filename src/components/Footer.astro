@@ -16,10 +16,11 @@ const currentYear = new Date().getFullYear();
 		flex-wrap: wrap;
 		justify-content: space-between;
 		gap: 1rem;
-		width: 100%;
-		max-width: 76rem;
+		/* La largeur du texte et non celle de la page : le filet s'arrete a la colonne. */
+		width: calc(100% - 3rem);
+		max-width: 73rem;
 		margin: auto auto 0;
-		padding: 2rem 1.5rem;
+		padding: 2rem 0;
 		border-top: 1px solid var(--rule);
 		color: var(--ink-muted);
 		font-size: var(--step--1);
@@ -40,7 +41,9 @@ const currentYear = new Date().getFullYear();
 
 	@media (min-width: 50em) {
 		footer {
-			padding: 2.5rem 3rem;
+			width: calc(100% - 6rem);
+			max-width: 70rem;
+			padding: 2.5rem 0;
 		}
 	}
 </style>

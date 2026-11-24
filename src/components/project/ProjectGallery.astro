@@ -271,15 +271,18 @@ const position = (index: number) =>
 		padding: 0;
 
 		/* La piste sort de la colonne de texte et prend toute la largeur de la
-		   page : `50%` se rapporte a la colonne, `50vw` a la page. `body` porte
-		   deja `overflow-x: hidden`, le debordement ne cree donc pas de barre de
-		   defilement horizontale. */
-		width: 100vw;
-		margin-inline: calc(50% - 50vw);
+		   page : `50%` se rapporte a la colonne, `50vw` a la page. La colonne
+		   (66rem) est alignee a gauche dans la page (70rem de texte) : elargie de
+		   deux fois cet ecart, la piste reste centree sur elle et atteint les deux
+		   bords. `body` porte deja `overflow-x: hidden`, le debordement ne cree donc
+		   pas de barre de defilement horizontale. */
+		--shift: clamp(0px, calc((100vw - 72rem) / 2), 2rem);
+		width: calc(100vw + 2 * var(--shift));
+		margin-inline: calc(50% - 50vw - var(--shift));
 
 		/* Sans ce remplissage, la premiere et la derniere capture ne pourraient
 		   pas atteindre le centre : le defilement bute avant. */
-		padding-inline: max(0px, calc((100vw - var(--slide-width)) / 2));
+		padding-inline: max(0px, calc((100vw - var(--slide-width)) / 2 + var(--shift)));
 
 		/* La piste rogne ce qui depasse : l'anneau de focus d'une capture a besoin
 		   de cette marge. */

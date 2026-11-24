@@ -300,20 +300,28 @@ retenus en premier.
   et à sa mention. Espace au clavier, résultat en `aria-live`, affichage direct en mouvement
   réduit.
 
-- [ ] **8. La typographie française n'est pas finie.** Aucune espace insécable dans les
+- [x] **8. La typographie française n'est pas finie.** Aucune espace insécable dans les
   sources (« full stack ? », « projet : ce formulaire », `src/i18n/ui.ts:26` et `:80`, et les
   contenus Markdown) : la ponctuation peut se retrouver seule en début de ligne. Aucun
   `text-wrap` : le titre de l'accueil coupe « de la / base de données ».
-  → Espace fine insécable (U+202F) avant `? ! : ;` au rendu, textes traduits et Markdown
-  compris ; `text-wrap: balance` sur les titres, `pretty` sur les paragraphes.
+  → Au rendu (`src/middleware.ts`, `src/typography.ts`), textes traduits et Markdown compris :
+  espace fine insécable avant `? ! ;`, espace insécable avant `:` et dans les guillemets, selon
+  l'usage français. Pages françaises seulement, CV exclu (son PDF tient sur une page et se relit
+  par des outils). `text-wrap: balance` sur les titres, `pretty` sur les paragraphes ; « de la
+  base » ne se coupe plus dans le titre de l'accueil.
 
-- [ ] **9. Le menu mobile ne se ferme qu'avec son bouton.** Ni Échap ni clic extérieur
+- [x] **9. Le menu mobile ne se ferme qu'avec son bouton.** Ni Échap ni clic extérieur
   (`src/components/Nav.astro:127`).
-  → Fermer sur Échap en rendant le focus au bouton, et au clic extérieur.
+  → Échap le ferme et rend le focus au bouton, un appui à l'extérieur le ferme aussi. Sur grand
+  écran, où le menu est toujours affiché, rien ne le masque.
 
-- [ ] **10. Les alignements.** Les filets du bloc de contact et du pied de page dépassent la
+- [x] **10. Les alignements.** Les filets du bloc de contact et du pied de page dépassent la
   colonne de texte de 48 px de chaque côté, la bordure étant posée sur une boîte plus large que
   son contenu (`src/components/ContactCTA.astro:22`, `src/components/Footer.astro:23`). Sur
   `/contact/`, le bouton d'envoi touche le filet du pied de page, faute de marge sous le
   `<main>` (`src/components/ContactPage.astro:123`). Sur `/cv/`, un grand vide sépare le menu
   des boutons, alignés à droite alors que le site s'aligne à gauche.
+  → Les filets s'arrêtent à la colonne de texte, le formulaire garde sa distance avec le pied de
+  page, le CV et ses boutons s'alignent sur le bord gauche du site avec l'écart des autres pages.
+  La piste de la galerie, décalée de 32 px à 1440 px, va maintenant d'un bord à l'autre de la page
+  et reste centrée sur la colonne.
