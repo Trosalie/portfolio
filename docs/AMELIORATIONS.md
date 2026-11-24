@@ -281,11 +281,12 @@ retenus en premier.
   les liens en dessous ; la stack détaillée reste en bas. La page finit sur « Projet suivant »,
   un bandeau dans le cadre du projet suivant, le premier après le dernier.
 
-- [ ] **5. La liste des projets finit sur une vignette orpheline et ne hiérarchise rien.** Un
+- [x] **5. La liste des projets finit sur une vignette orpheline et ne hiérarchise rien.** Un
   projet en vedette puis cinq en grille de deux (`src/styles/global.css:245`) : Covoit'Etud
   reste seul avec un trou à droite, et un TP en C pèse autant que Seenit.
-  → Deux niveaux : les projets phares en grand, les projets de BUT en rangée de trois plus
-  compacte.
+  → Deux niveaux, par un champ `level` obligatoire dans le contenu : ChronoPotes, Seenit et
+  BluePoint en grand, puis « Projets de BUT » en rangée de trois. L'accueil ne montre plus que les
+  trois phares. Dans une rangée, cadres, captures et cartels s'alignent (`subgrid`).
 
 - [ ] **6. Rien ne relie la vignette à sa page.** Le produit ne réapparaît qu'à la couverture,
   après une page grise.
