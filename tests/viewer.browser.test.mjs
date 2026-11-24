@@ -245,6 +245,38 @@ onPage('cibles d’au moins 44 px, textes dans la couleur du titre', '/work/covo
 	}
 });
 
+for (const options of [{}, PHONE]) {
+	const device = options.mobile ? 'téléphone' : 'grand écran';
+	onPage(`${device} : flèches de même taille, capture centrée`, '/work/seenit/', options, async (page) => {
+		await openCover(page);
+		const boxes = await page.evaluate(() =>
+			['prev', 'next', 'stage'].map((name) => {
+				const r = document.querySelector(`dialog [data-${name}]`).getBoundingClientRect();
+				return { width: r.width, height: r.height, middle: (r.left + r.right) / 2 };
+			}),
+		);
+		assert.deepEqual([boxes[0].width, boxes[0].height], [boxes[1].width, boxes[1].height]);
+		assert.ok(Math.abs(boxes[2].middle - page.viewport().width / 2) < 1, String(boxes[2].middle));
+	});
+}
+
+onPage('au doigt, la flèche ne reste pas colorée', '/work/seenit/', PHONE, async (page) => {
+	await openCover(page);
+	const ground = () => page.$eval('dialog [data-next]', (el) => getComputedStyle(el).backgroundColor);
+	const before = await ground();
+	await page.click('dialog [data-next]');
+	await settle(page);
+	assert.equal((await state(page)).index, 1);
+	assert.equal(await ground(), before);
+});
+
+onPage('téléphone couché : une capture de téléphone reste lisible', '/work/chronopotes/', { width: 812, height: 375, mobile: true }, async (page) => {
+	await openCover(page);
+	await page.click('dialog [data-next]');
+	const s = await state(page);
+	assert.deepEqual([s.index, s.width], [1, 430]);
+});
+
 onPage('une seule capture : pas de suite', '/work/projet-chat/', {}, async (page) => {
 	await openCover(page);
 	await page.keyboard.press('ArrowRight');
@@ -388,6 +420,14 @@ onPage('BluePoint : depuis la couverture, le focus revient à la couverture', '/
 	await page.click('dialog [data-next]');
 	await page.keyboard.press('Escape');
 	assert.equal(await focus(page), 'cover-link');
+});
+
+onPage('galerie à 320 px : flèches et pastilles sur une ligne, « Agrandir » dessous', '/work/seenit/', { width: 320, height: 568, mobile: true }, async (page) => {
+	const [prev, next, enlarge] = await page.evaluate(() =>
+		['prev', 'next', 'enlarge'].map((name) => document.querySelector(`[data-gallery] [data-${name}]`).getBoundingClientRect().top),
+	);
+	assert.equal(prev, next);
+	assert.ok(enlarge > next);
 });
 
 onPage('galerie sans JavaScript : pas de commandes, cinq liens', '/work/seenit/', { js: false }, async (page) => {

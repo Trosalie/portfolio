@@ -46,6 +46,16 @@ test('une capture de téléphone s’ouvre entière et ne dépasse pas 430 px', 
 	assert.equal(sizes(1250, 780, img('a', 1290, 2796), false).zoom, 430);
 });
 
+test('une capture de téléphone s’ouvre agrandie quand l’entière fait moins de la moitié', () => {
+	assert.deepEqual(sizes(640, 240, img('a', 1290, 2796), true), {
+		fit: 110,
+		zoom: 430,
+		canZoom: true,
+		opensZoomed: true,
+	});
+	assert.equal(sizes(1250, 400, img('a', 1290, 2796), false).opensZoomed, false);
+});
+
 test('pas de bascule quand les deux tailles se valent', () => {
 	assert.deepEqual(sizes(1800, 1000, img('a'), false), { fit: 1440, zoom: 1440, canZoom: false, opensZoomed: false });
 });

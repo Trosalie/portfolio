@@ -49,7 +49,8 @@ const MIN_ZOOM = 800;
  * La taille reelle est celle de l'ecran d'origine : les captures plus hautes que
  * larges viennent d'un telephone en 3x. Sur grand ecran, agrandir montre cette
  * taille ; sur petit ecran, la capture remplit la zone dans un sens et defile dans
- * l'autre.
+ * l'autre. Elle s'y ouvre agrandie si c'est un ecran de bureau, ou si l'entiere
+ * ferait moins de la moitie de sa taille (telephone couche).
  */
 export function captureSizes(stage: Size, image: Size, small: boolean) {
 	const ratio = image.width / image.height;
@@ -61,5 +62,6 @@ export function captureSizes(stage: Size, image: Size, small: boolean) {
 	const zoom = Math.floor(small ? Math.min(real, cover) : real);
 
 	const canZoom = zoom >= fit * 1.1;
-	return { fit, zoom: canZoom ? zoom : fit, canZoom, opensZoomed: small && !portrait && canZoom };
+	const opensZoomed = small && canZoom && (!portrait || fit < real / 2);
+	return { fit, zoom: canZoom ? zoom : fit, canZoom, opensZoomed };
 }

@@ -383,7 +383,9 @@ const position = (index: number) =>
 		display: none;
 	}
 
+	/* Sur telephone, les fleches et cinq pastilles remplissent la ligne. */
 	.enlarge {
+		flex-basis: 100%;
 		min-height: 2.75rem;
 		padding: 0 0.25rem;
 		border: 0;
@@ -407,7 +409,7 @@ const position = (index: number) =>
 		flex-wrap: wrap;
 		align-items: center;
 		justify-content: center;
-		gap: 1rem;
+		gap: 0.5rem;
 	}
 
 	.arrow {
@@ -481,6 +483,14 @@ const position = (index: number) =>
 	}
 
 	@media (min-width: 50em) {
+		.controls {
+			gap: 1rem;
+		}
+
+		.enlarge {
+			flex-basis: auto;
+		}
+
 		figcaption {
 			font-size: var(--step-0);
 		}

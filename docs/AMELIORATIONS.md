@@ -265,10 +265,13 @@ retenus en premier.
   le texte reste lisible, 1250 px dans la capture de téléphone de ChronoPotes).
   Le titre de l'accueil passe à 1,75rem : le premier projet apparaît dans le premier écran.
 
-- [ ] **3. Aucune capture ne s'agrandit.** La couverture et la galerie n'ouvrent rien ; un clic
+- [x] **3. Aucune capture ne s'agrandit.** La couverture et la galerie n'ouvrent rien ; un clic
   sur une voisine la centre seulement (`src/components/project/ProjectGallery.astro:169`).
-  → Une visionneuse plein écran sur `<dialog>` natif : Échap, flèches du clavier, zoom au
-  pincement.
+  → Une visionneuse sur `<dialog>` natif, aux couleurs du cadre de chaque projet
+  (`CaptureViewer.astro`). Le plein écran seul ne gagnait que 15 % sur téléphone : une capture de
+  bureau s'y ouvre agrandie (800 px au moins) et se parcourt au doigt. Clavier, focus rendu,
+  lien vers l'image sans JavaScript. Ses comportements sont testés dans un navigateur, aussi
+  avant chaque déploiement.
 
 - [x] **4. Les pages projet ne mènent nulle part et laissent une colonne vide.** Sur grand
   écran, le tiers droit reste vide pendant que période, cadre et équipe tiennent en trois

@@ -116,8 +116,9 @@ par 3 pour une capture plus haute que large (téléphone en 3x : 1290 px donnent
 | Grand écran | tient dans la zone, sans dépasser la taille réelle | taille réelle |
 | Petit écran | tient dans la zone, sans dépasser la taille réelle | remplit la zone dans un sens et défile dans l'autre, sans dépasser la taille réelle |
 
-- **À l'ouverture :** agrandie pour une capture de bureau sur petit écran, entière dans tous les
-  autres cas. Chaque changement de capture repart de cette règle, défilement au début.
+- **À l'ouverture :** sur petit écran, agrandie pour une capture de bureau, ainsi que pour une
+  capture de téléphone dont l'entière ferait moins de la moitié de la taille réelle (téléphone
+  couché) ; entière dans tous les autres cas. Chaque changement de capture repart de cette règle, défilement au début.
 - **Repère :** sur petit écran, une capture de bureau agrandie fait au moins 800 px de large, quitte
   à défiler dans les deux sens (téléphone couché ou très petit).
 - **Basculer :** un appui sur la capture ou le bouton, « Agrandir » ou « Voir entière ». En
