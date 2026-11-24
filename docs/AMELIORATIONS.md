@@ -288,11 +288,13 @@ retenus en premier.
   BluePoint en grand, puis « Projets de BUT » en rangée de trois. L'accueil ne montre plus que les
   trois phares. Dans une rangée, cadres, captures et cartels s'alignent (`subgrid`).
 
-- [ ] **6. Rien ne relie la vignette à sa page.** Le produit ne réapparaît qu'à la couverture,
+- [x] **6. Rien ne relie la vignette à sa page.** Le produit ne réapparaît qu'à la couverture,
   après une page grise.
-  → Transitions entre pages en CSS seul (`@view-transition { navigation: auto; }` et un
-  `view-transition-name` par projet sur la vignette et la couverture), coupées sous
-  `prefers-reduced-motion`.
+  → Transitions entre pages du navigateur (`PageTransition.astro`) : le cadre du projet glisse
+  entre sa vignette, sa couverture et « Projet suivant », le reste se fond en 300 ms, rien sous
+  `prefers-reduced-motion`. Nommer tous les cadres en CSS faisait traverser l'écran aux cadres
+  voisins : un petit script n'en nomme qu'un. Les liens de projet ont pris la barre finale, qui
+  évite une redirection à chaque clic.
 
 - [ ] **7. La pièce d'interface du nuancier est figée.** L'affichage à palettes de ChronoPotes
   (`src/components/project/specimens/ChronoFlaps.astro:18`) est une image en HTML.
