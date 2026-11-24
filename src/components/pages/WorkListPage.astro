@@ -8,30 +8,44 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ContactCTA from '../ContactCTA.astro';
 import ProjectTile from '../work/ProjectTile.astro';
+import { byLevel } from '../../data/levels';
 import { getWorkCollection } from '../../data/work';
 import { getLangFromUrl, useTranslations } from '../../i18n/ui';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
-// La collection est deja triee du plus recent au plus ancien : le premier
-// projet ouvre la page sur toute la largeur, les suivants suivent en grille.
-const [featured, ...rest] = await getWorkCollection(lang);
+// Les projets phares en grand, puis ceux du BUT en rangee. Dans chaque niveau,
+// l'ordre de la collection, du plus recent au plus ancien.
+const { featured, university } = byLevel(await getWorkCollection(lang));
 ---
 
 <BaseLayout title={t('work.meta.title')} description={t('work.meta.desc')}>
 	<main id="main-content" tabindex="-1" class="wrapper work-list">
 		<h1>{t('work.title')}</h1>
-		{featured && <ProjectTile entry={featured} lang={lang} featured withDescription />}
-		<ul class="tiles">
+		<ul class="tiles tiles--wide">
 			{
-				rest.map((entry) => (
+				featured.map((entry) => (
 					<li>
-						<ProjectTile entry={entry} lang={lang} withDescription />
+						<ProjectTile entry={entry} lang={lang} size="wide" withDescription />
 					</li>
 				))
 			}
 		</ul>
+		{
+			university.length > 0 && (
+				<section class="university">
+					<h2>{t('work.group.university')}</h2>
+					<ul class="tiles tiles--three">
+						{university.map((entry) => (
+							<li>
+								<ProjectTile entry={entry} lang={lang} size="small" />
+							</li>
+						))}
+					</ul>
+				</section>
+			)
+		}
 	</main>
 	<ContactCTA />
 </BaseLayout>
@@ -48,9 +62,26 @@ const [featured, ...rest] = await getWorkCollection(lang);
 		letter-spacing: -0.02em;
 	}
 
+	/* Le second niveau se detache plus que deux phares entre eux. */
+	.university {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+		margin-top: 1.5rem;
+	}
+
+	h2 {
+		font-size: var(--step-3);
+	}
+
 	@media (min-width: 50em) {
 		.work-list {
 			gap: 4.5rem;
+		}
+
+		.university {
+			gap: 2rem;
+			margin-top: 2rem;
 		}
 	}
 </style>

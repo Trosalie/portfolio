@@ -20,13 +20,15 @@ import type { WorkEntry } from '../../data/work';
  * `band` : le bandeau du lien « Projet suivant », sans capture ; le nom y est
  * le contenu du lien et n'est donc pas cache aux lecteurs d'ecran.
  */
+export type TileSize = 'card' | 'wide' | 'small';
+
 interface Props {
 	entry: WorkEntry;
 	variant: 'tile' | 'cover' | 'band';
-	featured?: boolean;
+	size?: TileSize;
 }
 
-const { entry, variant, featured = false } = Astro.props;
+const { entry, variant, size = 'card' } = Astro.props;
 const { data } = entry;
 const identity = data.identity;
 
@@ -36,12 +38,16 @@ const titleStyle = identity ? `title--${identity.frame.titleStyle}` : 'title--si
 const style = frameStyle(identity?.frame);
 
 const isCover = variant === 'cover';
-const sizes = isCover
-	? '(min-width: 50em) 66rem, 100vw'
-	: featured
-		? '(min-width: 50em) 40rem, 100vw'
-		: '(min-width: 50em) 34rem, 100vw';
-const widths = isCover ? [640, 1024, 1600] : [480, 800, 1200];
+
+// La largeur de la capture, marges du cadre deduites. Un phare prend toute la page
+// entre 50em et 64em (voir ProjectTile.astro).
+const tileSizes: Record<TileSize, string> = {
+	card: '(min-width: 50em) 31rem, 100vw',
+	wide: '(min-width: 64em) 38rem, (min-width: 50em) calc(100vw - 9rem), 100vw',
+	small: '(min-width: 50em) 19rem, 100vw',
+};
+const sizes = isCover ? '(min-width: 50em) 66rem, 100vw' : tileSizes[size];
+const widths = isCover ? [640, 1024, 1600] : [320, 480, 640, 800, 1200];
 
 // Le recadrage mobile est etroit par choix (voir scripts/crop-mobile-tiles.mjs) :
 // on ne demande jamais une largeur superieure a celle du fichier.
@@ -124,11 +130,18 @@ const imageProps = {
 		object-position: top;
 	}
 
+	/* Dans une rangee, un nom peut tenir sur plus de lignes que ses voisins : les
+	   captures s'alignent sur le bas des cadres. */
+	.tile > :is(picture, img) {
+		margin-top: auto;
+	}
+
 	.frame-title {
 		margin-bottom: 0.85rem;
 		font-size: var(--step-2);
 		line-height: 1.1;
 		color: var(--frame-title);
+		overflow-wrap: anywhere;
 	}
 
 	/* Le bandeau « Projet suivant » : environ la moitie d'une vignette, le nom

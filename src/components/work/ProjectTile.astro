@@ -2,21 +2,26 @@
 import { workBasePath, type WorkEntry } from '../../data/work';
 import type { Lang } from '../../i18n/ui';
 import ProjectCartel from './ProjectCartel.astro';
-import ProjectFrame from './ProjectFrame.astro';
+import ProjectFrame, { type TileSize } from './ProjectFrame.astro';
 
-/** La vignette d'un projet : un seul lien, le cadre puis l'etiquette. */
+/**
+ * La vignette d'un projet : un seul lien, le cadre puis l'etiquette.
+ *
+ * `wide` : un projet phare, l'etiquette a cote du cadre sur grand ecran.
+ * `small` : un projet du BUT, dans une rangee de trois.
+ */
 interface Props {
 	entry: WorkEntry;
 	lang: Lang;
-	featured?: boolean;
+	size?: TileSize;
 	withDescription?: boolean;
 }
 
-const { entry, lang, featured = false, withDescription = false } = Astro.props;
+const { entry, lang, size = 'card', withDescription = false } = Astro.props;
 ---
 
-<a class:list={['tile', { featured }]} href={`${workBasePath(lang)}${entry.id}`}>
-	<ProjectFrame entry={entry} variant="tile" featured={featured} />
+<a class:list={['tile', size]} href={`${workBasePath(lang)}${entry.id}`}>
+	<ProjectFrame entry={entry} variant="tile" size={size} />
 	<ProjectCartel entry={entry} withDescription={withDescription} />
 </a>
 
@@ -30,9 +35,9 @@ const { entry, lang, featured = false, withDescription = false } = Astro.props;
 		text-decoration: none;
 	}
 
-	/* Les cadres d'une meme rangee prennent la meme hauteur, qu'ils aient ou non
-	   un nom en tete ; l'etiquette garde la largeur de son texte, comme un
-	   cartel pose sous l'oeuvre. */
+	/* Sans `subgrid` (voir global.css), les cadres d'une meme rangee s'etirent a la
+	   meme hauteur ; l'etiquette garde la largeur de son texte, comme un cartel
+	   pose sous l'oeuvre. */
 	.tile > :global(.project-frame) {
 		flex: 1;
 	}
@@ -46,15 +51,18 @@ const { entry, lang, featured = false, withDescription = false } = Astro.props;
 		text-underline-offset: 0.2em;
 	}
 
-	@media (min-width: 50em) {
-		.tile.featured {
+	/* A 64em et non 50em : plus etroite, l'etiquette de BluePoint depasserait son cadre. */
+	@media (min-width: 64em) {
+		.tile.wide {
 			display: grid;
 			grid-template-columns: 3fr 2fr;
 			gap: 2.5rem;
 		}
 
-		/* Mis en avant, le cartel se pose au pied de l'oeuvre, a cote d'elle. */
-		.tile.featured > :global(.cartel) {
+		/* Le cartel se pose au pied de l'oeuvre, a cote d'elle ; le cadre ne s'etire
+		   pas pour l'atteindre. */
+		.tile.wide > :global(.project-frame),
+		.tile.wide > :global(.cartel) {
 			align-self: end;
 		}
 	}

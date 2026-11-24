@@ -132,5 +132,5 @@ test('les liens anglais restent en anglais', () => {
 });
 
 test('l’étiquette du projet mis en avant se pose au pied de son cadre', () => {
-	assert.match(pageCss('/work/'), /\.featured(\[[^\]]*\])?\s*>\s*\.cartel\s*{[^}]*align-self:\s*(end|flex-end)/);
+	assert.match(pageCss('/work/'), /\.wide(\[[^\]]*\])?\s*>\s*\.cartel\s*{[^}]*align-self:\s*(end|flex-end)/);
 });

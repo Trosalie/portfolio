@@ -231,7 +231,11 @@ h5 {
 	background: #000;
 }
 
-/* Grille des vignettes de projet (accueil, liste des projets). */
+/*
+ * Vignettes de projet : `--wide` les phares de la liste, `--three` la rangee du
+ * BUT, `--pair` l'accueil. Le cadre d'une vignette porte lui aussi la classe
+ * `tile` : le lien se vise par `a.tile`.
+ */
 .tiles {
 	display: grid;
 	gap: 3rem 2.5rem;
@@ -242,7 +246,32 @@ h5 {
 
 @media (min-width: 50em) {
 	.tiles {
-		grid-template-columns: 1fr 1fr;
-		gap: 4rem 2.5rem;
+		gap: 4.5rem 2.5rem;
+	}
+
+	.tiles--pair {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		row-gap: 4rem;
+	}
+
+	.tiles--three {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		column-gap: 2rem;
+	}
+
+	/* Le cadre et le cartel d'une vignette partagent leurs rangees avec leurs
+	   voisines : cadres de meme hauteur, cartels alignes. */
+	@supports (grid-template-rows: subgrid) {
+		:is(.tiles--pair, .tiles--three) > li,
+		:is(.tiles--pair, .tiles--three) > li > a.tile {
+			display: grid;
+			grid-template-rows: subgrid;
+			grid-row: span 2;
+			row-gap: 1rem;
+		}
+
+		.tiles--pair > li > a.tile > .cartel {
+			justify-self: start;
+		}
 	}
 }
