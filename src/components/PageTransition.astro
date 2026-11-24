@@ -53,6 +53,9 @@
 
 		const projectOf = (url) => new URL(url).pathname.match(/^[/](?:en[/])?work[/]([^/]+)[/]?$/)?.[1];
 
+		// L'accueil, la liste ou un projet : les seules pages qui montrent des cadres.
+		const showsFrames = (url) => /^[/](?:en[/]?)?(?:work(?:[/](?:[^/]+[/]?)?)?)?$/.test(new URL(url).pathname);
+
 		// Le cadre du projet sur cette page, s'il est au moins en partie a l'ecran. Pas
 		// sous la visionneuse : il passerait par-dessus.
 		const frameOf = (id) => {
@@ -90,10 +93,12 @@
 			wait.blocking = 'render';
 			wait.href = projectOf(location.href) === expected ? '#cover' : '#page-end';
 			document.head.append(wait);
+			// Sur un reseau tres lent, mieux vaut la page sans glissement que pas de page.
+			setTimeout(() => wait.remove(), 500);
 		}
 
 		addEventListener('pageswap', ({ viewTransition, activation }) => {
-			if (!viewTransition || !activation) return;
+			if (!viewTransition || !activation || !showsFrames(activation.entry.url)) return;
 			// Le projet ou l'on va, sinon celui que l'on quitte.
 			for (const id of [projectOf(activation.entry.url), projectOf(location.href)]) {
 				const frame = id && frameOf(id);

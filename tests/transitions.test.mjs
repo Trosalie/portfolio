@@ -21,7 +21,7 @@ test('le script est dans l’en-tête, classique et court', () => {
 		const scripts = [...head.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/g)].filter((m) => m[2].includes('pagereveal'));
 		assert.equal(scripts.length, 1, route);
 		assert.doesNotMatch(scripts[0][1], /module|defer|async|src/);
-		assert.ok(scripts[0][2].length < 3200, String(scripts[0][2].length));
+		assert.ok(scripts[0][2].length < 3500, String(scripts[0][2].length));
 	}
 });
 

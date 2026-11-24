@@ -32,7 +32,8 @@ souvenir des produits.
 
 Raté, même si tout fonctionne, si :
 
-- la navigation paraît plus lente : la transition ne retarde jamais l'affichage de la page ;
+- la navigation paraît plus lente : la transition ne retarde pas l'affichage de la page, sinon d'une
+  demi-seconde au plus, sur un réseau lent, quand un cadre est attendu ;
 - un autre cadre que celui du projet bouge, reste affiché ou traverse l'écran ;
 - le cadre glisse vers un endroit qu'on ne voit pas ;
 - on voit une bande transparente ou un éclat pendant le glissement ;
@@ -41,7 +42,7 @@ Raté, même si tout fonctionne, si :
 ## Contraintes
 
 - Astro 5 statique, transitions entre documents du navigateur (`@view-transition`), aucune
-  bibliothèque. Un script d'une trentaine de lignes, placé dans l'en-tête de chaque page : il doit
+  bibliothèque. Un seul script (environ 80 lignes, 3 Ko), placé dans l'en-tête de chaque page : il doit
   être prêt avant le premier affichage.
 - Parité FR/EN : le même comportement dans les deux langues.
 - Le script n'est nécessaire à rien d'autre : une erreur ou une API absente laisse la navigation
@@ -84,7 +85,9 @@ quittée en montre un cadre à l'écran, sinon celui du **projet quitté**.
 - Visionneuse ouverte, aucun cadre ne glisse : il passerait par-dessus elle.
 - Quand un cadre est attendu, la page n'est montrée qu'une fois lue jusqu'à lui (la couverture, ou
   la page entière ailleurs). Sans cela, au retour sur une page que le navigateur n'a pas gardée en
-  mémoire, elle s'affiche en haut puis saute. Les pages font moins de 11 Ko compressées.
+  mémoire, elle s'affiche en haut puis saute. Les pages font moins de 12 Ko compressées, et l'attente
+  ne dépasse jamais une demi-seconde. Une page qui ne montre aucun cadre (contact, CV, erreur)
+  n'attend rien.
 - Le navigateur peut abandonner une transition : la page s'ouvre sans elle et sans erreur.
 - Un clic pendant les 300 ms est perdu : le navigateur ne donne pas le pointeur à la page pendant
   une transition, et rien en CSS n'y change.

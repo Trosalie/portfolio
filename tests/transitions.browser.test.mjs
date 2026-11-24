@@ -42,7 +42,7 @@ function watch() {
 		// `cover` et `end` : ce qui est deja lu quand la page va s'afficher.
 		const cover = Boolean(document.querySelector('#cover'));
 		const end = Boolean(document.querySelector('#page-end'));
-		window.seen = { old: [], named: [], groups: null, kept, cover, end, scroll: scrollY };
+		window.seen = { old: [], named: [], groups: null, kept, cover, end, scroll: scrollY, time: performance.now() };
 		try {
 			window.seen.old = JSON.parse(sessionStorage.getItem('test-old') ?? '[]');
 			sessionStorage.removeItem('test-old');
@@ -68,12 +68,13 @@ class Abandoned extends Error {}
  * scenario que le navigateur abandonne recommence sur une page neuve.
  */
 function onPage(name, path, options, run) {
-	test(name, async () => {
+	test(name, async (t) => {
 		for (let left = 3; left > 0; left--) {
 			try {
 				return await attempt(path, options, run);
 			} catch (error) {
 				if (!(error instanceof Abandoned) || left === 1) throw error;
+				t.diagnostic('transition abandonnée par le navigateur, nouvel essai');
 			}
 		}
 	});
@@ -92,6 +93,10 @@ async function attempt(path, options, run) {
 		await page.goto(at.url + path, { waitUntil: 'networkidle0' });
 		await run(page);
 		assert.deepEqual(errors, []);
+	} catch (error) {
+		// Un nouvel essai n'efface pas les erreurs de celui-ci.
+		if (error instanceof Abandoned) assert.deepEqual(errors, []);
+		throw error;
 	} finally {
 		await page.close();
 		await own?.close();
@@ -233,6 +238,7 @@ onPage('une adresse avec requête et ancre est reconnue', '/work/?a=1#x', {}, as
 
 onPage('le cadre garde sa couleur de fond pendant le glissement', '/work/', {}, async (page) => {
 	const seen = await follow(page, tileTo('/work/covoit-etud/'), '/work/covoit-etud/');
+	if (!seen.groups) throw new Abandoned('transition abandonnée');
 	assert.equal(seen.ground, 'rgb(171, 196, 255)');
 	assert.deepEqual(seen.durations, [300]);
 });
@@ -355,9 +361,23 @@ onPage('liste qui arrive en deux fois : la vignette est attendue', '/work/chrono
 	assert.equal((await followHere(page, '.back-link', '/work/')).end, true);
 });
 
-onPage('sans cadre à attendre, rien ne retarde la page', '/', { browser: { split: 400 } }, async (page) => {
-	await followHere(page, 'header a[href="/contact/"]', '/contact/');
-	assert.equal(await page.evaluate(() => document.querySelectorAll('link[rel="expect"]').length), 0);
+// Ces pages ne montrent aucun cadre : rien a nommer, rien a attendre.
+for (const [from, to] of [
+	['/', '/contact/'],
+	['/work/seenit/', '/contact/'],
+	['/work/seenit/', '/cv/'],
+	['/en/work/seenit/', '/en/contact/'],
+]) {
+	onPage(`de ${from} à ${to} : aucun cadre, rien ne retarde la page`, from, { browser: { split: 400 } }, async (page) => {
+		const seen = await followHere(page, `header a[href="${to}"]`, to);
+		assert.deepEqual([seen.old, seen.named], [[], []]);
+		assert.equal(await page.evaluate(() => document.querySelectorAll('link[rel="expect"]').length), 0);
+	});
+}
+
+onPage('très lente, la page n’attend pas plus d’une demi-seconde', '/work/', { browser: { split: 2500 } }, async (page) => {
+	const seen = await follow(page, tileTo('/work/seenit/'), '/work/seenit/');
+	assert.ok(seen.time < 1500, `${Math.round(seen.time)} ms`);
 });
 
 // Chrome abandonne alors souvent la transition avant de la donner a la page : `onPage`
