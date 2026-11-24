@@ -46,6 +46,17 @@ export interface ProjectIdentity extends Partial<ProjectSpecimen> {
 	frame: FrameStyle;
 }
 
+/**
+ * Les couleurs d'un cadre en variables CSS, pour la vignette, la couverture, le
+ * bandeau et la visionneuse. Un projet sans identite prend l'encre et le blanc.
+ */
+export function frameStyle(frame: FrameStyle | undefined): string {
+	const background = frame?.background ?? 'var(--ink)';
+	const border = frame?.border ?? background;
+	const titleColor = frame?.titleColor ?? '#FFFFFF';
+	return `--frame-bg:${background};--frame-border:${border};--frame-title:${titleColor}`;
+}
+
 const specimenParts = (identity: Partial<ProjectSpecimen>) =>
 	[identity.palette, identity.fonts, identity.specimen].filter((part) => part !== undefined).length;
 

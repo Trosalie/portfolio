@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { hasSpecimen, identityGaps, isPartialSpecimen } from '../src/data/identity.ts';
+import { frameStyle, hasSpecimen, identityGaps, isPartialSpecimen } from '../src/data/identity.ts';
 
 const base = {
 	frame: { background: '#101216', titleColor: '#F5C518', titleStyle: 'oswald-caps' },
@@ -91,4 +91,13 @@ test('le nuancier est entier ou absent', () => {
 	assert.equal(isPartialSpecimen(frameOnly), false);
 	const { specimen, ...partial } = base;
 	assert.equal(isPartialSpecimen(partial), true);
+});
+
+test('les couleurs du cadre, et le repli encre', () => {
+	assert.equal(
+		frameStyle({ ...frameOnly.frame, border: '#FFFFFF' }),
+		'--frame-bg:#1F1F1F;--frame-border:#FFFFFF;--frame-title:#338CD2',
+	);
+	assert.equal(frameStyle(frameOnly.frame), '--frame-bg:#1F1F1F;--frame-border:#1F1F1F;--frame-title:#338CD2');
+	assert.equal(frameStyle(undefined), '--frame-bg:var(--ink);--frame-border:var(--ink);--frame-title:#FFFFFF');
 });

@@ -5,6 +5,7 @@ import '@fontsource/jost/latin-500.css';
 import '@fontsource/oswald/latin-600.css';
 import '@fontsource/playfair-display/latin-600-italic.css';
 
+import { frameStyle } from '../../data/identity';
 import type { WorkEntry } from '../../data/work';
 
 /**
@@ -29,11 +30,10 @@ const { entry, variant, featured = false } = Astro.props;
 const { data } = entry;
 const identity = data.identity;
 
-const background = identity?.frame.background ?? 'var(--ink)';
-const border = identity?.frame.border ?? background;
-const titleColor = identity?.frame.titleColor ?? '#FFFFFF';
+const border = identity?.frame.border;
+const bordered = border !== undefined && border !== identity?.frame.background;
 const titleStyle = identity ? `title--${identity.frame.titleStyle}` : 'title--site';
-const style = `--frame-bg:${background};--frame-border:${border};--frame-title:${titleColor}`;
+const style = frameStyle(identity?.frame);
 
 const isCover = variant === 'cover';
 const sizes = isCover
@@ -64,7 +64,7 @@ const imageProps = {
 ---
 
 <div
-	class:list={['project-frame', variant, titleStyle, { bordered: border !== background }]}
+	class:list={['project-frame', variant, titleStyle, { bordered }]}
 	data-frame={identity ? 'identity' : 'ink'}
 	style={style}
 >

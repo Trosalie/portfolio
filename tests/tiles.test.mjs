@@ -64,7 +64,7 @@ test('les six projets sont dans leur identité', () => {
 
 test('le cadre encre reste le repli d’un projet sans identité', () => {
 	const frame = srcFiles(['.astro']).find((f) => f.path.endsWith('work/ProjectFrame.astro')).content;
-	assert.match(frame, /'var\(--ink\)'/);
+	assert.match(frame, /frameStyle\(identity\?\.frame\)/);
 	assert.match(frame, /'identity' : 'ink'/);
 });
 
