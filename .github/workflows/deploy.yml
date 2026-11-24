@@ -48,6 +48,7 @@ jobs:
       #    Ils lisent dist/ et importent du TypeScript, d'ou Node 22.18 ou plus.
       - name: Tests
         run: npm test
+        timeout-minutes: 10
         env:
           PUPPETEER_EXECUTABLE_PATH: ${{ steps.chrome.outputs.chrome-path }}
 

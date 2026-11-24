@@ -144,6 +144,7 @@ const position = (index: number) =>
 
 		const slides = [...track.children] as HTMLElement[];
 		let current = 0;
+		let centredAt = -Infinity;
 
 		controls.hidden = false;
 
@@ -189,8 +190,14 @@ const position = (index: number) =>
 		slides.forEach((slide, index) => {
 			slide.addEventListener('click', (event) => {
 				const modified = event.ctrlKey || event.metaKey || event.shiftKey || event.altKey;
-				if (index === current || event.detail === 0 || modified) return;
+				if (event.detail === 0 || modified) return;
+				if (index === current) {
+					// Encore en mouvement : ce clic visait la voisine, pas son ouverture.
+					if (event.timeStamp - centredAt < 600) event.preventDefault();
+					return;
+				}
 				event.preventDefault();
+				centredAt = event.timeStamp;
 				goTo(index);
 			});
 

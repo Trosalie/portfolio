@@ -104,6 +104,9 @@ const numbered = (key: 'work.viewer.position' | 'work.gallery.position', index: 
 
 	const SMALL = window.matchMedia('(max-width: 49.99em), (max-height: 29.99em)');
 	const PAN = 120;
+	// Le temps d'un double-clic : son second clic, destine a la page, ne doit pas
+	// tomber sur un bouton de la visionneuse qui vient d'apparaitre.
+	const OPENING = 400;
 
 	const modified = (event: MouseEvent | KeyboardEvent) =>
 		event.ctrlKey || event.metaKey || event.shiftKey || event.altKey;
@@ -121,7 +124,12 @@ const numbered = (key: 'work.viewer.position' | 'work.gallery.position', index: 
 
 		let current = 0;
 		let zoomed = false;
+		// La personne a choisi la taille : une rotation ne la change plus.
+		let chosen = false;
 		let opener: HTMLElement | null = null;
+		let openedAt = 0;
+		let firstClick = true;
+		let pressed: EventTarget | null = null;
 
 		const image = () => captures[current]!.querySelector('img')!;
 
@@ -139,6 +147,8 @@ const numbered = (key: 'work.viewer.position' | 'work.gallery.position', index: 
 		const resize = () => {
 			const { fit, zoom, canZoom } = sizes();
 			image().style.width = `${zoomed ? zoom : fit}px`;
+			// Masque avec le focus, le bouton le perdrait et le clavier ne repondrait plus.
+			if (!canZoom && document.activeElement === toggle) stage.focus();
 			toggle.hidden = !canZoom;
 			toggle.textContent = (zoomed ? toggle.dataset.fitLabel : toggle.dataset.zoomLabel) ?? '';
 			dialog.dataset.size = zoomed && canZoom ? 'zoom' : 'fit';
@@ -154,6 +164,7 @@ const numbered = (key: 'work.viewer.position' | 'work.gallery.position', index: 
 			prev?.setAttribute('aria-disabled', String(index === 0));
 			next?.setAttribute('aria-disabled', String(index === captures.length - 1));
 			// La legende vient de changer, et la zone avec elle : on mesure apres.
+			chosen = false;
 			zoomed = sizes().opensZoomed;
 			resize();
 			stage.scrollTo(0, 0);
@@ -168,6 +179,7 @@ const numbered = (key: 'work.viewer.position' | 'work.gallery.position', index: 
 		// `at` : le point touche, en fraction de l'image, a garder sous les yeux.
 		const setZoom = (value: boolean, at?: { x: number; y: number }) => {
 			zoomed = value;
+			chosen = true;
 			resize();
 			if (!at || !value) return;
 			const { width, height } = image().getBoundingClientRect();
@@ -184,12 +196,31 @@ const numbered = (key: 'work.viewer.position' | 'work.gallery.position', index: 
 			event.preventDefault();
 			opener = trigger;
 			live.textContent = '';
+			openedAt = event.timeStamp;
+			firstClick = true;
 			dialog.showModal();
 			show(Number(trigger.dataset.viewerOpen));
 		});
 
+		// Avant tout bouton. Un clic du clavier n'a pas de compte (`detail` a zero).
+		dialog.addEventListener(
+			'click',
+			(event) => {
+				const early = event.timeStamp - openedAt < OPENING || (firstClick && event.detail > 1);
+				if (event.detail > 0 && early) {
+					event.preventDefault();
+					event.stopPropagation();
+				} else firstClick = false;
+			},
+			true,
+		);
+
+		const isGround = (target: EventTarget | null) => target === dialog || target === stage;
+
+		dialog.addEventListener('pointerdown', (event) => (pressed = event.target));
+
 		dialog.addEventListener('click', (event) => {
-			// Le second clic d'un double-clic sur la page arrive ici : il n'a rien demande.
+			// Un double-clic sur la capture ne change qu'une fois de taille.
 			if (event.detail > 1) return;
 			const target = event.target as Element;
 			if (target === image()) {
@@ -200,7 +231,8 @@ const numbered = (key: 'work.viewer.position' | 'work.gallery.position', index: 
 			}
 			const onScrollbar =
 				target === stage && (event.offsetX >= stage.clientWidth || event.offsetY >= stage.clientHeight);
-			if ((target === dialog || target === stage) && !onScrollbar) dialog.close();
+			// Presse et relache sur le fond : un texte selectionne ne ferme pas.
+			if (isGround(target) && isGround(pressed) && !onScrollbar) dialog.close();
 		});
 
 		toggle.addEventListener('click', () => setZoom(!zoomed));
@@ -224,9 +256,18 @@ const numbered = (key: 'work.viewer.position' | 'work.gallery.position', index: 
 			last?.dispatchEvent(new CustomEvent('gallery:show', { bubbles: true }));
 			const target = opener?.matches('a') ? (last ?? opener) : opener;
 			target?.focus({ preventScroll: true });
+			// Apres une rotation, la page n'est plus la ou on l'avait laissee.
+			const box = target?.getBoundingClientRect();
+			if (box && (box.bottom <= 0 || box.top >= window.innerHeight)) {
+				target?.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'instant' });
+			}
 		});
 
-		new ResizeObserver(() => dialog.open && resize()).observe(stage);
+		new ResizeObserver(() => {
+			if (!dialog.open) return;
+			if (!chosen) zoomed = sizes().opensZoomed;
+			resize();
+		}).observe(stage);
 	}
 
 	document.querySelectorAll<HTMLDialogElement>('[data-viewer]').forEach(setupViewer);
@@ -244,6 +285,7 @@ const numbered = (key: 'work.viewer.position' | 'work.gallery.position', index: 
 		height: 100dvh;
 		max-height: none;
 		padding: 0.75rem 1rem;
+		overscroll-behavior: contain;
 		border: 0;
 		background: var(--frame-bg);
 		color: var(--frame-title);
@@ -253,19 +295,28 @@ const numbered = (key: 'work.viewer.position' | 'work.gallery.position', index: 
 		background: none;
 	}
 
-	/* `display` ne va que sur la boite ouverte : fermee, elle doit rester masquee. */
+	/* `display` ne va que sur la boite ouverte : fermee, elle doit rester masquee.
+	   La capture garde toujours de la place : en texte agrandi ou sur un ecran tres
+	   bas, c'est la boite qui defile. */
 	.viewer[open] {
 		display: grid;
 		grid-template:
-			'head head head' auto
-			'stage stage stage' minmax(0, 1fr)
-			'captions captions captions' auto
-			'prev toggle next' auto / 2.75rem minmax(0, 1fr) 2.75rem;
+			'head head head' max-content
+			'stage stage stage' minmax(min(9.5rem, 60dvh), 1fr)
+			'captions captions captions' max-content
+			'prev toggle next' max-content / 2.75rem minmax(0, 1fr) 2.75rem;
 		gap: 0.75rem 1rem;
 	}
 
 	.viewer [hidden] {
 		display: none;
+	}
+
+	/* Le bouton de taille garde sa place : la rendre a la capture l'agrandirait, et
+	   ferait revenir le bouton, sans fin. */
+	.viewer .toggle[hidden] {
+		display: block;
+		visibility: hidden;
 	}
 
 	.viewer :focus-visible {
@@ -274,7 +325,7 @@ const numbered = (key: 'work.viewer.position' | 'work.gallery.position', index: 
 
 	.position {
 		grid-area: head;
-		align-self: center;
+		place-self: center start;
 	}
 
 	.close {
@@ -315,9 +366,15 @@ const numbered = (key: 'work.viewer.position' | 'work.gallery.position', index: 
 
 	.captions {
 		grid-area: captions;
+		/* Vide autour de son texte, la rangee est du fond : un clic y ferme. */
+		pointer-events: none;
 		max-width: var(--measure);
 		font-size: var(--step--1);
 		line-height: 1.4;
+	}
+
+	.captions p {
+		pointer-events: auto;
 	}
 
 	.text-button,
@@ -379,7 +436,9 @@ const numbered = (key: 'work.viewer.position' | 'work.gallery.position', index: 
 		grid-area: next;
 	}
 
-	@media (min-width: 50em) {
+	/* Grand ecran, ou telephone couche : la hauteur y est trop rare pour une rangee
+	   de fleches. */
+	@media (min-width: 50em), (max-height: 29.99em) {
 		.viewer {
 			padding: 0.75rem 1.5rem;
 		}
@@ -388,9 +447,9 @@ const numbered = (key: 'work.viewer.position' | 'work.gallery.position', index: 
 		   partagent la derniere rangee sans elargir la colonne de la fleche. */
 		.viewer[open] {
 			grid-template:
-				'head head head' auto
-				'prev stage next' minmax(0, 1fr)
-				'captions captions captions' auto / 2.75rem minmax(0, 1fr) 2.75rem;
+				'head head head' max-content
+				'prev stage next' minmax(min(9.5rem, 60dvh), 1fr)
+				'captions captions captions' max-content / 2.75rem minmax(0, 1fr) 2.75rem;
 		}
 
 		.arrow {

@@ -124,7 +124,10 @@ par 3 pour une capture plus haute que large (téléphone en 3x : 1290 px donnent
 - **Basculer :** un appui sur la capture ou le bouton, « Agrandir » ou « Voir entière ». En
   agrandissant d'un appui, l'endroit touché reste à l'écran, au plus près du centre.
 - Quand les deux tailles diffèrent de moins de 10 %, il n'y a ni bouton ni bascule.
-- Tourner le téléphone ou redimensionner garde la capture en cours et recalcule ses tailles.
+- Tourner le téléphone ou redimensionner garde la capture en cours et recalcule ses tailles. Tant
+  que la personne n'a pas choisi de taille, la règle d'ouverture s'applique de nouveau.
+- La capture garde au moins 150 px de haut, texte agrandi compris : au-delà, c'est la boîte qui
+  défile.
 
 ## Ouvrir
 
@@ -137,6 +140,8 @@ par 3 pour une capture plus haute que large (téléphone en 3x : 1290 px donnent
   capture, et dans la barre de commandes de la galerie, où il ouvre la capture centrale. Le curseur
   indique le zoom.
 - Le focus va sur « Fermer ».
+- Un double-clic sur la page ne fait qu'ouvrir : les clics des 400 premières millisecondes sont
+  ignorés. Dans la galerie, un clic répété sur une voisine qui se centre ne l'ouvre pas.
 
 ## Se déplacer et fermer
 
@@ -151,7 +156,8 @@ par 3 pour une capture plus haute que large (téléphone en 3x : 1290 px donnent
 - **Retour :** ouverte depuis la couverture ou le bouton « Agrandir », elle rend le focus à ce
   point de départ. Ouverte depuis une capture de la galerie, elle place la galerie sur la dernière
   capture vue et y pose le focus ; si la dernière vue n'est pas dans la galerie, le focus revient à
-  la capture de départ. La page ne défile pas verticalement.
+  la capture de départ. La page ne défile pas verticalement, sauf si une
+  rotation a sorti ce point de retour de l'écran.
 - La page derrière ne défile pas pendant que la visionneuse est ouverte.
 
 ## Libellés

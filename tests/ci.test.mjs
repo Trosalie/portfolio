@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { execFile } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
 
@@ -22,4 +23,20 @@ test('la CI lance les tests avant de déployer', () => {
 test('les tests de la CI trouvent Chrome', () => {
 	const step = read('.github/workflows/deploy.yml').split('- name: Tests')[1].split('- name:')[0];
 	assert.ok(step.includes('PUPPETEER_EXECUTABLE_PATH: ${{ steps.chrome.outputs.chrome-path }}'), step);
+});
+
+// Un Chrome qui ne demarre pas doit donner un test rouge, pas un deploiement qui
+// attend la limite de GitHub.
+test('sans Chrome, les tests échouent au lieu d’attendre', async () => {
+	const helper = new URL('./browser.mjs', import.meta.url).href;
+	const result = await new Promise((resolve) => {
+		execFile(
+			process.execPath,
+			['--input-type=module', '-e', `import { openSite } from '${helper}'; await openSite().catch(() => {});`],
+			{ timeout: 20000, env: { ...process.env, PUPPETEER_EXECUTABLE_PATH: '/pas/de/chrome' } },
+			(error) => resolve(error?.killed ? 'bloqué' : 'terminé'),
+		);
+	});
+	assert.equal(result, 'terminé');
+	assert.match(read('.github/workflows/deploy.yml').split('- name: Tests')[1].split('- name:')[0], /timeout-minutes: \d+/);
 });
