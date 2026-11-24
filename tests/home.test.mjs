@@ -21,8 +21,12 @@ test('le bouton mène au CV, le lien au contact', () => {
 	assert.match(page('/en/'), /href="\/en\/cv\/"[^>]*>\s*Read my resume\s*</);
 });
 
-test('quatre vignettes puis un lien vers tous les projets', () => {
-	assert.equal(page('/').match(/class="tile[" ]/g).length, 4);
+test('les trois phares puis un lien vers tous les projets', () => {
+	for (const route of ['/', '/en/']) {
+		const tiles = chunk(page(route), 'class="tiles tiles--pair', '</ul>');
+		assert.equal(tiles.match(/<a[^>]*class="tile[" ]/g).length, 3);
+		assert.doesNotMatch(tiles, /projet-chat|cartel-desc/);
+	}
 	assert.match(page('/'), /href="\/work\/"[^>]*>\s*Voir tous les projets\s*</);
 });
 

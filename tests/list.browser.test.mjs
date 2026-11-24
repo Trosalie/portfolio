@@ -138,3 +138,33 @@ for (const path of ['/work/', '/']) {
 			});
 		}));
 }
+
+for (const path of ['/', '/en/']) {
+	for (const width of WIDTHS) {
+		test(`${path} à ${width} px`, () =>
+			at(path, width, async (page) => {
+				assert.equal(await overflows(page), false, 'défilement horizontal');
+				const pair = await tiles(page, '.tiles--pair');
+				assert.deepEqual(pair.map((t) => t.slug), ['chronopotes', 'seenit', 'bluepoint-waste-identifier']);
+				same(pair.map((t) => t.frame.width), 'cadres de même largeur');
+				if (width < 800) return assertColumn(pair, 'accueil');
+				assertRow(pair.slice(0, 2), 'première rangée');
+				const last = pair[2];
+				assert.ok(last.frame.top >= pair[0].cartel.bottom, 'BluePoint sur sa rangée');
+				near(last.frame.left, pair[0].frame.left, 'cadre dans la première colonne');
+				near(last.cartel.left, pair[1].frame.left, 'cartel dans la seconde colonne');
+				near(last.image.bottom + last.inner, last.frame.bottom, 'cadre étiré');
+				assertBeside(last, 'BluePoint');
+			}));
+	}
+}
+
+test('un quatrième phare : deux rangées de deux', () =>
+	at('/', 1440, async (page) => {
+		await page.$eval('.tiles--pair', (list) => list.append(list.firstElementChild.cloneNode(true)));
+		const pair = await tiles(page, '.tiles--pair');
+		assert.equal(pair.length, 4);
+		same(pair.map((t) => t.frame.width), 'cadres de même largeur');
+		assertRow(pair.slice(0, 2), 'première rangée');
+		assertRow(pair.slice(2), 'seconde rangée');
+	}));

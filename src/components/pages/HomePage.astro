@@ -10,6 +10,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ContactCTA from '../ContactCTA.astro';
 import ProjectTile from '../work/ProjectTile.astro';
+import { byLevel } from '../../data/levels';
 import { getWorkCollection, workBasePath } from '../../data/work';
 import { getLangFromUrl, useTranslations } from '../../i18n/ui';
 
@@ -17,9 +18,9 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const prefix = lang === 'en' ? '/en' : '';
 
-// Les quatre projets les plus recents, dans la langue de la page. Le tri et le
-// controle de parite FR/EN vivent dans src/data/work.ts.
-const projects = (await getWorkCollection(lang)).slice(0, 4);
+// Les projets phares, dans la langue de la page. Le tri et le controle de parite
+// FR/EN vivent dans src/data/work.ts.
+const projects = byLevel(await getWorkCollection(lang)).featured;
 ---
 
 <BaseLayout>
