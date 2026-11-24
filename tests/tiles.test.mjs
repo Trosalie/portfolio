@@ -23,7 +23,7 @@ function contrast(a, b) {
 const frameOf = (slug) => {
 	const html = tile('/work/', slug);
 	const style = html.match(/style="([^"]*--frame-bg[^"]*)"/)[1];
-	const value = (name) => style.match(new RegExp(`--${name}:\s*([^;]+)`))[1].trim();
+	const value = (name) => style.match(new RegExp(`--${name}:\\s*([^;]+)`))[1].trim();
 	return { html, bg: value('frame-bg'), border: value('frame-border'), title: value('frame-title') };
 };
 
@@ -115,12 +115,16 @@ test('chaque vignette sert un recadrage sous 50em', () => {
 		const source = tile('/work/', slug).match(/<source[^>]*>/)?.[0] ?? '';
 		assert.ok(source.includes('media="(max-width: 49.99em)"'), slug);
 		assert.match(source, /srcset="[^"]*\.webp/, slug);
+		// Les marges de la page et du cadre (5,5rem) sont deduites : un telephone 2x
+		// se contente alors du fichier de 640 px.
+		assert.ok(source.includes('sizes="calc(100vw - 5.5rem)"'), slug);
 	}
 	assert.ok(tile('/en/work/', 'seenit').includes('<source'));
 });
 
 test('la couverture d’une page projet n’est pas recadrée', () => {
 	assert.ok(!page('/work/seenit/').includes('<source'));
+	assert.ok(!page('/work/seenit/').includes('<picture'));
 });
 
 test('les liens anglais restent en anglais', () => {

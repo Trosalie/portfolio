@@ -17,11 +17,15 @@ const { entry, lang } = Astro.props;
 const { data } = entry;
 const t = useTranslations(lang);
 
+// L'espace d'une technologie en deux mots est insecable : « API TMDb » passe
+// entiere a la ligne suivante au lieu de se couper.
+const tech = data.tags.map((tag) => tag.replaceAll(' ', '\u00a0')).join(', ');
+
 const rows = [
 	{ label: t('work.fact.period'), value: data.period },
 	{ label: t('work.fact.context'), value: data.context },
 	{ label: t('work.fact.team'), value: data.team },
-	{ label: t('work.fact.tech'), value: data.tags.join(', ') },
+	{ label: t('work.fact.tech'), value: tech },
 ].filter((row) => Boolean(row.value));
 ---
 
@@ -56,5 +60,6 @@ const rows = [
 	dd {
 		margin: 0;
 		color: var(--ink-muted);
+		overflow-wrap: anywhere;
 	}
 </style>

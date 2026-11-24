@@ -49,7 +49,7 @@ test('le nuancier de ChronoPotes et ses palettes', () => {
 	assert.ok(text(page('/en/work/chronopotes/')).includes('Dial'));
 });
 
-test('pas de nuancier pour un projet sans identité', () => {
+test('un cadre seul n’affiche pas de nuancier', () => {
 	assert.ok(!page('/work/bluepoint-waste-identifier/').includes('Identité visuelle'));
 });
 
@@ -82,6 +82,10 @@ test('la fiche du projet, en français et en anglais', () => {
 		'Période Novembre 2026 Cadre Projet personnel Équipe Seul Technologies React, TypeScript, Node.js, SQLite, API TMDb',
 	);
 	assert.ok(facts('/en/work/seenit/').includes('Date November 2026 Context Personal project Team Solo Technologies React'));
+});
+
+test('une technologie en deux mots ne se coupe pas dans la fiche', () => {
+	assert.match(chunk(page('/work/seenit/'), 'class="facts', '</dl>'), /API( |&nbsp;|&#160;)TMDb/);
 });
 
 test('une ligne sans valeur n’apparaît pas dans la fiche', () => {

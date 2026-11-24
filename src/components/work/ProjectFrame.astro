@@ -53,6 +53,14 @@ const mobile = mobileImage
 			format: 'webp',
 		})
 	: undefined;
+
+const imageProps = {
+	widths,
+	sizes,
+	alt: isCover ? data.img_alt! : '',
+	loading: isCover ? ('eager' as const) : ('lazy' as const),
+	decoding: 'async' as const,
+};
 ---
 
 <div
@@ -64,26 +72,22 @@ const mobile = mobileImage
 	{variant === 'tile' && data.img && <span class="frame-title" aria-hidden="true">{data.title}</span>}
 	{
 		variant === 'band' ? null : data.img ? (
-			<picture>
-				{mobile && mobileImage && (
+			mobile && mobileImage ? (
+				<picture>
+					{/* Les marges de la page (3rem) et du cadre (2,5rem) sont deduites. */}
 					<source
 						media="(max-width: 49.99em)"
 						srcset={mobile.srcSet.attribute}
-						sizes="100vw"
+						sizes="calc(100vw - 5.5rem)"
 						width={mobileImage.width}
 						height={mobileImage.height}
 						type="image/webp"
 					/>
-				)}
-				<Image
-					src={data.img}
-					alt={isCover ? data.img_alt! : ''}
-					widths={widths}
-					sizes={sizes}
-					loading={isCover ? 'eager' : 'lazy'}
-					decoding="async"
-				/>
-			</picture>
+					<Image src={data.img} {...imageProps} />
+				</picture>
+			) : (
+				<Image src={data.img} {...imageProps} />
+			)
 		) : (
 			<span class="frame-name" aria-hidden="true">
 				{data.title}
