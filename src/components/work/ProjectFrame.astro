@@ -42,16 +42,16 @@ const isCover = variant === 'cover';
 // La largeur de la capture, marges du cadre deduites. Un phare prend toute la page
 // entre 50em et 64em (voir ProjectTile.astro).
 const tileSizes: Record<TileSize, string> = {
-	card: '(min-width: 50em) 31rem, 100vw',
-	wide: '(min-width: 64em) 38rem, (min-width: 50em) calc(100vw - 9rem), 100vw',
-	small: '(min-width: 50em) 19rem, 100vw',
+	card: '(min-width: 76em) 31rem, (min-width: 50em) calc(50vw - 7.4rem), calc(100vw - 5.5rem)',
+	wide: '(min-width: 76em) 38rem, (min-width: 64em) calc(60vw - 8.2rem), (min-width: 50em) calc(100vw - 9rem), calc(100vw - 5.5rem)',
+	small: '(min-width: 76em) 19rem, (min-width: 50em) calc(33.4vw - 6.5rem), calc(100vw - 5.5rem)',
 };
 const sizes = isCover ? '(min-width: 50em) 66rem, 100vw' : tileSizes[size];
 const widths = isCover
 	? [640, 1024, 1600]
 	: size === 'wide'
 		? [640, 800, 1200, 1600, 1920]
-		: [320, 480, 640, 800, 1200];
+		: [240, 320, 480, 640, 800, 1200];
 
 // Le recadrage mobile est etroit par choix (voir scripts/crop-mobile-tiles.mjs) :
 // on ne demande jamais une largeur superieure a celle du fichier.

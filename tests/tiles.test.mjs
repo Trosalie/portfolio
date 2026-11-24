@@ -131,6 +131,6 @@ test('les liens anglais restent en anglais', () => {
 	assert.ok(page('/en/work/').includes('href="/en/work/seenit"'));
 });
 
-test('l’étiquette du projet mis en avant se pose au pied de son cadre', () => {
+test('l’étiquette d’un projet phare se pose au pied de son cadre', () => {
 	assert.match(pageCss('/work/'), /\.wide(\[[^\]]*\])?\s*>\s*\.cartel\s*{[^}]*align-self:\s*(end|flex-end)/);
 });

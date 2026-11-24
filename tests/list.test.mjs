@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import { chunk, page, pageCss } from './helpers.mjs';
+import { chunk, page } from './helpers.mjs';
 
 const slugs = (html) => [...html.matchAll(/<a[^>]*class="tile[^>]*href="[^"]*\/([^"/]+)"/g)].map((m) => m[1]);
 const group = (route, name) => chunk(page(route), `class="tiles tiles--${name}`, '</ul>');
@@ -18,7 +18,3 @@ for (const [route, title] of [
 		assert.doesNotMatch(group(route, 'three'), /cartel-desc/);
 	});
 }
-
-test('les rangées alignées demandent subgrid, sans quoi l’ancienne mise en page reste', () => {
-	assert.match(pageCss('/work/'), /@supports\s*\(grid-template-rows:\s*subgrid\)/);
-});

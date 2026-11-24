@@ -51,8 +51,10 @@ const { entry, lang, size = 'card', withDescription = false } = Astro.props;
 		text-underline-offset: 0.2em;
 	}
 
-	/* A 64em et non 50em : plus etroite, l'etiquette de BluePoint depasserait son cadre. */
-	@media (min-width: 64em) {
+	/* Plus etroite, l'etiquette de BluePoint depasserait son cadre. 58rem, la place d'un
+	   phare sur un ecran de 64em ; en rem et sur la vignette (voir global.css), le texte
+	   agrandi compte aussi. */
+	@container (min-width: 58rem) {
 		.tile.wide {
 			display: grid;
 			grid-template-columns: 3fr 2fr;

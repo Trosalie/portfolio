@@ -284,20 +284,53 @@ h5 {
 		}
 	}
 
-	/* En nombre impair, la derniere occupe sa rangee : son cartel se pose dans la
-	   seconde colonne plutot que d'y laisser un trou. */
-	.tiles--pair > li:last-child:nth-child(odd) {
+	/* Seule sur sa rangee, la derniere vignette l'occupe : son cartel se pose dans la
+	   colonne d'a cote plutot que d'y laisser un trou. En rem et sur la vignette, non
+	   sur l'ecran : en texte tres agrandi, le cartel depasserait son cadre. */
+	:is(.tiles--pair > li:last-child:nth-child(odd), .tiles--three > li:last-child:nth-child(3n + 1)) {
 		display: block;
 		grid-column: 1 / -1;
+		container-type: inline-size;
 	}
 
-	.tiles--pair > li:last-child:nth-child(odd) > a.tile {
-		display: grid;
-		grid-template: auto / repeat(2, minmax(0, 1fr));
-		column-gap: 2.5rem;
+	@container (min-width: 44rem) {
+		:is(.tiles--pair > li:last-child:nth-child(odd), .tiles--three > li:last-child:nth-child(3n + 1)) > a.tile {
+			display: grid;
+			grid-template: auto / repeat(2, minmax(0, 1fr));
+			column-gap: 2.5rem;
+		}
+
+		.tiles--three > li:last-child:nth-child(3n + 1) > a.tile {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			column-gap: 2rem;
+		}
+
+		:is(.tiles--pair > li:last-child:nth-child(odd), .tiles--three > li:last-child:nth-child(3n + 1))
+			> a.tile
+			> :is(.project-frame, .cartel) {
+			align-self: end;
+			justify-self: start;
+		}
+
+		:is(.tiles--pair > li:last-child:nth-child(odd), .tiles--three > li:last-child:nth-child(3n + 1))
+			> a.tile
+			> .project-frame {
+			width: 100%;
+		}
+	}
+}
+
+/* Le phare mesure sa propre place (voir ProjectTile.astro). */
+.tiles--wide > li {
+	container-type: inline-size;
+}
+
+@media print {
+	.tiles > li {
+		break-inside: avoid;
 	}
 
-	.tiles--pair > li:last-child:nth-child(odd) > a.tile > :is(.project-frame, .cartel) {
-		align-self: end;
+	main h2 {
+		break-after: avoid;
 	}
 }

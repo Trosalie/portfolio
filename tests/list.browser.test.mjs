@@ -140,50 +140,35 @@ for (const path of ['/work/', '/en/work/', '/', '/en/']) {
 	}
 }
 
-// Un phare prend toute la largeur entre 50em et 64em : net aussi sur un ecran 2x.
-for (const width of [820, 1023, 1440]) {
-	test(`/work/ à ${width} px, écran 2x : les phares restent nets`, () =>
-		at('/work/', width, async (page) => {
-			await page.setViewport({ width, height: 900, deviceScaleFactor: 2 });
-			await page.reload({ waitUntil: 'networkidle0' });
-			const images = await page.$$eval('.tiles--wide img', async (els) =>
-				Promise.all(
-					els.map(async (img) => {
-						img.loading = 'eager';
-						await img.decode();
-						const file = new Image();
-						file.src = img.currentSrc;
-						await file.decode();
-						return [img.currentSrc, file.naturalWidth / (img.getBoundingClientRect().width * 2)];
-					}),
-				),
-			);
-			images.forEach(([src, ratio]) => assert.ok(ratio >= 0.99 && ratio <= 1.7, `${src} : ${ratio.toFixed(2)}`));
-		}));
-}
-
+// Ni floues, ni plus lourdes que necessaire, a chaque largeur et sur un ecran fin.
 for (const path of ['/work/', '/']) {
-	test(`${path} à 1440 px : des images à la taille de leur place`, () =>
-		at(path, 1440, async (page) => {
-			const images = await page.$$eval('a.tile img', async (els) =>
-				Promise.all(
-					els.map(async (img) => {
-						img.loading = 'eager';
-						await img.decode();
-						// `naturalWidth` tient compte de `sizes` : le fichier lui-meme dit sa largeur.
-						const file = new Image();
-						file.src = img.currentSrc;
-						await file.decode();
-						return [img.currentSrc, file.naturalWidth, img.getBoundingClientRect().width];
-					}),
-				),
-			);
-			assert.ok(images.length >= 3);
-			images.forEach(([src, natural, shown]) => {
-				const ratio = natural / shown;
-				assert.ok(ratio >= 1 && ratio <= 1.7, `${src} : ${natural} px pour ${Math.round(shown)}`);
-			});
-		}));
+	for (const width of [1440, 1180, 1100, 1024, 1023, 900, 820, 800]) {
+		for (const density of [1, 2]) {
+			test(`${path} à ${width} px, écran ${density}x : des images à la taille de leur place`, () =>
+				at(path, width, async (page) => {
+					await page.setViewport({ width, height: 900, deviceScaleFactor: density });
+					await page.reload({ waitUntil: 'networkidle0' });
+					const images = await page.$$eval('a.tile img', async (els) =>
+						Promise.all(
+							els.map(async (img) => {
+								img.loading = 'eager';
+								await img.decode();
+								// `naturalWidth` tient compte de `sizes` : le fichier lui-meme dit sa largeur.
+								const file = new Image();
+								file.src = img.currentSrc;
+								await file.decode();
+								return [img.currentSrc, file.naturalWidth, img.getBoundingClientRect().width * devicePixelRatio];
+							}),
+						),
+					);
+					assert.ok(images.length >= 3);
+					images.forEach(([src, natural, needed]) => {
+						const ratio = natural / needed;
+						assert.ok(ratio >= 0.99 && ratio <= 1.7, `${src} : ${natural} px pour ${Math.round(needed)}`);
+					});
+				}));
+		}
+	}
 }
 
 for (const path of ['/', '/en/']) {
@@ -214,4 +199,102 @@ test('un quatrième phare : deux rangées de deux', () =>
 		same(pair.map((t) => t.frame.width), 'cadres de même largeur');
 		assertRow(pair.slice(0, 2), 'première rangée');
 		assertRow(pair.slice(2), 'seconde rangée');
+	}));
+
+// Un projet de BUT de plus ou de moins : jamais un trou a cote d'une vignette seule.
+for (const count of [1, 4, 7]) {
+	test(`${count} projet(s) de BUT : le dernier occupe sa rangée`, () =>
+		at('/work/', 1440, async (page) => {
+			await page.$eval(
+				'.tiles--three',
+				(list, total) => {
+					const items = [...list.children];
+					while (list.children.length < total) list.append(items[list.children.length % items.length].cloneNode(true));
+					while (list.children.length > total) list.lastElementChild.remove();
+				},
+				count,
+			);
+			assert.deepEqual(await strays(page), []);
+			const three = await tiles(page, '.tiles--three');
+			assert.equal(three.length, count);
+			const last = three.at(-1);
+			near(last.frame.width, 352, 'cadre de la largeur d’une colonne');
+			near(last.image.bottom + last.inner, last.frame.bottom, 'cadre étiré');
+			assertBeside(last, 'dernière');
+			for (let i = 0; i + 2 < count - 1; i += 3) assertRow(three.slice(i, i + 3), `rangée ${i / 3 + 1}`);
+		}));
+}
+
+test('deux projets de BUT : une rangée alignée', () =>
+	at('/work/', 1440, async (page) => {
+		await page.$eval('.tiles--three', (list) => list.lastElementChild.remove());
+		assertRow(await tiles(page, '.tiles--three'), 'rangée');
+	}));
+
+/** Retire les regles qui demandent `subgrid`, comme un navigateur qui ne le connait pas. */
+const withoutSubgrid = (page) =>
+	page.evaluate(() => {
+		let removed = 0;
+		const prune = (group) => {
+			for (let i = group.cssRules.length - 1; i >= 0; i--) {
+				const rule = group.cssRules[i];
+				if (rule instanceof CSSSupportsRule && rule.conditionText.includes('subgrid')) {
+					group.deleteRule(i);
+					removed++;
+				} else if (rule.cssRules) prune(rule);
+			}
+		};
+		for (const sheet of document.styleSheets) prune(sheet);
+		return removed;
+	});
+
+for (const [path, list] of [
+	['/work/', '.tiles--three'],
+	['/', '.tiles--pair'],
+]) {
+	for (const width of [1440, 820]) {
+		test(`${path} à ${width} px sans subgrid : rien ne se chevauche`, () =>
+			at(path, width, async (page) => {
+				const cartels = (await tiles(page, list)).map((t) => t.cartel.width);
+				assert.ok((await withoutSubgrid(page)) > 0, 'aucune règle retirée');
+				assert.deepEqual(await strays(page), []);
+				const all = await tiles(page, list);
+				const row = all.slice(0, list === '.tiles--three' ? 3 : 2);
+				same(row.map((t) => t.frame.top), 'hauts des cadres');
+				row.forEach((t) => assert.ok(t.cartel.top >= t.frame.bottom, `${t.slug}, cartel sous le cadre`));
+				if (list === '.tiles--pair') {
+					assertBeside(all[2], 'BluePoint');
+					near(all[2].cartel.width, cartels[2], 'le cartel garde la largeur de son texte');
+				}
+			}));
+	}
+}
+
+// En texte tres agrandi, un cartel a cote de son cadre ne doit pas le depasser.
+for (const [path, list, widths] of [
+	['/work/', '.tiles--wide', [1024, 1440]],
+	['/en/work/', '.tiles--wide', [1024, 1440]],
+	['/', '.tiles--pair', [800, 820, 1024, 1440]],
+]) {
+	for (const width of widths) {
+		for (const size of ['150%', '200%']) {
+			test(`${path} à ${width} px, texte à ${size} : aucun cartel plus haut que son cadre à côté`, () =>
+				at(path, width, async (page) => {
+					await page.evaluate((value) => (document.documentElement.style.fontSize = value), size);
+					for (const t of await tiles(page, list)) {
+						if (t.cartel.top >= t.frame.bottom) continue;
+						assert.ok(t.cartel.height <= t.frame.height + 1, `${t.slug} : ${t.cartel.height} et ${t.frame.height}`);
+					}
+					assert.deepEqual(await strays(page), []);
+				}));
+		}
+	}
+}
+
+test('à l’impression, une vignette ne se coupe pas et un titre reste avec la suite', () =>
+	at('/work/', 1440, async (page) => {
+		await page.emulateMediaType('print');
+		const inside = await page.$$eval('.tiles > li', (els) => els.map((el) => getComputedStyle(el).breakInside));
+		assert.deepEqual(inside, Array(6).fill('avoid'));
+		assert.equal(await page.$eval('main h2', (el) => getComputedStyle(el).breakAfter), 'avoid');
 	}));
