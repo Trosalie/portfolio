@@ -1,0 +1,278 @@
+---
+import Icon from '../Icon.astro';
+import type { ViewerCapture } from '../../data/captures';
+import { frameStyle, type ProjectIdentity } from '../../data/identity';
+import { useTranslations, type Lang } from '../../i18n/ui';
+
+/**
+ * La visionneuse des captures d'un projet, dans les couleurs de son cadre.
+ *
+ * Toutes les captures sont dans la page, une seule est affichee a la fois : dans
+ * un `<dialog>` ferme, une image paresseuse n'est jamais telechargee. Sans
+ * JavaScript rien ne l'ouvre, et les liens de la page menent aux images.
+ * Voir docs/superpowers/specs/2026-11-24-visionneuse-design.md.
+ */
+interface Props {
+	captures: ViewerCapture[];
+	identity: ProjectIdentity | undefined;
+	lang: Lang;
+}
+
+const { captures, identity, lang } = Astro.props;
+const t = useTranslations(lang);
+const several = captures.length > 1;
+
+const numbered = (key: 'work.viewer.position' | 'work.gallery.position', index: number) =>
+	t(key)
+		.replace('{n}', String(index + 1))
+		.replace('{total}', String(captures.length));
+---
+
+<dialog class="viewer" data-viewer aria-label={t('work.gallery.label')} style={frameStyle(identity?.frame)}>
+	{
+		several && (
+			<p class="position" data-position>
+				{numbered('work.viewer.position', 0)}
+			</p>
+		)
+	}
+	<form method="dialog" class="close">
+		<button class="text-button" data-close autofocus>{t('work.viewer.close')}</button>
+	</form>
+
+	{/* La zone prend le focus pour defiler au clavier quand la capture est agrandie. */}
+	<div class="stage" data-stage tabindex="0" role="group" aria-label={t('work.gallery.label')}>
+		{
+			captures.map((capture, index) => (
+				<div
+					class="capture"
+					data-capture
+					data-width={capture.src.width}
+					data-height={capture.src.height}
+					data-position-label={several ? numbered('work.viewer.position', index) : undefined}
+					data-live={numbered('work.gallery.position', index)}
+					hidden={index > 0}
+				>
+					<img
+						src={capture.full}
+						alt={capture.alt}
+						width={capture.src.width}
+						height={capture.src.height}
+						loading="lazy"
+						decoding="async"
+					/>
+				</div>
+			))
+		}
+	</div>
+
+	<div class="captions">
+		{
+			captures.map((capture, index) => (
+				<p data-caption hidden={index > 0 || !capture.caption}>
+					{capture.caption}
+				</p>
+			))
+		}
+	</div>
+
+	{
+		several && (
+			<>
+				<button type="button" class="arrow prev" data-prev aria-label={t('work.gallery.previous')}>
+					<Icon icon="arrow-left" size="1.25rem" />
+				</button>
+				<button type="button" class="arrow next" data-next aria-label={t('work.gallery.next')}>
+					<Icon icon="arrow-right" size="1.25rem" />
+				</button>
+			</>
+		)
+	}
+	<button
+		type="button"
+		class="text-button toggle"
+		data-toggle
+		data-zoom-label={t('work.viewer.open')}
+		data-fit-label={t('work.viewer.fit')}>{t('work.viewer.open')}</button
+	>
+
+	<p class="sr-only" aria-live="polite" data-live-region></p>
+</dialog>
+
+<style>
+	/* La page derriere ne defile pas tant que la visionneuse est ouverte. */
+	:global(html:has(dialog.viewer[open])) {
+		overflow: hidden;
+	}
+
+	.viewer {
+		width: 100%;
+		max-width: none;
+		height: 100dvh;
+		max-height: none;
+		padding: 0.75rem 1rem;
+		border: 0;
+		background: var(--frame-bg);
+		color: var(--frame-title);
+	}
+
+	.viewer::backdrop {
+		background: none;
+	}
+
+	/* `display` ne va que sur la boite ouverte : fermee, elle doit rester masquee. */
+	.viewer[open] {
+		display: grid;
+		grid-template:
+			'position position close' auto
+			'stage stage stage' minmax(0, 1fr)
+			'captions captions captions' auto
+			'prev toggle next' auto / auto minmax(0, 1fr) auto;
+		gap: 0.75rem 1rem;
+	}
+
+	.viewer [hidden] {
+		display: none;
+	}
+
+	.viewer :focus-visible {
+		outline-color: var(--frame-title);
+	}
+
+	.position {
+		grid-area: position;
+		align-self: center;
+	}
+
+	.close {
+		grid-area: close;
+		justify-self: end;
+	}
+
+	.stage {
+		grid-area: stage;
+		display: flex;
+		overflow: auto;
+		overscroll-behavior: contain;
+	}
+
+	.stage:focus-visible {
+		outline-offset: -2px;
+	}
+
+	/* `margin: auto` et non un centrage de la zone : une capture agrandie garde
+	   ainsi son bord gauche atteignable. */
+	.capture {
+		flex: none;
+		margin: auto;
+	}
+
+	.capture img {
+		display: block;
+		max-width: none;
+	}
+
+	[data-size='fit'][data-zoomable] .capture img {
+		cursor: zoom-in;
+	}
+
+	[data-size='zoom'] .capture img {
+		cursor: zoom-out;
+	}
+
+	.captions {
+		grid-area: captions;
+		max-width: var(--measure);
+		font-size: var(--step--1);
+		line-height: 1.4;
+	}
+
+	.text-button,
+	.arrow {
+		min-width: 2.75rem;
+		min-height: 2.75rem;
+		border: 0;
+		border-radius: var(--radius);
+		background: none;
+		color: inherit;
+		cursor: pointer;
+	}
+
+	.text-button {
+		padding: 0 0.25rem;
+		font: inherit;
+		font-weight: 600;
+		text-decoration: underline;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 0.2em;
+	}
+
+	.text-button:hover {
+		text-decoration-thickness: 2px;
+	}
+
+	.toggle {
+		grid-area: toggle;
+		justify-self: center;
+	}
+
+	.arrow {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0;
+		border: 1px solid currentColor;
+	}
+
+	.arrow:hover:not([aria-disabled='true']) {
+		background: var(--frame-title);
+		color: var(--frame-bg);
+	}
+
+	/* Indisponible : le bord disparait, la couleur reste pleine pour rester lisible. */
+	.arrow[aria-disabled='true'] {
+		border-color: transparent;
+		cursor: default;
+	}
+
+	.prev {
+		grid-area: prev;
+	}
+
+	.next {
+		grid-area: next;
+	}
+
+	@media (min-width: 50em) {
+		.viewer {
+			padding: 0.75rem 1.5rem;
+		}
+
+		/* Les fleches encadrent la capture ; la legende et le bouton de taille
+		   partagent la derniere rangee sans elargir la colonne de la fleche. */
+		.viewer[open] {
+			grid-template:
+				'position position close' auto
+				'prev stage next' minmax(0, 1fr)
+				'captions captions captions' auto / auto minmax(0, 1fr) auto;
+		}
+
+		.arrow {
+			align-self: center;
+		}
+
+		.captions {
+			align-self: center;
+			min-height: 2.75rem;
+			display: flex;
+			align-items: center;
+			margin-right: 9rem;
+		}
+
+		.toggle {
+			grid-area: captions;
+			justify-self: end;
+			align-self: center;
+		}
+	}
+</style>

@@ -1,7 +1,9 @@
 ---
+import { getImage } from 'astro:assets';
 import { render, type CollectionEntry } from 'astro:content';
 
 import ContactCTA from '../components/ContactCTA.astro';
+import CaptureViewer from '../components/project/CaptureViewer.astro';
 import FeatureGrid from '../components/project/FeatureGrid.astro';
 import IdentitySpecimen from '../components/project/IdentitySpecimen.astro';
 import NextProject from '../components/project/NextProject.astro';
@@ -12,6 +14,7 @@ import ProjectSection from '../components/project/ProjectSection.astro';
 import RoleCallout from '../components/project/RoleCallout.astro';
 import StackTable from '../components/project/StackTable.astro';
 import BaseLayout from './BaseLayout.astro';
+import { captureList, type ViewerCapture } from '../data/captures';
 import { hasSpecimen } from '../data/identity';
 import { getWorkCollection, nextEntry, normalizeFeatures, type WorkEntry } from '../data/work';
 import { useTranslations, type Lang } from '../i18n/ui';
@@ -42,6 +45,16 @@ const hasExtraContent = Boolean(entry.body?.trim());
 
 const features = normalizeFeatures(entry.data.features);
 
+// La suite de la visionneuse : la couverture, puis la galerie. Chaque image garde
+// sa taille d'origine, c'est elle qu'on vient regarder de pres.
+const { img, img_alt, gallery } = entry.data;
+const captures: ViewerCapture[] = await Promise.all(
+	captureList(img && { src: img, alt: img_alt! }, gallery).map(async (capture) => ({
+		...capture,
+		full: (await getImage({ src: capture.src, format: 'webp', quality: 90 })).src,
+	})),
+);
+
 // La page se termine sur le projet suivant de la liste, le premier apres le dernier.
 const next = nextEntry(await getWorkCollection(lang), entry.id);
 ---
@@ -52,7 +65,7 @@ const next = nextEntry(await getWorkCollection(lang), entry.id);
 			<ProjectHero entry={entry} lang={lang} />
 			{/* Sans capture, pas de couverture : un cadre vide sous le titre ne
 			    ferait que le repeter. */}
-			{entry.data.img && <ProjectCover entry={entry} />}
+			{entry.data.img && <ProjectCover entry={entry} capture={captures[0]!} lang={lang} />}
 
 			<ProjectSection title={t('work.section.about')}>
 				<p class="intro">{entry.data.intro}</p>
@@ -81,7 +94,7 @@ const next = nextEntry(await getWorkCollection(lang), entry.id);
 			{
 				entry.data.gallery && (
 					<ProjectSection title={t('work.section.gallery')}>
-						<ProjectGallery gallery={entry.data.gallery} lang={lang} />
+						<ProjectGallery gallery={entry.data.gallery} captures={captures} lang={lang} />
 					</ProjectSection>
 				)
 			}
@@ -99,6 +112,7 @@ const next = nextEntry(await getWorkCollection(lang), entry.id);
 			{next && <NextProject entry={next} lang={lang} />}
 		</div>
 	</main>
+	{captures.length > 0 && <CaptureViewer captures={captures} identity={entry.data.identity} lang={lang} />}
 	<ContactCTA />
 </BaseLayout>
 

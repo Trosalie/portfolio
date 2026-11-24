@@ -61,6 +61,10 @@ export const ui = {
 		'work.next.label': 'Projet suivant : {title}',
 		// Les intitulés de section vivent ici et non dans le contenu : les deux
 		// versions d'un projet ne peuvent plus les nommer différemment.
+		'work.viewer.open': 'Agrandir',
+		'work.viewer.fit': 'Voir entière',
+		'work.viewer.close': 'Fermer',
+		'work.viewer.position': '{n} sur {total}',
 		'work.section.about': 'Le projet',
 		'work.section.features': 'Fonctionnalités',
 		'work.section.stack': 'Stack technique',
@@ -178,6 +182,10 @@ export const ui = {
 		'work.fact.tech': 'Technologies',
 		'work.next': 'Next project',
 		'work.next.label': 'Next project: {title}',
+		'work.viewer.open': 'Enlarge',
+		'work.viewer.fit': 'Fit to screen',
+		'work.viewer.close': 'Close',
+		'work.viewer.position': '{n} of {total}',
 		'work.section.about': 'The project',
 		'work.section.features': 'Features',
 		'work.section.stack': 'Tech stack',

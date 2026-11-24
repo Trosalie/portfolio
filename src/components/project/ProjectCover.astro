@@ -1,11 +1,49 @@
 ---
 import ProjectFrame from '../work/ProjectFrame.astro';
+import type { ViewerCapture } from '../../data/captures';
 import type { WorkEntry } from '../../data/work';
+import { useTranslations, type Lang } from '../../i18n/ui';
 
-/** La couverture d'une page projet : la capture principale, dans le cadre du projet. */
+/**
+ * La couverture d'une page projet : la capture principale, dans le cadre du
+ * projet. Elle est la premiere capture de la visionneuse ; sans JavaScript, le
+ * lien mene a l'image.
+ */
 interface Props {
 	entry: WorkEntry;
+	capture: ViewerCapture;
+	lang: Lang;
 }
+
+const { entry, capture, lang } = Astro.props;
+const t = useTranslations(lang);
 ---
 
-<ProjectFrame entry={Astro.props.entry} variant="cover" />
+<a class="cover-link" href={capture.full} data-viewer-open="0">
+	<ProjectFrame entry={entry} variant="cover" />
+	<span class="open-label">{t('work.viewer.open')}</span>
+</a>
+
+<style>
+	.cover-link {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		color: inherit;
+		text-decoration: none;
+		cursor: zoom-in;
+	}
+
+	.open-label {
+		align-self: flex-end;
+		font-size: var(--step--1);
+		font-weight: 600;
+		text-decoration: underline;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 0.2em;
+	}
+
+	.cover-link:hover .open-label {
+		text-decoration-thickness: 2px;
+	}
+</style>

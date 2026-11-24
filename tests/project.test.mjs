@@ -70,7 +70,7 @@ test('ni pilules, ni points médians, ni icônes de fonctionnalité', () => {
 // page, qui n'affiche la couverture que si le projet a une image.
 test('pas de couverture vide pour un projet sans capture', () => {
 	const layout = srcFiles(['.astro']).find((f) => f.path.endsWith('layouts/ProjectLayout.astro')).content;
-	assert.match(layout, /\{entry\.data\.img && <ProjectCover entry=\{entry\} \/>\}/);
+	assert.match(layout, /\{entry\.data\.img && <ProjectCover entry=\{entry\}/);
 });
 
 // Le fragment commence au milieu de la balise ouvrante : on retire ce reste avant d'en lire le texte.
