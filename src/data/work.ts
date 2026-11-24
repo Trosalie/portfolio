@@ -25,6 +25,11 @@ export interface ProjectFeature {
 	description?: string;
 }
 
+/** L'adresse d'un projet, barre finale comprise : sans elle, le serveur redirige. */
+export function projectPath(lang: Lang, id: string): string {
+	return `${workBasePath(lang)}${id}/`;
+}
+
 /** Prefixe des URL de projet, par langue. */
 export function workBasePath(lang: Lang): string {
 	return lang === 'en' ? '/en/work/' : '/work/';

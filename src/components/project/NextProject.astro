@@ -1,6 +1,6 @@
 ---
 import ProjectFrame from '../work/ProjectFrame.astro';
-import { workBasePath, type WorkEntry } from '../../data/work';
+import { projectPath, type WorkEntry } from '../../data/work';
 import { useTranslations, type Lang } from '../../i18n/ui';
 
 /**
@@ -18,7 +18,7 @@ const t = useTranslations(lang);
 const label = t('work.next.label').replace('{title}', entry.data.title);
 ---
 
-<a class="next-project" href={`${workBasePath(lang)}${entry.id}`} aria-label={label}>
+<a class="next-project" href={projectPath(lang, entry.id)} aria-label={label}>
 	<span class="next-label">{t('work.next')}</span>
 	<ProjectFrame entry={entry} variant="band" />
 </a>

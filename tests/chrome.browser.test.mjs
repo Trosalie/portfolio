@@ -164,3 +164,16 @@ for (const width of [1600, 1440, 1250, 1180, 820, 375]) {
 		near((first.left + first.right) / 2, (text.left + text.right) / 2, 'première capture', 2);
 	});
 }
+
+// Le lien d'evitement est fixe : il s'imprimait au bas de chaque page.
+for (const path of ['/', '/work/seenit/']) {
+	onPage(`${path} : le lien d’évitement ne s’imprime pas, et reste le premier au clavier`, path, {}, async (page) => {
+		const shown = () => page.$eval('.skip-link', (el) => getComputedStyle(el).display);
+		await page.emulateMediaType('print');
+		assert.equal(await shown(), 'none');
+		await page.emulateMediaType('screen');
+		assert.notEqual(await shown(), 'none');
+		await page.keyboard.press('Tab');
+		assert.equal(await page.evaluate(() => document.activeElement.className), 'skip-link');
+	});
+}

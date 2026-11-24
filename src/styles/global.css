@@ -326,6 +326,11 @@ h5 {
 }
 
 @media print {
+	/* Fixe, il reviendrait au bas de chaque page. */
+	.skip-link {
+		display: none;
+	}
+
 	.tiles > li {
 		break-inside: avoid;
 	}

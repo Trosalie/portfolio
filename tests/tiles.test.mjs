@@ -3,7 +3,7 @@ import { test } from 'node:test';
 
 import { chunk, page, pageCss, srcFiles, text } from './helpers.mjs';
 
-const tile = (route, slug) => chunk(page(route), `href="${route}${slug}"`);
+const tile = (route, slug) => chunk(page(route), `href="${route}${slug}/"`);
 
 const SLUGS = ['chronopotes', 'seenit', 'bluepoint-waste-identifier', 'projet-chat', 'boardpxl', 'covoit-etud'];
 
@@ -83,7 +83,7 @@ test('Jost est servie par le site, pas par Google Fonts', () => {
 
 test('chaque projet a sa couverture', () => {
 	const html = page('/work/');
-	const slugs = [...html.matchAll(/class="tile[" ][^>]*href="\/work\/([^"]+)"|href="\/work\/([^"]+)"[^>]*class="tile[" ]/g)].map(
+	const slugs = [...html.matchAll(/class="tile[" ][^>]*href="\/work\/([^"]+)\/"|href="\/work\/([^"]+)\/"[^>]*class="tile[" ]/g)].map(
 		(m) => m[1] ?? m[2],
 	);
 	assert.equal(slugs.length, 6, slugs.join(', '));
@@ -128,7 +128,7 @@ test('la couverture d’une page projet n’est pas recadrée', () => {
 });
 
 test('les liens anglais restent en anglais', () => {
-	assert.ok(page('/en/work/').includes('href="/en/work/seenit"'));
+	assert.ok(page('/en/work/').includes('href="/en/work/seenit/"'));
 });
 
 test('l’étiquette d’un projet phare se pose au pied de son cadre', () => {

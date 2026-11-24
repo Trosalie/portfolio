@@ -1,5 +1,5 @@
 ---
-import { workBasePath, type WorkEntry } from '../../data/work';
+import { projectPath, type WorkEntry } from '../../data/work';
 import type { Lang } from '../../i18n/ui';
 import ProjectCartel from './ProjectCartel.astro';
 import ProjectFrame, { type TileSize } from './ProjectFrame.astro';
@@ -20,7 +20,7 @@ interface Props {
 const { entry, lang, size = 'card', withDescription = false } = Astro.props;
 ---
 
-<a class:list={['tile', size]} href={`${workBasePath(lang)}${entry.id}`}>
+<a class:list={['tile', size]} href={projectPath(lang, entry.id)}>
 	<ProjectFrame entry={entry} variant="tile" size={size} />
 	<ProjectCartel entry={entry} withDescription={withDescription} />
 </a>

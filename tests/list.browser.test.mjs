@@ -33,7 +33,7 @@ const tiles = (page, list) =>
 			const frame = link.querySelector('.project-frame');
 			const style = getComputedStyle(frame);
 			return {
-				slug: link.getAttribute('href').split('/').pop(),
+				slug: link.getAttribute('href').split('/').at(-2),
 				frame: box(frame),
 				image: box(frame.querySelector('img')),
 				cartel: box(link.querySelector('.cartel')),

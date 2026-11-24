@@ -3,7 +3,7 @@ import { test } from 'node:test';
 
 import { chunk, page } from './helpers.mjs';
 
-const slugs = (html) => [...html.matchAll(/<a[^>]*class="tile[^>]*href="[^"]*\/([^"/]+)"/g)].map((m) => m[1]);
+const slugs = (html) => [...html.matchAll(/<a[^>]*class="tile[^>]*href="[^"]*\/([^"/]+)\/"/g)].map((m) => m[1]);
 const group = (route, name) => chunk(page(route), `class="tiles tiles--${name}`, '</ul>');
 
 for (const [route, title] of [
