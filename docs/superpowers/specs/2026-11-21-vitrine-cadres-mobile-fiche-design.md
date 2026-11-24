@@ -1,6 +1,7 @@
 # Cadres pour tous les projets, vignettes mobiles et fiche projet : conception
 
-Date : 2026-11-21. Statut : validé par Thibault le 2026-11-21.
+Date : 2026-11-21. Statut : validé par Thibault le 2026-11-21, livré le 2026-11-22.
+Mis à jour le 2026-11-24 pour décrire ce qui a été livré (voir « Écarts à la livraison »).
 
 Suite de la direction visuelle « La vitrine »
 (`docs/superpowers/specs/2026-11-20-direction-visuelle-design.md`). Couvre les points 1, 2 et 4
@@ -123,7 +124,7 @@ Couleurs relevées dans le code du projet quand il est public, sinon mesurées d
 |---|---|---|---|---|---|
 | ChronoPotes | `#101216` | aucun | `#F5C518` | `oswald-caps` | inchangé |
 | Seenit | `#2C1C0F` | `#4D331E` | `#C5A059` | `playfair-italic` | inchangé |
-| SportPXL | `#E8EAF6` | `#FA8624` | `#0A2D44` | `jost-caps` | fond : `styles.scss` du projet ; orange : boutons ; marine : logo |
+| SportPXL | `#E8EAF6` | `#0A2D44` | `#0A2D44` | `jost-caps` | fond : `styles.scss` du projet ; marine : logo |
 | Covoit'Etud | `#ABC4FF` | aucun | `#31429A` | `site` | fond : `$header-color` de `scss/custom.scss` du projet ; indigo : logo, mesuré |
 | BluePoint | `#1F1F1F` | aucun | `#338CD2` | `site` | fenêtre Qt et boîte de détection, mesurées |
 | Projet Chat | `#17181C` | `#3C3F47` | `#81B07A` | `dm-mono` | fond du terminal, bord de fenêtre et invite `$`, mesurés |
@@ -136,29 +137,28 @@ Contraste du titre sur le fond, calculé (WCAG) : ChronoPotes 11,5:1, Seenit 6,7
 visible : un test exige au moins 4,5:1 pour chaque cadre. Pour Covoit'Etud, l'indigo des boutons
 (`$primary`, `#4357BD`) ne donnait que 3,6:1 ; l'indigo du logo, plus sombre, le remplace.
 
-Le liseré orange de SportPXL et le cadre lavande sur le mur gris sont les deux choix les moins
-sûrs : à juger sur la page rendue. Si le liseré crie, le remplacer par le marine du logo. Le
-cadre lavande a besoin d'un liseré dans tous les cas : il ne se distingue presque pas du mur
-(`#E6E6E2`, 1,04:1). Le cadre pervenche de Covoit'Etud s'en détache par la teinte (1,39:1) et
-s'en passe ; à confirmer à l'œil.
+Le cadre lavande de SportPXL a besoin d'un liseré : il ne se distingue presque pas du mur
+(`#E6E6E2`, 1,04:1). Ce liseré prend le marine du logo. Le cadre pervenche de Covoit'Etud se
+détache du mur par la teinte (1,39:1) et s'en passe.
 
 ## 2. Vignettes mobiles
 
 ### Recadrages
 
 Un fichier par projet, `src/assets/projets/<projet>/vignette-mobile.webp`, au format 16:10 (le
-même que la vignette actuelle, la grille ne change pas), d'au moins 640 px de large pour rester
-net sur un écran 2x (la capture occupe environ 290 px de large à 375 px). Découpés une fois dans
-les captures existantes :
+même que la vignette actuelle, la grille ne change pas). La capture occupe environ 290 px de
+large à 375 px : la lisibilité passe avant la définition. Les cadrages font de 460 à 820 px de
+large dans les captures de bureau, et 1250 px dans celle de ChronoPotes, prise sur un téléphone.
+Le script refuse un cadrage de moins de 440 px. Découpés une fois dans les captures existantes :
 
 | Projet | Source | Détail montré |
 |---|---|---|
 | ChronoPotes | `chronopotes/accueil.webp` (1290×2796) | le haut d'un seul téléphone : « Garde le rythme. Sans le voir. » et l'affichage à palettes |
-| Seenit | `seenit/couverture.webp` | le fronton « À l'affiche » et ses trois séances |
+| Seenit | `seenit/couverture.webp` | le fronton « À l'affiche » et sa première séance |
 | BluePoint | `bluepoint/flux-detection.webp` | la boîte de détection « ID : 3 \| Class : trash \| 88% » et son objet |
 | Projet Chat | `projet-chat/couverture.webp` | le terminal de lea : arrivée dans le channel et échanges |
-| SportPXL | `sportpxl/couverture.webp` | une ligne de photographe : chiffre d'affaires, crédits, statut des factures |
-| Covoit'Etud | `covoit-etud/couverture.webp` | une carte de trajet : adresses, horaires, prix |
+| SportPXL | `sportpxl/couverture.webp` | deux lignes de photographe : nom, e-mail, chiffre d'affaires |
+| Covoit'Etud | `covoit-etud/couverture.webp` | deux cartes de trajet : arrivée, horaires, date, prix |
 
 Le cadrage exact (coordonnées) est laissé au constructeur, à juger sur l'écran rendu à 375 px.
 Garder le script de découpe dans `scripts/` pour pouvoir refaire un recadrage, à la manière de
@@ -208,7 +208,7 @@ bibliothèque en forme d'étagère…       │ Équipe        Seul             
 - Libellés dans `src/i18n/ui.ts`. Français : Période, Cadre, Équipe, Technologies. Anglais
   proposé : Date, Context, Team, Technologies.
 - À partir de 50em : deux colonnes, le titre, la description et les liens à gauche, la fiche à
-  droite, alignée en haut sur le titre. Le lien de retour reste au-dessus, sur toute la largeur.
+  droite (18rem au plus), alignée en haut sur le titre. Le lien de retour reste au-dessus, sur toute la largeur.
 - Sous 50em : la fiche vient après les liens, dans l'ordre du document.
 - La section « Stack technique » détaillée, par couche, reste en bas de page.
 
@@ -235,6 +235,22 @@ bibliothèque en forme d'étagère…       │ Équipe        Seul             
 - Les espacements, la largeur de la fiche et la hauteur du bandeau « Projet suivant ».
 - La remesure des couleurs « mesurées » si une valeur plus exacte se trouve dans le code du
   produit.
+
+## Écarts à la livraison
+
+Ce que la page rendue a fait changer par rapport à la conception validée le 2026-11-21. Le texte
+ci-dessus décrit l'état livré.
+
+| Prévu | Livré | Raison |
+|---|---|---|
+| Liseré orange `#FA8624` pour SportPXL | Marine du logo, `#0A2D44` | L'orange se lisait comme une vignette sélectionnée et dominait la page ; c'est le repli que la conception prévoyait |
+| Recadrages d'au moins 640 px de large | 440 px au moins, de 460 à 820 px dans les captures de bureau | À 640 px, le texte du terminal de Projet Chat tombait à 6 px à l'écran. Contrepartie : le plus étroit est agrandi 1,3 fois sur un écran 2x et 1,9 fois sur un écran 3x, donc un peu flou |
+| Seenit : trois séances | Une séance | Trois séances en 16:10 étaient illisibles |
+| SportPXL : une ligne entière (chiffre d'affaires, crédits, factures) | Deux lignes, sans les crédits ni les factures | Une ligne entière était illisible |
+| Covoit'Etud : une carte avec ses deux adresses | Deux cartes, sans l'adresse de départ | Une carte entière était illisible |
+
+La largeur de la fiche était laissée au constructeur. Le plan d'implémentation prévoyait 15 à
+21rem ; elle fait 14 à 18rem, car à 800 px elle était plus large que la colonne de texte.
 
 ## Vérification
 

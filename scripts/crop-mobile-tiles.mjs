@@ -12,10 +12,12 @@
  *
  *     node scripts/crop-mobile-tiles.mjs
  *
- * Le cadrage cherche la lisibilite avant la definition : un detail de 460 a
- * 820 px de large garde un texte d'environ 8 a 11 px a l'ecran, quand un
- * cadrage de 640 px dans une capture de 1440 px le ramenait a 6 px. Le
- * navigateur agrandit alors au plus 1,3 fois l'image sur un ecran 2x.
+ * Le cadrage cherche la lisibilite avant la definition : dans les captures de
+ * bureau, un detail de 460 a 820 px de large, selon la taille de leur texte, le
+ * garde dechiffrable. Le terminal de Projet Chat, cadre a 640 px, tombait a 6 px
+ * a l'ecran. Le navigateur agrandit alors au plus 1,3 fois l'image sur un ecran
+ * 2x, et 1,9 fois sur un ecran 3x. ChronoPotes fait 1250 px : sa source est une
+ * capture de telephone en 3x, au texte deja grand.
  */
 
 import { fileURLToPath } from 'node:url';

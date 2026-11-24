@@ -261,7 +261,8 @@ retenus en premier.
   lignes et le premier projet n'apparaît qu'au bas du premier écran. Les recruteurs ouvrent
   souvent le lien depuis LinkedIn, sur téléphone.
   → Sous 50em, chaque vignette sert un détail de l'interface (`img_mobile`, découpé par
-  `scripts/crop-mobile-tiles.mjs`, de 460 à 820 px de large pour que le texte reste lisible).
+  `scripts/crop-mobile-tiles.mjs`, de 460 à 820 px de large dans les captures de bureau pour que
+  le texte reste lisible, 1250 px dans la capture de téléphone de ChronoPotes).
   Le titre de l'accueil passe à 1,75rem : le premier projet apparaît dans le premier écran.
 
 - [ ] **3. Aucune capture ne s'agrandit.** La couverture et la galerie n'ouvrent rien ; un clic
