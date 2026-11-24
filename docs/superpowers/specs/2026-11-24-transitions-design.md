@@ -81,6 +81,13 @@ quittée en montre un cadre à l'écran, sinon celui du **projet quitté**.
 - « Retour aux projets » ouvre la liste en haut : le cadre glisse si la vignette y est visible,
   sinon fondu. Le bouton retour du navigateur retrouve la position, donc la vignette.
 - La page d'arrivée n'anime un cadre que si la page de départ a désigné ce même projet.
+- Visionneuse ouverte, aucun cadre ne glisse : il passerait par-dessus elle.
+- Quand un cadre est attendu, la page n'est montrée qu'une fois lue jusqu'à lui (la couverture, ou
+  la page entière ailleurs). Sans cela, au retour sur une page que le navigateur n'a pas gardée en
+  mémoire, elle s'affiche en haut puis saute. Les pages font moins de 11 Ko compressées.
+- Le navigateur peut abandonner une transition : la page s'ouvre sans elle et sans erreur.
+- Un clic pendant les 300 ms est perdu : le navigateur ne donne pas le pointeur à la page pendant
+  une transition, et rien en CSS n'y change.
 
 ## Le mouvement
 

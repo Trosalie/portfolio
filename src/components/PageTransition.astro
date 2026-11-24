@@ -53,8 +53,10 @@
 
 		const projectOf = (url) => new URL(url).pathname.match(/^[/](?:en[/])?work[/]([^/]+)[/]?$/)?.[1];
 
-		// Le cadre du projet sur cette page, s'il est au moins en partie a l'ecran.
+		// Le cadre du projet sur cette page, s'il est au moins en partie a l'ecran. Pas
+		// sous la visionneuse : il passerait par-dessus.
 		const frameOf = (id) => {
+			if (document.querySelector('dialog[open]')) return;
 			const frame =
 				projectOf(location.href) === id
 					? document.querySelector('.project-frame.cover')
@@ -70,15 +72,28 @@
 			root.style.removeProperty('--frame-ground');
 		};
 
-		// Une transition abandonnee rejette ses promesses : ce n'est pas une erreur.
-		const quiet = (transition) => {
-			for (const step of ['ready', 'finished', 'updateCallbackDone']) transition[step]?.catch(() => {});
-		};
+		// Une transition abandonnee n'est pas une erreur. Le navigateur en abandonne
+		// aussi avant de nous la donner : on l'entend ici, pas sur la transition.
+		addEventListener('unhandledrejection', (event) => {
+			const { name, message } = event.reason ?? {};
+			if (['AbortError', 'InvalidStateError', 'TimeoutError'].includes(name) && /transition/i.test(message)) {
+				event.preventDefault();
+			}
+		});
+
+		// Un cadre est attendu : la page n'est montree qu'une fois lue jusqu'a lui, sans
+		// quoi elle s'afficherait en haut, sans vignette, puis sauterait.
+		const expected = kept();
+		if (expected) {
+			const wait = document.createElement('link');
+			wait.rel = 'expect';
+			wait.blocking = 'render';
+			wait.href = projectOf(location.href) === expected ? '#cover' : '#page-end';
+			document.head.append(wait);
+		}
 
 		addEventListener('pageswap', ({ viewTransition, activation }) => {
-			if (!viewTransition) return;
-			quiet(viewTransition);
-			if (!activation) return;
+			if (!viewTransition || !activation) return;
 			// Le projet ou l'on va, sinon celui que l'on quitte.
 			for (const id of [projectOf(activation.entry.url), projectOf(location.href)]) {
 				const frame = id && frameOf(id);
@@ -94,7 +109,6 @@
 			const id = kept();
 			keep();
 			if (!viewTransition) return;
-			quiet(viewTransition);
 			const frame = id && frameOf(id);
 			if (!frame) return;
 			frame.style.viewTransitionName = 'project';

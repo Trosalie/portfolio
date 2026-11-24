@@ -39,7 +39,10 @@ function watch() {
 		if (window.seen) window.seen.kept = kept;
 	});
 	addEventListener('pagereveal', (event) => {
-		window.seen = { old: [], named: [], groups: null, kept };
+		// `cover` et `end` : ce qui est deja lu quand la page va s'afficher.
+		const cover = Boolean(document.querySelector('#cover'));
+		const end = Boolean(document.querySelector('#page-end'));
+		window.seen = { old: [], named: [], groups: null, kept, cover, end, scroll: scrollY };
 		try {
 			window.seen.old = JSON.parse(sessionStorage.getItem('test-old') ?? '[]');
 			sessionStorage.removeItem('test-old');
@@ -57,23 +60,42 @@ function watch() {
 	});
 }
 
-/** Une page observee, sur `path` ; toute erreur de console fait echouer le test. */
+/** Le navigateur a le droit d'abandonner une transition : la page s'ouvre sans elle. */
+class Abandoned extends Error {}
+
+/**
+ * Une page observee, sur `path` ; toute erreur de console fait echouer le test. Un
+ * scenario que le navigateur abandonne recommence sur une page neuve.
+ */
 function onPage(name, path, options, run) {
 	test(name, async () => {
-		const page = await site.visit('/404.html', options);
-		const errors = [];
-		page.on('pageerror', (error) => errors.push(String(error)));
-		page.on('console', (message) => message.type() === 'error' && errors.push(message.text()));
-		try {
-			await page.evaluateOnNewDocument(watch);
-			if (options.init) await page.evaluateOnNewDocument(options.init);
-			await page.goto(site.url + path, { waitUntil: 'networkidle0' });
-			await run(page);
-			assert.deepEqual(errors, []);
-		} finally {
-			await page.close();
+		for (let left = 3; left > 0; left--) {
+			try {
+				return await attempt(path, options, run);
+			} catch (error) {
+				if (!(error instanceof Abandoned) || left === 1) throw error;
+			}
 		}
 	});
+}
+
+async function attempt(path, options, run) {
+	const own = options.browser && (await openSite(options.browser));
+	const at = own || site;
+	const page = await at.visit('/404.html', options);
+	const errors = [];
+	page.on('pageerror', (error) => errors.push(String(error)));
+	page.on('console', (message) => message.type() === 'error' && errors.push(message.text()));
+	try {
+		await page.evaluateOnNewDocument(watch);
+		if (options.init) await page.evaluateOnNewDocument(options.init);
+		await page.goto(at.url + path, { waitUntil: 'networkidle0' });
+		await run(page);
+		assert.deepEqual(errors, []);
+	} finally {
+		await page.close();
+		await own?.close();
+	}
 }
 
 const pathOf = (page) => new URL(page.url()).pathname;
@@ -108,6 +130,7 @@ const clean = (page) =>
 	}));
 
 async function glides(page, seen, from, to) {
+	if (!seen.groups) throw new Abandoned('transition abandonnée');
 	assert.deepEqual(seen.old, [from]);
 	assert.deepEqual(seen.named, [to]);
 	assert.ok(seen.groups?.includes('::view-transition-old(project)'), String(seen.groups));
@@ -117,6 +140,7 @@ async function glides(page, seen, from, to) {
 }
 
 async function fades(page, seen) {
+	if (!seen.groups) throw new Abandoned('transition abandonnée');
 	assert.deepEqual(seen.named, []);
 	assert.ok(seen.groups?.includes('::view-transition-new(root)'), String(seen.groups));
 	assert.ok(!seen.groups.includes('::view-transition-new(project)'), String(seen.groups));
@@ -299,3 +323,51 @@ onPage(
 		assert.deepEqual(await clean(page), { named: 0, ground: '' });
 	},
 );
+
+// La couverture ne doit pas passer par-dessus la visionneuse.
+onPage('visionneuse ouverte, retour du navigateur : simple fondu', '/work/', {}, async (page) => {
+	await follow(page, tileTo('/work/seenit/'), '/work/seenit/');
+	await page.click('.cover-link');
+	assert.equal(await page.$eval('dialog', (el) => el.open), true);
+	const seen = await back(page, '/work/');
+	assert.deepEqual(seen.old, []);
+	await fades(page, seen);
+});
+
+const NO_CACHE = ['--disable-features=BackForwardCache'];
+
+onPage('retour sur une page non gardée en mémoire : la position et la vignette', '/work/', { browser: { args: NO_CACHE } }, async (page) => {
+	await page.$eval(tileTo('/work/covoit-etud/'), (el) => el.scrollIntoView({ block: 'center', behavior: 'instant' }));
+	const at = await page.evaluate(() => scrollY);
+	await follow(page, tileTo('/work/covoit-etud/'), '/work/covoit-etud/');
+	const seen = await back(page, '/work/');
+	assert.equal(seen.kept, false);
+	assert.equal(seen.end, true, 'la liste devrait être lue en entier');
+	assert.equal(seen.scroll, at, 'la position devrait être retrouvée avant l’affichage');
+	await glides(page, seen, 'cover covoit-etud', 'tile covoit-etud');
+});
+
+onPage('page qui arrive en deux fois : la couverture est attendue', '/work/', { browser: { split: 400 } }, async (page) => {
+	assert.equal((await follow(page, tileTo('/work/seenit/'), '/work/seenit/')).cover, true);
+});
+
+onPage('liste qui arrive en deux fois : la vignette est attendue', '/work/chronopotes/', { browser: { split: 400 } }, async (page) => {
+	assert.equal((await followHere(page, '.back-link', '/work/')).end, true);
+});
+
+onPage('sans cadre à attendre, rien ne retarde la page', '/', { browser: { split: 400 } }, async (page) => {
+	await followHere(page, 'header a[href="/contact/"]', '/contact/');
+	assert.equal(await page.evaluate(() => document.querySelectorAll('link[rel="expect"]').length), 0);
+});
+
+// Chrome abandonne alors souvent la transition avant de la donner a la page : `onPage`
+// verifie qu'il n'en reste pas d'erreur.
+for (let i = 0; i < 3; i++) {
+	onPage(`transition abandonnée par le navigateur, aucune erreur (${i + 1})`, '/work/', { browser: { args: NO_CACHE, split: 400 } }, async (page) => {
+		await page.click(tileTo('/work/chronopotes/'));
+		await page.waitForFunction(() => location.pathname === '/work/chronopotes/' && document.readyState === 'complete');
+		await settle(page);
+		await new Promise((resolve) => setTimeout(resolve, 500));
+		assert.deepEqual(await clean(page), { named: 0, ground: '' });
+	});
+}

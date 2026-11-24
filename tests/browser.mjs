@@ -23,12 +23,20 @@ const TYPES = {
 	'.woff': 'font/woff',
 };
 
-async function serve(request, response) {
+async function serve(request, response, split) {
 	const path = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
 	const file = join(DIST, normalize(path.endsWith('/') ? `${path}index.html` : path));
 	try {
 		const body = await readFile(file);
 		response.writeHead(200, { 'Content-Type': TYPES[extname(file)] ?? 'application/octet-stream' });
+		if (split && extname(file) === '.html') {
+			// Le debut de la page, puis le reste : un reseau lent.
+			const cut = body.indexOf('<main');
+			response.write(body.subarray(0, cut));
+			await new Promise((resolve) => setTimeout(resolve, split));
+			response.end(body.subarray(cut));
+			return;
+		}
 		response.end(body);
 	} catch {
 		response.writeHead(404);
@@ -36,14 +44,15 @@ async function serve(request, response) {
 	}
 }
 
-export async function openSite() {
+/** `args` : des drapeaux Chrome en plus. `split` : delai, en ms, avant le corps de chaque page. */
+export async function openSite({ args = [], split = 0 } = {}) {
 	// Le navigateur d'abord : s'il ne demarre pas, aucun serveur ne retient le
 	// processus. Il refuse son bac a sable sur la CI, comme pour le PDF du CV.
 	const browser = await puppeteer.launch({
-		args: process.env.CI ? ['--no-sandbox', '--disable-setuid-sandbox'] : [],
+		args: [...args, ...(process.env.CI ? ['--no-sandbox', '--disable-setuid-sandbox'] : [])],
 	});
 
-	const server = createServer(serve);
+	const server = createServer((request, response) => serve(request, response, split));
 	await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
 	const url = `http://127.0.0.1:${server.address().port}`;
 

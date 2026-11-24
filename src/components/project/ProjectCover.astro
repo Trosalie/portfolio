@@ -19,7 +19,7 @@ const { entry, capture, lang } = Astro.props;
 const t = useTranslations(lang);
 ---
 
-<a class="cover-link" href={capture.full} data-viewer-open="0">
+<a id="cover" class="cover-link" href={capture.full} data-viewer-open="0">
 	<ProjectFrame entry={entry} variant="cover" />
 	<span class="open-label">{t('work.viewer.open')}</span>
 </a>
