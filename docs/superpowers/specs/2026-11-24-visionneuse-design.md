@@ -146,8 +146,10 @@ par 3 pour une capture plus haute que large (téléphone en 3x : 1290 px donnent
 ## Se déplacer et fermer
 
 - Boutons précédent et suivant. Les touches gauche et droite font de même tant que la capture est
-  entière ; quand elle est agrandie, elles la font défiler.
-- La zone de la capture prend le focus, pour défiler au clavier.
+  entière ; quand elle est agrandie, elles la font défiler, sauf s'il n'y a rien à faire défiler en
+  largeur.
+- La zone de la capture prend le focus, pour défiler au clavier. Elle s'appelle « Capture »
+  (« Screenshot »). Maintenir Entrée n'ouvre ou ne ferme qu'une fois.
 - Aux extrémités, le bouton est annoncé indisponible mais garde le focus.
 - Un changement de capture est annoncé (« Capture 2 sur 6 », libellé existant).
 - **Fermer :** Échap, « Fermer », ou un clic sur le fond hors de la capture et des commandes. Sur

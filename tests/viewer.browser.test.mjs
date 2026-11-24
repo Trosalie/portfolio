@@ -55,11 +55,14 @@ const focus = (page) =>
 
 const focusedData = (page) => page.evaluate(() => Object.keys(document.activeElement.dataset));
 
+/** Le doigt sur un ecran tactile, la souris ailleurs. */
+const press = (page, selector) => (page.viewport().hasTouch ? page.tap(selector) : page.click(selector));
+
 /** Laisse passer le delai qui protege d'un double-clic a l'ouverture. */
 const ready = () => new Promise((resolve) => setTimeout(resolve, 450));
 
 async function openCover(page) {
-	await page.click('.cover-link');
+	await press(page, '.cover-link');
 	const s = await state(page);
 	assert.equal(s.open, true, 'la visionneuse devrait être ouverte');
 	await ready();
@@ -104,7 +107,7 @@ onPage('téléphone couché : au moins 800 px', '/work/boardpxl/', { width: 812,
 
 onPage('téléphone : une capture de téléphone s’ouvre entière', '/work/chronopotes/', PHONE, async (page) => {
 	await openCover(page);
-	await page.click('dialog [data-next]');
+	await press(page, 'dialog [data-next]');
 	const s = await state(page);
 	assert.equal(s.index, 1);
 	assert.equal(s.size, 'fit');
@@ -114,10 +117,10 @@ onPage('téléphone : une capture de téléphone s’ouvre entière', '/work/chr
 onPage('bascule par l’image et par le bouton', '/work/seenit/', {}, async (page) => {
 	await openCover(page);
 	assert.equal((await state(page)).toggle, 'Agrandir');
-	await page.click('dialog [data-capture]:not([hidden]) img');
+	await press(page, 'dialog [data-capture]:not([hidden]) img');
 	let s = await state(page);
 	assert.deepEqual([s.size, s.width, s.toggle], ['zoom', 1920, 'Voir entière']);
-	await page.click('dialog [data-toggle]');
+	await press(page, 'dialog [data-toggle]');
 	s = await state(page);
 	assert.equal(s.size, 'fit');
 	assert.equal(s.toggle, 'Agrandir');
@@ -149,7 +152,7 @@ onPage('flèches du clavier : changer de capture, ou défiler', '/work/seenit/',
 	await page.keyboard.press('ArrowRight');
 	await page.keyboard.up('Alt');
 	assert.equal((await state(page)).index, 1);
-	await page.click('dialog [data-toggle]');
+	await press(page, 'dialog [data-toggle]');
 	await page.keyboard.press('ArrowRight');
 	const s = await state(page);
 	assert.equal(s.index, 1);
@@ -163,7 +166,7 @@ onPage('aux extrémités, le bouton est indisponible et garde le focus', '/work/
 	await page.keyboard.press('Enter');
 	assert.equal((await state(page)).index, 0);
 	assert.ok((await focusedData(page)).includes('prev'));
-	for (let i = 0; i < 8; i++) await page.click('dialog [data-next]');
+	for (let i = 0; i < 8; i++) await press(page, 'dialog [data-next]');
 	assert.equal((await state(page)).index, 5);
 	assert.equal(await page.$eval('dialog [data-next]', (el) => el.getAttribute('aria-disabled')), 'true');
 	assert.equal(await page.$eval('dialog [data-prev]', (el) => el.getAttribute('aria-disabled')), 'false');
@@ -171,9 +174,9 @@ onPage('aux extrémités, le bouton est indisponible et garde le focus', '/work/
 
 onPage('changer de capture repart de la taille d’ouverture', '/work/seenit/', {}, async (page) => {
 	await openCover(page);
-	await page.click('dialog [data-toggle]');
+	await press(page, 'dialog [data-toggle]');
 	await page.$eval('dialog [data-stage]', (el) => el.scrollTo(200, 200));
-	await page.click('dialog [data-next]');
+	await press(page, 'dialog [data-next]');
 	const s = await state(page);
 	assert.deepEqual([s.index, s.size, s.scrollLeft, s.scrollTop], [1, 'fit', 0, 0]);
 });
@@ -184,11 +187,11 @@ onPage('ferme par Échap, par le bouton et par le fond', '/work/seenit/', {}, as
 	await page.keyboard.press('Escape');
 	assert.equal(await isOpen(), false);
 	await openCover(page);
-	await page.click('dialog [data-close]');
+	await press(page, 'dialog [data-close]');
 	assert.equal(await isOpen(), false);
 	await openCover(page);
-	await page.click('dialog [data-next]');
-	await page.click('dialog [data-caption]:not([hidden])');
+	await press(page, 'dialog [data-next]');
+	await press(page, 'dialog [data-caption]:not([hidden])');
 	assert.equal(await isOpen(), true, 'un clic sur la légende ne ferme pas');
 	await page.mouse.click(720, 30);
 	assert.equal(await isOpen(), false, 'la barre du haut est du fond');
@@ -199,7 +202,7 @@ onPage('ferme par Échap, par le bouton et par le fond', '/work/seenit/', {}, as
 
 onPage('sélectionner la légende ne ferme pas', '/work/seenit/', {}, async (page) => {
 	await openCover(page);
-	await page.click('dialog [data-next]');
+	await press(page, 'dialog [data-next]');
 	const box = await (await page.$('dialog [data-caption]:not([hidden])')).boundingBox();
 	await page.mouse.move(box.x + 10, box.y + box.height / 2);
 	await page.mouse.down();
@@ -250,7 +253,7 @@ onPage('un double appui sur « Agrandir » garde la capture agrandie', '/work/se
 	await page.$eval('[data-enlarge]', (el) => scrollBy(0, el.getBoundingClientRect().top + 22 - 778));
 	await settle(page);
 	const box = await (await page.$('[data-enlarge]')).boundingBox();
-	await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2, { count: 2, delay: 10 });
+	for (let i = 0; i < 2; i++) await page.touchscreen.tap(box.x + box.width / 2, box.y + box.height / 2);
 	const s = await state(page);
 	assert.deepEqual([s.open, s.size], [true, 'zoom']);
 });
@@ -263,6 +266,53 @@ onPage('le doigt parcourt la capture sans en changer', '/work/seenit/', PHONE, a
 	const s = await state(page);
 	assert.equal(s.index, 0);
 	assert.ok(s.scrollLeft > 50, String(s.scrollLeft));
+});
+
+onPage('un appui du doigt sur la capture change sa taille', '/work/seenit/', PHONE, async (page) => {
+	await openCover(page);
+	await press(page, 'dialog [data-capture]:not([hidden]) img');
+	assert.equal((await state(page)).size, 'fit');
+});
+
+// Agrandie sans rien a faire defiler en largeur : les touches gardent un effet.
+onPage('gauche et droite changent de capture si elle ne défile pas en largeur', '/work/chronopotes/', { width: 812, height: 375, mobile: true }, async (page) => {
+	await openCover(page);
+	await press(page, 'dialog [data-next]');
+	assert.equal((await state(page)).size, 'zoom');
+	await page.keyboard.press('ArrowRight');
+	assert.equal((await state(page)).index, 2);
+});
+
+onPage('maintenir Entrée ouvre et n’ouvre qu’une fois', '/work/seenit/', {}, async (page) => {
+	await page.focus('.cover-link');
+	await page.keyboard.down('Enter');
+	for (let i = 0; i < 5; i++) await page.keyboard.down('Enter');
+	await page.keyboard.up('Enter');
+	assert.equal((await state(page)).open, true);
+});
+
+onPage('maintenir Entrée sur Fermer ne rouvre pas', '/work/seenit/', {}, async (page) => {
+	await openCover(page);
+	await page.evaluate(() => {
+		window.openings = 0;
+		new MutationObserver(() => (window.openings += document.querySelector('dialog').open ? 1 : 0)).observe(
+			document.querySelector('dialog'),
+			{ attributeFilter: ['open'] },
+		);
+	});
+	await page.keyboard.down('Enter');
+	for (let i = 0; i < 5; i++) {
+		await settle(page);
+		await page.keyboard.down('Enter');
+	}
+	await page.keyboard.up('Enter');
+	assert.equal((await state(page)).open, false);
+	assert.equal(await page.evaluate(() => window.openings), 0);
+});
+
+onPage('tout ce qui ouvre la visionneuse l’annonce', '/work/seenit/', {}, async (page) => {
+	const popups = await page.$$eval('[data-viewer-open]', (els) => els.map((el) => el.getAttribute('aria-haspopup')));
+	assert.deepEqual(popups, Array(7).fill('dialog'));
 });
 
 onPage('le bouton de taille ne clignote pas', '/work/projet-chat/', { width: 770, height: 635 }, async (page) => {
@@ -290,14 +340,14 @@ onPage('le focus ne se perd pas quand le bouton de taille disparaît', '/work/ch
 
 onPage('la rotation garde une capture de téléphone lisible', '/work/chronopotes/', PHONE, async (page) => {
 	await openCover(page);
-	await page.click('dialog [data-next]');
+	await press(page, 'dialog [data-next]');
 	await page.setViewport({ width: 812, height: 375, isMobile: true, hasTouch: true });
 	assert.equal((await state(page)).width, 430);
 });
 
 onPage('après une rotation, un choix de taille est gardé', '/work/seenit/', PHONE, async (page) => {
 	await openCover(page);
-	await page.click('dialog [data-toggle]');
+	await press(page, 'dialog [data-toggle]');
 	await page.setViewport({ width: 812, height: 375, isMobile: true, hasTouch: true });
 	assert.equal((await state(page)).size, 'fit');
 });
@@ -329,8 +379,8 @@ for (const [width, height, size] of [
 
 onPage('la rotation garde la capture et recalcule sa taille', '/work/seenit/', PHONE, async (page) => {
 	await openCover(page);
-	await page.click('dialog [data-next]');
-	await page.click('dialog [data-next]');
+	await press(page, 'dialog [data-next]');
+	await press(page, 'dialog [data-next]');
 	await page.setViewport({ width: 812, height: 375, isMobile: true, hasTouch: true });
 	const s = await state(page);
 	assert.deepEqual([s.open, s.index], [true, 2]);
@@ -340,7 +390,7 @@ onPage('la rotation garde la capture et recalcule sa taille', '/work/seenit/', P
 
 onPage('très petit écran et légende : tout reste à l’écran', '/work/chronopotes/', { width: 320, height: 568, mobile: true }, async (page) => {
 	await openCover(page);
-	await page.click('dialog [data-next]');
+	await press(page, 'dialog [data-next]');
 	await settle(page);
 	for (const selector of ['dialog [data-close]', 'dialog [data-prev]', 'dialog [data-next]', 'dialog [data-caption]:not([hidden])']) {
 		assert.equal(await inScreen(page, selector), true, selector);
@@ -387,7 +437,7 @@ onPage('au doigt, la flèche ne reste pas colorée', '/work/seenit/', PHONE, asy
 
 onPage('téléphone couché : une capture de téléphone reste lisible', '/work/chronopotes/', { width: 812, height: 375, mobile: true }, async (page) => {
 	await openCover(page);
-	await page.click('dialog [data-next]');
+	await press(page, 'dialog [data-next]');
 	const s = await state(page);
 	assert.deepEqual([s.index, s.width], [1, 430]);
 });
@@ -401,14 +451,14 @@ onPage('une seule capture : pas de suite', '/work/projet-chat/', {}, async (page
 onPage('pas de bascule quand les deux tailles se valent', '/work/boardpxl/', { width: 1900, height: 1200 }, async (page) => {
 	await openCover(page);
 	assert.equal(await page.$eval('dialog [data-toggle]', (el) => el.hidden), true);
-	await page.click('dialog [data-capture]:not([hidden]) img');
+	await press(page, 'dialog [data-capture]:not([hidden]) img');
 	const s = await state(page);
 	assert.deepEqual([s.open, s.size, s.width], [true, 'fit', 1440]);
 });
 
 onPage('sans JavaScript, la capture mène à son image', '/work/seenit/', { js: false }, async (page) => {
 	const href = await page.$eval('.cover-link', (a) => a.href);
-	await Promise.all([page.waitForNavigation(), page.click('.cover-link')]);
+	await Promise.all([page.waitForNavigation(), press(page, '.cover-link')]);
 	assert.equal(page.url(), href);
 });
 
@@ -442,7 +492,8 @@ async function clickSlide(page, index, options = {}) {
 		const right = Math.min(r.right, innerWidth);
 		return { x: (left + right) / 2, y: r.top + r.height / 2 };
 	}, index);
-	await page.mouse.click(point.x, point.y, options);
+	if (page.viewport().hasTouch) await page.touchscreen.tap(point.x, point.y);
+	else await page.mouse.click(point.x, point.y, options);
 	await settle(page);
 }
 
@@ -492,9 +543,9 @@ onPage('galerie : le clavier centre puis ouvre une voisine', '/work/seenit/', {}
 
 onPage('galerie : le bouton « Agrandir » ouvre la capture centrale et retrouve le focus', '/work/seenit/', {}, async (page) => {
 	await toGallery(page);
-	await page.click('[data-gallery] [data-next]');
+	await press(page, '[data-gallery] [data-next]');
 	await until(page, 1);
-	await page.click('[data-enlarge]');
+	await press(page, '[data-enlarge]');
 	assert.equal((await state(page)).index, 2);
 	await page.keyboard.press('Escape');
 	assert.ok((await focusedData(page)).includes('enlarge'));
@@ -504,8 +555,8 @@ onPage('galerie : fermer revient à la dernière capture vue', '/work/seenit/', 
 	await toGallery(page);
 	await clickSlide(page, 0);
 	await ready();
-	await page.click('dialog [data-next]');
-	await page.click('dialog [data-next]');
+	await press(page, 'dialog [data-next]');
+	await press(page, 'dialog [data-next]');
 	const before = await page.evaluate(() => scrollY);
 	await page.keyboard.press('Escape');
 	await until(page, 2);
@@ -520,6 +571,24 @@ onPage('galerie : fermer revient à la dernière capture vue', '/work/seenit/', 
 		return Math.abs((r.left + r.right) / 2 - (track.left + track.right) / 2);
 	});
 	assert.ok(centred < 3, String(centred));
+});
+
+onPage('galerie : fermer n’annonce pas de nouveau la capture', '/work/seenit/', {}, async (page) => {
+	await toGallery(page);
+	await clickSlide(page, 0);
+	await page.keyboard.press('Escape');
+	await settle(page);
+	assert.equal(await page.$eval('[data-gallery] > [data-live]', (el) => el.textContent), '');
+});
+
+onPage('galerie : le doigt la fait défiler sans rien ouvrir', '/work/seenit/', PHONE, async (page) => {
+	await toGallery(page);
+	const y = await page.$eval('.slide .frame', (el) => el.getBoundingClientRect().top + 60);
+	const touch = await page.touchscreen.touchStart(320, y);
+	for (let x = 300; x >= 40; x -= 20) await touch.move(x, y);
+	await touch.end();
+	await until(page, 1);
+	assert.equal(await isOpen(page), false);
 });
 
 onPage('galerie : des clics rapides sur la voisine ne l’ouvrent pas', '/work/seenit/', {}, async (page) => {
@@ -551,7 +620,7 @@ onPage('galerie : si la dernière vue n’y est pas, le focus revient au départ
 	await toGallery(page);
 	await clickSlide(page, 0);
 	await ready();
-	await page.click('dialog [data-prev]');
+	await press(page, 'dialog [data-prev]');
 	assert.equal((await state(page)).index, 0);
 	await page.keyboard.press('Escape');
 	assert.equal(await page.evaluate(() => document.activeElement.closest('.slide')?.matches(':first-child')), true);
@@ -559,7 +628,7 @@ onPage('galerie : si la dernière vue n’y est pas, le focus revient au départ
 
 onPage('BluePoint : depuis la couverture, le focus revient à la couverture', '/work/bluepoint-waste-identifier/', {}, async (page) => {
 	await openCover(page);
-	await page.click('dialog [data-next]');
+	await press(page, 'dialog [data-next]');
 	await page.keyboard.press('Escape');
 	assert.equal(await focus(page), 'cover-link');
 });

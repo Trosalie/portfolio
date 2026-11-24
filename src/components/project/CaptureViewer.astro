@@ -41,7 +41,7 @@ const numbered = (key: 'work.viewer.position' | 'work.gallery.position', index: 
 	</form>
 
 	{/* La zone prend le focus pour defiler au clavier quand la capture est agrandie. */}
-	<div class="stage" data-stage tabindex="0" role="group" aria-label={t('work.gallery.label')}>
+	<div class="stage" data-stage tabindex="0" role="group" aria-label={t('work.viewer.capture')}>
 		{
 			captures.map((capture, index) => (
 				<div
@@ -186,7 +186,16 @@ const numbered = (key: 'work.viewer.position' | 'work.gallery.position', index: 
 			stage.scrollTo(at.x * width - stage.clientWidth / 2, at.y * height - stage.clientHeight / 2);
 		};
 
-		document.querySelectorAll('a[data-viewer-open]').forEach((link) => link.setAttribute('aria-haspopup', 'dialog'));
+		document.querySelectorAll('[data-viewer-open]').forEach((opens) => opens.setAttribute('aria-haspopup', 'dialog'));
+
+		// Entree maintenue se repete : ouvrir donne le focus a « Fermer », et la
+		// visionneuse se refermait aussitot.
+		document.addEventListener('keydown', (event) => {
+			const target = event.target as Element;
+			if (event.key === 'Enter' && event.repeat && target.closest('[data-viewer-open], [data-close]')) {
+				event.preventDefault();
+			}
+		});
 
 		// Ecoute sur le document : la galerie passe avant et retient le clic qui ne
 		// sert qu'a centrer une capture voisine.
@@ -243,7 +252,7 @@ const numbered = (key: 'work.viewer.position' | 'work.gallery.position', index: 
 			const step = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
 			if (!step || modified(event)) return;
 			event.preventDefault();
-			if (dialog.dataset.size === 'zoom') stage.scrollBy({ left: step * PAN });
+			if (stage.scrollWidth > stage.clientWidth) stage.scrollBy({ left: step * PAN });
 			else goTo(current + step);
 		});
 

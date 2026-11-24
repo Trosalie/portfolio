@@ -58,6 +58,12 @@ test('les libellés, dans les deux langues', () => {
 	assert.ok(text(chunk(page('/en/work/seenit/'), 'class="cover-link')).endsWith('Enlarge'));
 });
 
+test('la zone de la capture ne répète pas le nom de la boîte', () => {
+	const stage = (route) => dialog(route).match(/<[^>]*data-stage[^>]*>/)[0];
+	assert.match(stage('/work/seenit/'), /aria-label="Capture"/);
+	assert.match(stage('/en/work/seenit/'), /aria-label="Screenshot"/);
+});
+
 test('la couverture de BluePoint et sa première capture ouvrent la même vue', () => {
 	assert.deepEqual(all(page('/work/bluepoint-waste-identifier/'), /<a[^>]*data-viewer-open="(\d+)"/g), [
 		'0',

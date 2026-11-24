@@ -175,7 +175,8 @@ const position = (index: number) =>
 				behavior: instant || REDUCED.matches ? 'instant' : 'smooth',
 			});
 			render(target);
-			if (live) live.textContent = dots[target]?.getAttribute('aria-label') ?? '';
+			// Au retour de la visionneuse, le focus lit deja la capture.
+			if (live && !instant) live.textContent = dots[target]?.getAttribute('aria-label') ?? '';
 		};
 
 		prev.addEventListener('click', () => goTo(current - 1));
