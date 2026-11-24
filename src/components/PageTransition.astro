@@ -1,0 +1,105 @@
+---
+/**
+ * Le passage d'une page a l'autre : le cadre du projet glisse de sa vignette a sa
+ * couverture, le reste se fond.
+ *
+ * Les transitions entre documents sont celles du navigateur. Le script nomme un
+ * seul cadre de chaque cote : nommer tous les cadres en CSS ferait bouger ceux des
+ * autres projets. Sans l'une de ces API, la navigation est celle de toujours.
+ * Voir docs/superpowers/specs/2026-11-24-transitions-design.md.
+ *
+ * En ligne et classique : le script doit etre pret avant le premier affichage.
+ */
+---
+
+<style is:global>
+	@media (prefers-reduced-motion: no-preference) {
+		@view-transition {
+			navigation: auto;
+		}
+	}
+
+	::view-transition-group(*),
+	::view-transition-old(*),
+	::view-transition-new(*) {
+		animation-duration: 300ms;
+	}
+
+	/* Les deux captures n'ont pas les memes proportions : le fond du cadre comble ce
+	   que l'une ne couvre pas, et ce qui depasse est rogne. */
+	::view-transition-group(project) {
+		background: var(--frame-ground, transparent);
+		overflow: clip;
+	}
+</style>
+
+<script is:inline>
+	(() => {
+		const KEY = 'project-frame';
+		const root = document.documentElement;
+
+		// Un stockage interdit leve une erreur : la page s'ouvre alors en fondu.
+		const keep = (id) => {
+			try {
+				if (id) sessionStorage.setItem(KEY, id);
+				else sessionStorage.removeItem(KEY);
+			} catch {}
+		};
+		const kept = () => {
+			try {
+				return sessionStorage.getItem(KEY);
+			} catch {}
+		};
+
+		const projectOf = (url) => new URL(url).pathname.match(/^[/](?:en[/])?work[/]([^/]+)[/]?$/)?.[1];
+
+		// Le cadre du projet sur cette page, s'il est au moins en partie a l'ecran.
+		const frameOf = (id) => {
+			const frame =
+				projectOf(location.href) === id
+					? document.querySelector('.project-frame.cover')
+					: [...document.querySelectorAll('a.tile > .project-frame, .next-project > .project-frame')].find(
+							(el) => projectOf(el.parentElement.href) === id,
+						);
+			const box = frame?.getBoundingClientRect();
+			return box?.height && box.bottom > 0 && box.top < innerHeight ? frame : undefined;
+		};
+
+		const clear = () => {
+			for (const frame of document.querySelectorAll('.project-frame')) frame.style.viewTransitionName = '';
+			root.style.removeProperty('--frame-ground');
+		};
+
+		// Une transition abandonnee rejette ses promesses : ce n'est pas une erreur.
+		const quiet = (transition) => {
+			for (const step of ['ready', 'finished', 'updateCallbackDone']) transition[step]?.catch(() => {});
+		};
+
+		addEventListener('pageswap', ({ viewTransition, activation }) => {
+			if (!viewTransition) return;
+			quiet(viewTransition);
+			if (!activation) return;
+			// Le projet ou l'on va, sinon celui que l'on quitte.
+			for (const id of [projectOf(activation.entry.url), projectOf(location.href)]) {
+				const frame = id && frameOf(id);
+				if (!frame) continue;
+				frame.style.viewTransitionName = 'project';
+				keep(id);
+				return;
+			}
+		});
+
+		addEventListener('pagereveal', ({ viewTransition }) => {
+			clear();
+			const id = kept();
+			keep();
+			if (!viewTransition) return;
+			quiet(viewTransition);
+			const frame = id && frameOf(id);
+			if (!frame) return;
+			frame.style.viewTransitionName = 'project';
+			root.style.setProperty('--frame-ground', getComputedStyle(frame).backgroundColor);
+			viewTransition.finished.then(clear, clear);
+		});
+	})();
+</script>

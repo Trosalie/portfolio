@@ -1,6 +1,7 @@
 ---
 import '@fontsource-variable/schibsted-grotesk';
 import '../styles/global.css';
+import PageTransition from './PageTransition.astro';
 import { getAlternateLangPath, getLangFromUrl, useTranslations } from '../i18n/ui';
 
 interface Props {
@@ -58,3 +59,5 @@ const enUrl = lang === 'en' ? canonical : alternate;
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 <meta name="color-scheme" content="light" />
+
+<PageTransition />
