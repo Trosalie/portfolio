@@ -141,3 +141,13 @@ La page d'impression du CV déclare la même icône que le reste du site.
   délai ; mouvement réduit ; annonces ; focus ; page sans saut ; 320 px et texte à 200 %.
 - **Revue à l'œil** à 1440 et 375 px, FR et EN, dans les trois états et les quatre mentions.
 - À essayer par Thibault sur son téléphone : le toucher et le zoom au double appui.
+
+## Écarts à la livraison
+
+- Un clic sans appui (lecteur d'écran, commande vocale) arrête aussi la manche : sans cela, ces
+  personnes ne pourraient que la lancer.
+- « Manche interrompue » s'affiche à la place de « Cible : 5,00 s », jusqu'au départ suivant.
+- La garde de 400 ms vaut aussi après une interruption, pour qu'un appui trop tardif ne relance rien.
+- Une touche maintenue, ou pressée avec Maj, Ctrl, Alt ou Cmd, ne lance ni n'arrête rien.
+- En texte agrandi, les palettes rétrécissent pour rester dans la pièce.
+- Les tests exigent 10 ms, et non 30, entre le temps affiché et celui des gestes.

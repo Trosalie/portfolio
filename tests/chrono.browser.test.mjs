@@ -41,13 +41,13 @@ function record() {
 /** Un test sur une page neuve, la piece a l'ecran, sans erreur a la fin. */
 function onPiece(name, { path = FR, init, reduced = false, ...options }, run) {
 	test(name, async () => {
-		const page = await site.visit('/404.html', options);
-		try {
+		const prepare = async (page) => {
 			await page.evaluateOnNewDocument(record);
 			if (init) await page.evaluateOnNewDocument(init);
 			if (reduced) await page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]);
-			page.errors.length = 0;
-			await page.goto(site.url + path, { waitUntil: 'load' });
+		};
+		const page = await site.visit(path, { ...options, prepare });
+		try {
 			await page.evaluate(() =>
 				document.querySelector('[data-chrono]')?.scrollIntoView({ block: 'center', behavior: 'instant' }),
 			);

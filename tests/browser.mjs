@@ -58,8 +58,11 @@ export async function openSite({ args = [], split = 0 } = {}) {
 
 	return {
 		url,
-		/** Une page neuve sur `path`. `page.errors` et `page.requested` se remplissent des le depart. */
-		async visit(path, { width = 1440, height = 900, mobile = false, js = true } = {}) {
+		/**
+		 * Une page neuve sur `path`. `page.errors` et `page.requested` se remplissent des le
+		 * depart ; `prepare` agit sur la page avant qu'elle ne s'ouvre.
+		 */
+		async visit(path, { width = 1440, height = 900, mobile = false, js = true, prepare } = {}) {
 			const page = await browser.newPage();
 			page.errors = [];
 			page.requested = [];
@@ -67,6 +70,7 @@ export async function openSite({ args = [], split = 0 } = {}) {
 			page.on('request', (request) => page.requested.push(new URL(request.url()).pathname));
 			await page.setJavaScriptEnabled(js);
 			await page.setViewport({ width, height, isMobile: mobile, hasTouch: mobile });
+			await prepare?.(page);
 			await page.goto(url + path, { waitUntil: 'networkidle0' });
 			return page;
 		},
