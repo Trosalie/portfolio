@@ -4,6 +4,7 @@ import { useTranslations, type Lang } from '../../../i18n/ui';
 /** Le talon de billet de Seenit : la fiche d'un film vu, avec sa date et sa note. */
 interface Props {
 	lang: Lang;
+	demoUrl?: string;
 }
 
 const t = useTranslations(Astro.props.lang);

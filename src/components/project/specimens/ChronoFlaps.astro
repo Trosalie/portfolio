@@ -2,55 +2,330 @@
 import { useTranslations, type Lang } from '../../../i18n/ui';
 
 /**
- * L'affichage a palettes de ChronoPotes : un resultat comme sur un tableau de
- * gare, et la mention obtenue. Le tout se lit d'un bloc par son `aria-label` ;
- * les palettes, une par caractere, sont decoratives.
+ * L'affichage a palettes de ChronoPotes. Sans script, un resultat comme sur un
+ * tableau de gare. Avec, une manche du jeu : on arrete a l'aveugle un chrono de
+ * cinq secondes, et les palettes roulent jusqu'au temps.
+ *
+ * Les palettes, une par caractere, sont decoratives : `data-flaps` se lit d'un
+ * bloc, et `data-live` annonce le depart et le resultat.
  */
 interface Props {
 	lang: Lang;
+	demoUrl?: string;
 }
 
-const t = useTranslations(Astro.props.lang);
+const { lang, demoUrl } = Astro.props;
+const t = useTranslations(lang);
 const value = t('specimen.chrono.value');
 const tier = t('specimen.chrono.tier');
+const host = demoUrl && new URL(demoUrl).hostname.replace(/^www\./, '');
+
+// Ce que le script ecrit.
+const labels = {
+	value,
+	praise: tier,
+	masked: t('specimen.chrono.masked'),
+	play: t('specimen.chrono.play'),
+	playLabel: t('specimen.chrono.playLabel'),
+	stop: t('specimen.chrono.stop'),
+	replay: t('specimen.chrono.replay'),
+	replayLabel: t('specimen.chrono.replayLabel'),
+	started: t('specimen.chrono.started'),
+	interrupted: t('specimen.chrono.interrupted'),
+	spoken: t('specimen.chrono.spoken'),
+	early: t('specimen.chrono.early'),
+	late: t('specimen.chrono.late'),
+	exact: t('specimen.chrono.exact'),
+	tiers: {
+		masterclass: t('specimen.chrono.tier.masterclass'),
+		good: t('specimen.chrono.tier.good'),
+		average: t('specimen.chrono.tier.average'),
+		missed: t('specimen.chrono.tier.missed'),
+	},
+};
+export type ChronoLabels = typeof labels;
 ---
 
-<div class="flaps" role="img" aria-label={`${value} ${tier}`}>
-	{
-		[...value].map((char) =>
-			/\d/.test(char) ? (
-				<span class="flap" aria-hidden="true">
-					{char}
-				</span>
-			) : (
-				<span class="sep" aria-hidden="true">
-					{char}
-				</span>
-			),
-		)
-	}
-	<span class="tier" aria-hidden="true">{tier}</span>
+<div
+	class="chrono"
+	role="group"
+	aria-label={t('specimen.chrono.group')}
+	data-chrono
+	data-state="rest"
+	data-lang={lang}
+	data-labels={JSON.stringify(labels)}
+>
+	<div class="board" data-board>
+		<div class="flaps" role="img" aria-label={`${value} ${tier}`} data-flaps>
+			{
+				[...value].map((char) => (
+					<span class={/\d/.test(char) ? 'flap' : 'sep'} data-char={char} aria-hidden="true">
+						{char}
+					</span>
+				))
+			}
+		</div>
+		<div class="status" aria-hidden="true">
+			<span class="tier" data-tier>{tier}</span>
+			<span class="detail"><span data-praise></span><span data-gap></span></span>
+		</div>
+	</div>
+
+	<div class="play" data-play hidden>
+		<p class="target" data-target>{t('specimen.chrono.target')}</p>
+		<div class="actions">
+			<button type="button" data-button aria-label={labels.playLabel}>{labels.play}</button>
+			{
+				host && (
+					<a class="link" href={demoUrl} target="_blank" rel="noopener noreferrer" data-link>
+						{t('specimen.chrono.link').replace('{host}', host)}
+					</a>
+				)
+			}
+		</div>
+	</div>
+	<p class="sr-only" aria-live="polite" data-live></p>
 </div>
 
+<script>
+	import {
+		formatFlap,
+		formatGap,
+		GUARD_MS,
+		LIMIT_MS,
+		ROLL_TICK_MS,
+		rollPlan,
+		TARGET_MS,
+		tierFor,
+	} from '../../../data/chrono';
+	import type { Lang } from '../../../i18n/ui';
+	import type { ChronoLabels } from './ChronoFlaps.astro';
+
+	const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+	/** Une palette posee sur un caractere. */
+	function set(flap: HTMLElement, char: string) {
+		if (flap.dataset.char !== char) flap.dataset.char = char;
+		flap.textContent = char;
+	}
+
+	/** Une palette qui se retourne : deux moitiés fixes, une feuille qui tombe, une qui se pose. */
+	function flip(flap: HTMLElement, next: string) {
+		const previous = flap.dataset.char!;
+		flap.dataset.char = next;
+		const half = (name: string, char: string) => {
+			const span = document.createElement('span');
+			span.className = `half ${name}`;
+			span.textContent = char;
+			return span;
+		};
+		flap.replaceChildren(half('top', next), half('bottom', previous), half('falls', previous), half('lands', next));
+	}
+
+	function setupChrono(root: HTMLElement) {
+		const find = <T extends HTMLElement>(name: string) => root.querySelector<T>(`[data-${name}]`);
+		const board = find('board');
+		const flapsBox = find('flaps');
+		const tierText = find('tier');
+		const praise = find('praise');
+		const gapText = find('gap');
+		const play = find('play');
+		const target = find('target');
+		const button = find<HTMLButtonElement>('button');
+		const live = find('live');
+		if (!board || !flapsBox || !tierText || !praise || !gapText || !play || !target || !button || !live) return;
+
+		const labels = JSON.parse(root.dataset.labels!) as ChronoLabels;
+		const lang = root.dataset.lang as Lang;
+		const flaps = [...root.querySelectorAll<HTMLElement>('[data-char]')];
+		const targetText = target.textContent!;
+
+		let startedAt = 0;
+		let stoppedAt = -Infinity;
+		let limit: number | undefined;
+		// Termine d'un coup le roulement en cours.
+		let finish: (() => void) | undefined;
+		// Le prochain clic appartient a un geste deja compte a l'appui.
+		let swallow = false;
+
+		const running = () => root.dataset.state === 'running';
+
+		const setButton = (text: string, name?: string) => {
+			button.textContent = text;
+			if (name) button.setAttribute('aria-label', name);
+			else button.removeAttribute('aria-label');
+		};
+
+		const setStatus = (tier: string, praised = '', gap = '') => {
+			tierText.textContent = tier;
+			praise.textContent = praised;
+			gapText.textContent = gap;
+		};
+
+		const start = (time: number) => {
+			if (finish || time - stoppedAt < GUARD_MS) return;
+			startedAt = time;
+			limit = window.setTimeout(interrupt, LIMIT_MS);
+			root.dataset.state = 'running';
+			delete root.dataset.result;
+			[...labels.value].forEach((char, i) => set(flaps[i]!, /\d/.test(char) ? '?' : char));
+			flapsBox.setAttribute('aria-label', labels.masked);
+			setStatus('');
+			target.textContent = targetText;
+			setButton(labels.stop);
+			live.textContent = labels.started;
+			// Safari ne donne pas le focus a un bouton clique : Espace doit pouvoir arreter.
+			button.focus({ preventScroll: true });
+		};
+
+		const stop = (time: number) => {
+			if (time - startedAt < GUARD_MS) return;
+			window.clearTimeout(limit);
+			stoppedAt = time;
+
+			const ms = Math.round(time - startedAt);
+			const signed = ms - TARGET_MS;
+			const value = formatFlap(ms, lang);
+			const gap = formatGap(signed, lang);
+			const tier = tierFor(Math.abs(signed));
+			const praised = tier === 'masterclass' ? labels.praise : '';
+			const named = [labels.tiers[tier], praised].filter(Boolean).join(', ');
+			const sense = /^\d/.test(gap) ? labels.exact : signed < 0 ? labels.early : labels.late;
+
+			setButton(labels.replay, labels.replayLabel);
+
+			const plan = rollPlan(value);
+			let tick = 0;
+			let timer: number | undefined;
+
+			finish = () => {
+				window.clearInterval(timer);
+				finish = undefined;
+				plan.forEach((frames, i) => set(flaps[i]!, frames.at(-1)!));
+				flapsBox.setAttribute('aria-label', `${value} ${named}, ${gap}`);
+				setStatus(labels.tiers[tier], praised, gap);
+				root.dataset.result = tier;
+				root.dataset.state = 'result';
+				root.dataset.played = '';
+				live.textContent = labels.spoken
+					.replace('{value}', value.replace(/^0/, ''))
+					.replace('{sense}', sense.replace('{gap}', gap.replace(/[^\d.,]/g, '')))
+					.replace('{tier}', named);
+			};
+			if (REDUCED.matches) return finish();
+
+			const roll = () => {
+				if (plan.every((frames) => tick >= frames.length)) return finish?.();
+				plan.forEach((frames, i) => {
+					if (frames.length > 1 && tick < frames.length) flip(flaps[i]!, frames[tick]!);
+				});
+				tick += 1;
+			};
+			root.dataset.state = 'rolling';
+			timer = window.setInterval(roll, ROLL_TICK_MS);
+			roll();
+		};
+
+		const interrupt = () => {
+			window.clearTimeout(limit);
+			stoppedAt = performance.now();
+			root.dataset.state = 'rest';
+			[...labels.value].forEach((char, i) => set(flaps[i]!, char));
+			flapsBox.setAttribute('aria-label', `${labels.value} ${labels.praise}`);
+			setStatus(labels.praise);
+			target.textContent = labels.interrupted;
+			setButton(labels.play, labels.playLabel);
+			live.textContent = labels.interrupted;
+		};
+
+		/** La page s'en va : une manche s'interrompt, un roulement se termine. */
+		const away = () => {
+			if (running()) interrupt();
+			else finish?.();
+		};
+
+		board.addEventListener('pointerdown', (event) => {
+			if (event.button !== 0 || !event.isPrimary) return;
+			if (running()) stop(event.timeStamp);
+		});
+		// Les palettes ne prennent pas le focus au bouton.
+		board.addEventListener('mousedown', (event) => event.preventDefault());
+
+		button.addEventListener('pointerdown', (event) => {
+			if (event.button !== 0 || !event.isPrimary) return;
+			swallow = running();
+			if (swallow) stop(event.timeStamp);
+		});
+
+		button.addEventListener('keydown', (event) => {
+			if (event.key !== ' ' && event.key !== 'Enter') return;
+			const modified = event.shiftKey || event.ctrlKey || event.altKey || event.metaKey;
+			if (event.repeat || modified) {
+				// Une repetition d'Entree cliquerait de nouveau.
+				event.preventDefault();
+				if (modified) swallow = true;
+				return;
+			}
+			swallow = running();
+			if (swallow) stop(event.timeStamp);
+		});
+
+		button.addEventListener('click', (event) => {
+			if (swallow) {
+				swallow = false;
+				return;
+			}
+			// Un lecteur d'ecran ou une commande vocale clique sans appuyer.
+			if (running()) stop(event.timeStamp);
+			else start(event.timeStamp);
+		});
+
+		document.addEventListener('visibilitychange', () => document.hidden && away());
+		window.addEventListener('pagehide', away);
+
+		play.hidden = false;
+	}
+
+	document.querySelectorAll<HTMLElement>('[data-chrono]').forEach(setupChrono);
+</script>
+
 <style>
+	.chrono {
+		--flap-size: clamp(1.5rem, 7vw, var(--step-4));
+
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 1rem;
+		max-width: 100%;
+		touch-action: manipulation;
+		user-select: none;
+		-webkit-user-select: none;
+	}
+
 	/* Sur un ecran de 375 px, quatre palettes en --step-4 et la mention ne
 	   tenaient pas sur une ligne : les palettes suivent la largeur de l'ecran et
 	   la mention passe a la ligne au besoin. */
-	.flaps {
-		--flap-size: clamp(1.5rem, 7vw, var(--step-4));
-
+	.board {
 		display: inline-flex;
 		flex-wrap: wrap;
 		align-items: center;
 		max-width: 100%;
-		gap: 0.25rem;
+		gap: 0.25rem 0.75rem;
 		padding: 0.9rem 1rem;
 		background: #101216;
+	}
+
+	.flaps {
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
 	}
 
 	.flap {
 		position: relative;
 		width: 1.3em;
+		height: 1.45em;
 		border-radius: 3px;
 		background: #20242c;
 		color: #fff;
@@ -59,6 +334,7 @@ const tier = t('specimen.chrono.tier');
 		font-size: var(--flap-size);
 		line-height: 1.45;
 		text-align: center;
+		perspective: 5em;
 	}
 
 	/* La pliure de la palette, a mi-hauteur. */
@@ -79,13 +355,145 @@ const tier = t('specimen.chrono.tier');
 		font-size: var(--flap-size);
 	}
 
-	.tier {
-		margin-left: 0.75rem;
+	/* Chaque moitie couvre toute la palette et n'en montre que la sienne. Le
+	   script les cree : elles ne portent pas la marque des styles du composant. */
+	.flap :global(.half) {
+		position: absolute;
+		inset: 0;
+		border-radius: inherit;
+		background: #20242c;
+	}
+
+	.flap :global(.top),
+	.flap :global(.falls) {
+		clip-path: inset(0 0 50% 0);
+	}
+
+	.flap :global(.bottom),
+	.flap :global(.lands) {
+		clip-path: inset(50% 0 0 0);
+	}
+
+	.flap :global(.falls) {
+		animation: falls 40ms ease-in;
+		transform: rotateX(-90deg);
+	}
+
+	.flap :global(.lands) {
+		animation: lands 40ms ease-out 40ms backwards;
+	}
+
+	@keyframes falls {
+		from {
+			transform: rotateX(0);
+		}
+	}
+
+	@keyframes lands {
+		from {
+			transform: rotateX(90deg);
+		}
+	}
+
+	.status {
+		display: flex;
+		flex-direction: column;
 		color: #f5c518;
 		font-family: 'Oswald', sans-serif;
 		font-weight: 600;
 		font-size: var(--step--1);
 		letter-spacing: 0.05em;
 		text-transform: uppercase;
+	}
+
+	.detail {
+		display: flex;
+		gap: 0.6em;
+	}
+
+	/* Le gris du jeu ne donne que 2,0:1 sur la palette. */
+	.chrono[data-state='running'] .flap {
+		color: #9aa3b2;
+	}
+
+	.chrono[data-result='masterclass'] .status {
+		color: #6ff0a9;
+	}
+
+	.chrono[data-result='good'] .status {
+		color: #f5c518;
+	}
+
+	.chrono[data-result='average'] .status {
+		color: #fb923c;
+	}
+
+	.chrono[data-result='missed'] .status {
+		color: #ff6b57;
+	}
+
+	/* La place du jeu est prise avant le script, et celle de la mention la plus
+	   longue avant la manche : rien ne saute. */
+	@media (scripting: enabled) {
+		.status {
+			min-width: 12em;
+			min-height: 3em;
+			justify-content: center;
+		}
+
+		.play[hidden] {
+			display: flex;
+			visibility: hidden;
+		}
+	}
+
+	.play {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.75rem;
+		max-width: 100%;
+	}
+
+	.play[hidden] {
+		display: none;
+	}
+
+	.target {
+		margin: 0;
+	}
+
+	.actions {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.5rem 1.25rem;
+	}
+
+	button {
+		min-width: 8.5em;
+		min-height: 2.75rem;
+		padding: 0.5rem 1.25rem;
+		border: 0;
+		border-radius: 4px;
+		background: #f5c518;
+		color: #101216;
+		font-family: 'Oswald', sans-serif;
+		font-weight: 600;
+		font-size: var(--step-0);
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+		cursor: pointer;
+	}
+
+	.link {
+		display: inline-flex;
+		align-items: center;
+		min-height: 2.75rem;
+		visibility: hidden;
+	}
+
+	.chrono[data-played] .link {
+		visibility: visible;
 	}
 </style>

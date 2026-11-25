@@ -88,7 +88,7 @@ async function attempt(path, options, run) {
 	const page = await at.visit('/404.html', options);
 	const errors = [];
 	page.on('pageerror', (error) => errors.push(String(error)));
-	page.on('console', (message) => isError(message) && errors.push(message.text()));
+	page.on('console', (message) => message.type() === 'error' && errors.push(message.text()));
 	try {
 		await page.evaluateOnNewDocument(watch);
 		if (options.init) await page.evaluateOnNewDocument(options.init);
@@ -104,9 +104,6 @@ async function attempt(path, options, run) {
 		await own?.close();
 	}
 }
-
-/** Une erreur de console, sans celle de l'icone que la page d'impression ne declare pas. */
-const isError = (message) => message.type() === 'error' && !message.location().url?.endsWith('/favicon.ico');
 
 const pathOf = (page) => new URL(page.url()).pathname;
 const settle = (page) =>
@@ -405,7 +402,7 @@ async function errorsOf(path, run) {
 	const page = await site.visit('/404.html');
 	const errors = [];
 	page.on('pageerror', (error) => errors.push(String(error)));
-	page.on('console', (message) => isError(message) && errors.push(message.text()));
+	page.on('console', (message) => message.type() === 'error' && errors.push(message.text()));
 	try {
 		await page.goto(site.url + path, { waitUntil: 'networkidle0' });
 		await run(page);

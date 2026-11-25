@@ -78,7 +78,7 @@ const next = nextEntry(await getWorkCollection(lang), entry.id);
 			{
 				hasSpecimen(entry.data.identity) && (
 					<ProjectSection title={t('work.section.identity')}>
-						<IdentitySpecimen identity={entry.data.identity} lang={lang} />
+						<IdentitySpecimen identity={entry.data.identity} lang={lang} demoUrl={entry.data.demoUrl} />
 					</ProjectSection>
 				)
 			}

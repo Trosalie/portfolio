@@ -18,9 +18,11 @@ import SeenitTicket from './specimens/SeenitTicket.astro';
 interface Props {
 	identity: ProjectSpecimen;
 	lang: Lang;
+	/** L'adresse du produit, pour une piece qui y mene. */
+	demoUrl?: string;
 }
 
-const { identity, lang } = Astro.props;
+const { identity, lang, demoUrl } = Astro.props;
 const t = useTranslations(lang);
 
 const pieces = {
@@ -65,7 +67,7 @@ const Piece = pieces[identity.specimen];
 
 	<div class="block">
 		<h3>{t('work.identity.piece')}</h3>
-		<Piece lang={lang} />
+		<Piece lang={lang} demoUrl={demoUrl} />
 	</div>
 </div>
 
