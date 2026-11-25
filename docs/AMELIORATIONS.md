@@ -296,11 +296,12 @@ retenus en premier.
   voisins : un petit script n'en nomme qu'un. Les liens de projet ont pris la barre finale, qui
   évite une redirection à chaque clic.
 
-- [ ] **7. La pièce d'interface du nuancier est figée.** L'affichage à palettes de ChronoPotes
-  (`src/components/project/specimens/ChronoFlaps.astro:18`) est une image en HTML.
-  → La rendre jouable : on arrête le chrono à l'aveugle, les palettes tournent jusqu'au résultat
-  et à sa mention. Espace au clavier, résultat en `aria-live`, affichage direct en mouvement
-  réduit.
+- [x] **7. La pièce d'interface du nuancier est figée.** L'affichage à palettes de ChronoPotes
+  était une image en HTML.
+  → Une manche du jeu sur la page ChronoPotes (`ChronoFlaps.astro`, règles dans
+  `src/data/chrono.ts`) : cible de 5,00 s à l'aveugle, rien ne bouge jusqu'à l'arrêt, puis les
+  palettes roulent jusqu'au temps et à sa mention. Souris, doigt, Espace ou Entrée, résultat en
+  `aria-live`, affichage direct en mouvement réduit, l'exemple seul sans JavaScript.
 
 - [x] **8. La typographie française n'est pas finie.** Aucune espace insécable dans les
   sources (« full stack ? », « projet : ce formulaire », `src/i18n/ui.ts:26` et `:80`, et les

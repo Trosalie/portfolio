@@ -625,6 +625,96 @@ onPiece('sans JavaScript : l’exemple seul', { js: false }, async (page) => {
 	);
 });
 
+// La mise en page : tout tient, et rien ne saute d'un etat a l'autre.
+
+const LAYOUTS = [
+	[1440, 100],
+	[375, 100],
+	[320, 100],
+	[375, 200],
+];
+
+const measure = (page) =>
+	page.evaluate(() => {
+		const root = document.querySelector('[data-chrono]');
+		const box = (el) => el.getBoundingClientRect();
+		const board = box(root.querySelector('[data-board]'));
+		const textBox = (el) => {
+			const range = document.createRange();
+			range.selectNodeContents(el);
+			return range.getBoundingClientRect();
+		};
+		const inside = ['tier', 'praise', 'gap']
+			.map((name) => textBox(root.querySelector(`[data-${name}]`)))
+			.concat([...root.querySelectorAll('[data-char]')].map(box))
+			.filter((b) => b.width > 0);
+		const overlaps = inside.filter((a, i) =>
+			inside.some(
+				(b, j) => j > i && Math.min(a.right, b.right) - Math.max(a.left, b.left) > 1 && Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top) > 1,
+			),
+		).length;
+		return {
+			height: box(root).height,
+			board: [board.width, board.height],
+			out: inside.filter((b) => b.left < board.left || b.right > board.right + 0.5 || b.top < board.top - 0.5 || b.bottom > board.bottom + 0.5).length,
+			overlaps,
+			// Le bord gauche de la mention et du premier texte sous elle.
+			indent: ['tier', root.querySelector('[data-praise]').textContent ? 'praise' : 'gap']
+				.map((name) => textBox(root.querySelector(`[data-${name}]`)))
+				.reduce((left, b) => Math.max(left, b.width > 0 ? b.left - board.left : 0), 0),
+			wide: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+			button: [box(root.querySelector('[data-button]')).width, box(root.querySelector('[data-button]')).height],
+			link: box(root.querySelector('[data-link]')).height,
+			clipped: [...root.querySelectorAll('[data-button], [data-link], [data-target]')].filter(
+				(el) => el.scrollWidth > el.clientWidth + 1 || box(el).right > document.documentElement.clientWidth,
+			).length,
+		};
+	});
+
+for (const [width, zoom] of LAYOUTS) {
+	for (const path of [FR, EN]) {
+		onPiece(`mise en page ${width} px, texte à ${zoom} %, ${path}`, { path, width, height: 1000 }, async (page) => {
+			await page.evaluate((z) => void (document.documentElement.style.fontSize = `${z}%`), zoom);
+			await page.evaluate(() => document.fonts.ready.then(() => {}));
+			await page.evaluate(() =>
+				document.querySelector('[data-chrono]').scrollIntoView({ block: 'center', behavior: 'instant' }),
+			);
+			const rest = await measure(page);
+			const check = async (state) => {
+				const seen = await measure(page);
+				assert.deepEqual([seen.out, seen.overlaps, seen.wide, seen.clipped], [0, 0, 0, 0], state);
+				assert.ok(Math.abs(seen.height - rest.height) <= 1, `${state} : ${rest.height} puis ${seen.height}`);
+				for (const i of [0, 1]) {
+					assert.ok(Math.abs(seen.board[i] - rest.board[i]) <= 1, `${state} : ${rest.board} puis ${seen.board}`);
+					assert.ok(Math.abs(seen.button[i] - rest.button[i]) <= 1, `${state} : ${rest.button} puis ${seen.button}`);
+				}
+				assert.ok(seen.button[1] >= 44 && seen.link >= 44, state);
+			};
+			await check('rest');
+			await at(page, 10_000);
+			await start(page);
+			await check('running');
+			for (const [i, gap] of [123, -320, -750, 1400, 24_900].entries()) {
+				const from = 10_000 + i * 60_000;
+				if (i > 0) {
+					await at(page, from);
+					await start(page);
+				}
+				await at(page, from + 5000 + gap);
+				await press(page);
+				if ((await read(page)).state === 'rolling') await check('rolling');
+				await until(page, 'result');
+				await check(`result ${gap}`);
+				assert.ok(Math.abs((await measure(page)).indent - rest.indent) <= 1, `${gap} : la mention et l’écart s’alignent`);
+			}
+			await at(page, 900_000);
+			await start(page);
+			await leave(page);
+			await check('interrompue');
+		});
+	}
+}
+
 test('Seenit garde sa pièce, sans jeu', async () => {
 	const page = await site.visit('/work/seenit/');
 	assert.deepEqual(page.errors, []);
