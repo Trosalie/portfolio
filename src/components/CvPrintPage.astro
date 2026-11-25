@@ -10,6 +10,7 @@
 
 import { getLangFromUrl, useTranslations } from '../i18n/ui';
 import CvDocument from './CvDocument.astro';
+import QuietTransitions from './QuietTransitions.astro';
 import PrintToolbar from './PrintToolbar.astro';
 // Polices embarquées, et non chargées depuis Google Fonts : ce sont exactement
 // les fichiers de l'outil candidatures (src/template/fonts.ts), mêmes graisses.
@@ -33,6 +34,7 @@ const backHref = lang === 'fr' ? '/cv/' : `/${lang}/cv/`;
 	<meta name="viewport" content="width=device-width" />
 	<meta name="robots" content="noindex, nofollow" />
 	<title>{t('cv.print.title')}</title>
+	<QuietTransitions />
 </head>
 <body>
 	<PrintToolbar title={t('cv.print.toolbar')} backHref={backHref} />

@@ -1,0 +1,18 @@
+---
+/**
+ * Une transition abandonnee n'est pas une erreur.
+ *
+ * Le navigateur en abandonne avant meme de la donner a la page, ou quand une seule
+ * des deux pages les accepte : on l'entend ici. Ne sont tues que ces abandons-la,
+ * page trop lente comprise ; un nom en double reste signale par le navigateur.
+ */
+---
+
+<script is:inline>
+	addEventListener('unhandledrejection', (event) => {
+		const { name, message } = event.reason ?? {};
+		if (['AbortError', 'InvalidStateError', 'TimeoutError'].includes(name) && /transition/i.test(message)) {
+			event.preventDefault();
+		}
+	});
+</script>

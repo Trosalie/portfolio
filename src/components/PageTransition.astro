@@ -10,7 +10,10 @@
  *
  * En ligne et classique : le script doit etre pret avant le premier affichage.
  */
+import QuietTransitions from './QuietTransitions.astro';
 ---
+
+<QuietTransitions />
 
 <style is:global>
 	@media (prefers-reduced-motion: no-preference) {
@@ -75,15 +78,6 @@
 			root.style.removeProperty('--frame-ground');
 		};
 
-		// Une transition abandonnee n'est pas une erreur. Le navigateur en abandonne
-		// aussi avant de nous la donner : on l'entend ici, pas sur la transition.
-		addEventListener('unhandledrejection', (event) => {
-			const { name, message } = event.reason ?? {};
-			if (['AbortError', 'InvalidStateError', 'TimeoutError'].includes(name) && /transition/i.test(message)) {
-				event.preventDefault();
-			}
-		});
-
 		// Un cadre est attendu : la page n'est montree qu'une fois lue jusqu'a lui, sans
 		// quoi elle s'afficherait en haut, sans vignette, puis sauterait.
 		const expected = kept();
@@ -97,14 +91,21 @@
 			setTimeout(() => wait.remove(), 500);
 		}
 
+		// La transition en cours sur cette page : si on la quitte avant sa fin, elle ne
+		// doit plus rien effacer.
+		let running;
+
 		addEventListener('pageswap', ({ viewTransition, activation }) => {
+			running = undefined;
+			clear();
 			if (!viewTransition || !activation || !showsFrames(activation.entry.url)) return;
 			// Le projet ou l'on va, sinon celui que l'on quitte.
 			for (const id of [projectOf(activation.entry.url), projectOf(location.href)]) {
 				const frame = id && frameOf(id);
 				if (!frame) continue;
-				frame.style.viewTransitionName = 'project';
+				// Sans stockage, la page ouverte ne saurait rien : aucun cadre.
 				keep(id);
+				if (kept() === id) frame.style.viewTransitionName = 'project';
 				return;
 			}
 		});
@@ -118,7 +119,9 @@
 			if (!frame) return;
 			frame.style.viewTransitionName = 'project';
 			root.style.setProperty('--frame-ground', getComputedStyle(frame).backgroundColor);
-			viewTransition.finished.then(clear, clear);
+			running = viewTransition;
+			const end = () => running === viewTransition && clear();
+			viewTransition.finished.then(end, end);
 		});
 	})();
 </script>

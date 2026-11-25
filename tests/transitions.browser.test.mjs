@@ -47,6 +47,7 @@ function watch() {
 			window.seen.old = JSON.parse(sessionStorage.getItem('test-old') ?? '[]');
 			sessionStorage.removeItem('test-old');
 		} catch {}
+		if (!event.viewTransition) window.seen.done = true;
 		event.viewTransition?.ready.then(
 			() => {
 				const animations = document.getAnimations().filter((a) => a.effect?.pseudoElement?.startsWith('::view-transition'));
@@ -54,8 +55,9 @@ function watch() {
 				window.seen.groups = [...new Set(animations.map((a) => a.effect.pseudoElement))];
 				window.seen.durations = [...new Set(animations.map((a) => a.effect.getTiming().duration))];
 				window.seen.ground = document.documentElement.style.getPropertyValue('--frame-ground');
+				window.seen.done = true;
 			},
-			() => {},
+			() => (window.seen.done = true),
 		);
 	});
 }
@@ -86,7 +88,7 @@ async function attempt(path, options, run) {
 	const page = await at.visit('/404.html', options);
 	const errors = [];
 	page.on('pageerror', (error) => errors.push(String(error)));
-	page.on('console', (message) => message.type() === 'error' && errors.push(message.text()));
+	page.on('console', (message) => isError(message) && errors.push(message.text()));
 	try {
 		await page.evaluateOnNewDocument(watch);
 		if (options.init) await page.evaluateOnNewDocument(options.init);
@@ -103,6 +105,9 @@ async function attempt(path, options, run) {
 	}
 }
 
+/** Une erreur de console, sans celle de l'icone que la page d'impression ne declare pas. */
+const isError = (message) => message.type() === 'error' && !message.location().url?.endsWith('/favicon.ico');
+
 const pathOf = (page) => new URL(page.url()).pathname;
 const settle = (page) =>
 	page.waitForFunction(() => !document.documentElement.matches(':active-view-transition'), { timeout: 5000 });
@@ -111,8 +116,7 @@ const settle = (page) =>
 async function go(page, to, act) {
 	await act();
 	await page.waitForFunction((path) => location.pathname === path && document.readyState === 'complete', { timeout: 10000 }, to);
-	await page.waitForFunction(() => window.seen, { timeout: 5000 });
-	await new Promise((resolve) => setTimeout(resolve, 120));
+	await page.waitForFunction(() => window.seen?.done, { timeout: 5000 });
 	const seen = await page.evaluate(() => window.seen);
 	await settle(page);
 	return seen;
@@ -144,9 +148,12 @@ async function glides(page, seen, from, to) {
 	assert.deepEqual(await clean(page), { named: 0, ground: '' });
 }
 
-async function fades(page, seen) {
+/** Aucun glissement. `from` : le cadre que la page quittee avait nomme, s'il n'a pas trouve sa place. */
+async function fades(page, seen, from) {
 	if (!seen.groups) throw new Abandoned('transition abandonnée');
+	assert.deepEqual(seen.old, from ? [from] : []);
 	assert.deepEqual(seen.named, []);
+	assert.equal(seen.groups.includes('::view-transition-old(project)'), Boolean(from), String(seen.groups));
 	assert.ok(seen.groups?.includes('::view-transition-new(root)'), String(seen.groups));
 	assert.ok(!seen.groups.includes('::view-transition-new(project)'), String(seen.groups));
 	assert.deepEqual(await clean(page), { named: 0, ground: '' });
@@ -184,7 +191,6 @@ onPage('retour avec la couverture hors de l’écran : aucun nom hérité', '/wo
 	await page.evaluate(() => scrollTo(0, document.body.scrollHeight));
 	const seen = await back(page, '/work/');
 	assert.equal(seen.kept, true, 'la page devrait revenir de la mémoire du navigateur');
-	assert.deepEqual(seen.old, []);
 	await fades(page, seen);
 });
 
@@ -198,7 +204,7 @@ onPage('« Retour aux projets » : la vignette visible en haut de la liste', '/w
 });
 
 onPage('« Retour aux projets » : vignette hors de l’écran, simple fondu', '/work/covoit-etud/', {}, async (page) => {
-	await fades(page, await followHere(page, '.back-link', '/work/'));
+	await fades(page, await followHere(page, '.back-link', '/work/'), 'cover covoit-etud');
 });
 
 onPage('changer de langue : la couverture reste à sa place', '/work/seenit/', {}, async (page) => {
@@ -211,7 +217,7 @@ onPage('entre deux pages sans projet : simple fondu', '/', {}, async (page) => {
 });
 
 onPage('petit téléphone : couverture hors de l’écran, simple fondu', '/work/', SMALL, async (page) => {
-	await fades(page, await follow(page, tileTo('/work/chronopotes/'), '/work/chronopotes/'));
+	await fades(page, await follow(page, tileTo('/work/chronopotes/'), '/work/chronopotes/'), 'tile chronopotes');
 });
 
 onPage('téléphone, au doigt : la vignette glisse', '/work/', PHONE, async (page) => {
@@ -220,7 +226,6 @@ onPage('téléphone, au doigt : la vignette glisse', '/work/', PHONE, async (pag
 
 onPage('vignette hors de l’écran au départ : simple fondu', '/work/', {}, async (page) => {
 	const seen = await followHere(page, tileTo('/work/covoit-etud/'), '/work/covoit-etud/');
-	assert.deepEqual(seen.old, []);
 	await fades(page, seen);
 });
 
@@ -290,7 +295,13 @@ onPage('Ctrl+clic : rien n’est retenu pour la navigation suivante', '/work/', 
 	await page.keyboard.down('Control');
 	await page.click(tileTo('/work/chronopotes/'));
 	await page.keyboard.up('Control');
-	await new Promise((resolve) => setTimeout(resolve, 500));
+	const target = await page.browser().waitForTarget((t) => t.url().endsWith('/work/chronopotes/'), { timeout: 5000 });
+	const tab = await target.page();
+	// Par delai : un onglet en arriere-plan n'a pas d'images a attendre.
+	await tab.waitForFunction(() => document.readyState === 'complete', { polling: 100 });
+	assert.deepEqual(await clean(tab), { named: 0, ground: '' });
+	assert.equal(await tab.evaluate(() => sessionStorage.getItem('project-frame')), null);
+	await tab.close();
 	assert.equal(pathOf(page), '/work/');
 	assert.deepEqual(await clean(page), { named: 0, ground: '' });
 	assert.equal(await page.evaluate(() => sessionStorage.getItem('project-frame')), null);
@@ -336,7 +347,6 @@ onPage('visionneuse ouverte, retour du navigateur : simple fondu', '/work/', {},
 	await page.click('.cover-link');
 	assert.equal(await page.$eval('dialog', (el) => el.open), true);
 	const seen = await back(page, '/work/');
-	assert.deepEqual(seen.old, []);
 	await fades(page, seen);
 });
 
@@ -380,14 +390,88 @@ onPage('très lente, la page n’attend pas plus d’une demi-seconde', '/work/'
 	assert.ok(seen.time < 1500, `${Math.round(seen.time)} ms`);
 });
 
-// Chrome abandonne alors souvent la transition avant de la donner a la page : `onPage`
-// verifie qu'il n'en reste pas d'erreur.
-for (let i = 0; i < 3; i++) {
-	onPage(`transition abandonnée par le navigateur, aucune erreur (${i + 1})`, '/work/', { browser: { args: NO_CACHE, split: 400 } }, async (page) => {
+// La page quittee accepte les transitions, la page d'impression non : Chrome abandonne
+// a chaque fois.
+onPage('retour sur la page d’impression du CV : aucune erreur', '/cv-print/', {}, async (page) => {
+	await page.click('.btn-back');
+	await page.waitForFunction(() => location.pathname === '/cv/' && document.readyState === 'complete');
+	await page.evaluate(() => history.back());
+	await page.waitForFunction(() => location.pathname === '/cv-print/' && document.readyState === 'complete');
+	await new Promise((resolve) => setTimeout(resolve, 600));
+});
+
+/** Les erreurs qu'une page laisse voir pendant `run`. */
+async function errorsOf(path, run) {
+	const page = await site.visit('/404.html');
+	const errors = [];
+	page.on('pageerror', (error) => errors.push(String(error)));
+	page.on('console', (message) => isError(message) && errors.push(message.text()));
+	try {
+		await page.goto(site.url + path, { waitUntil: 'networkidle0' });
+		await run(page);
+		await new Promise((resolve) => setTimeout(resolve, 600));
+		return errors;
+	} finally {
+		await page.close();
+	}
+}
+
+/** Une promesse rejetee par la page elle-meme, et non par l'outil de test. */
+const script = (page, content) => page.addScriptTag({ content });
+const reject = (page, name, message) => script(page, `Promise.reject(new DOMException(${JSON.stringify(message)}, '${name}'))`);
+
+test('seule une transition abandonnée est tue', async () => {
+	for (const path of ['/', '/cv-print/']) {
+		const quiet = await errorsOf(path, async (page) => {
+			await reject(page, 'AbortError', 'Transition was skipped');
+			await reject(page, 'InvalidStateError', 'Transition was aborted because of invalid state');
+			await reject(page, 'TimeoutError', 'Transition was aborted because of timeout in DOM update');
+		});
+		assert.deepEqual(quiet, [], path);
+		const loud = await errorsOf(path, async (page) => {
+			await reject(page, 'AbortError', 'The user aborted a request.');
+			await reject(page, 'TimeoutError', 'signal timed out');
+			await reject(page, 'DataError', 'Transition was skipped');
+			await script(page, "Promise.reject(new Error('une vraie erreur'))");
+			await script(page, 'Promise.reject()');
+		});
+		assert.equal(loud.length, 5, `${path} : ${loud.join(' | ')}`);
+	}
+});
+
+// Deux cadres du meme nom : un defaut du site, qui doit rester visible.
+test('un nom en double reste visible dans la console', async () => {
+	const errors = await errorsOf('/work/', async (page) => {
+		await page.addStyleTag({ content: 'h1 { view-transition-name: project; }' });
 		await page.click(tileTo('/work/chronopotes/'));
 		await page.waitForFunction(() => location.pathname === '/work/chronopotes/' && document.readyState === 'complete');
-		await settle(page);
-		await new Promise((resolve) => setTimeout(resolve, 500));
-		assert.deepEqual(await clean(page), { named: 0, ground: '' });
 	});
-}
+	assert.ok(errors.some((error) => /duplicate/i.test(error)), errors.join(' | ') || 'aucune erreur');
+});
+
+// Quitter une page pendant que sa propre transition dure encore.
+onPage(
+	'deux retours rapprochés : le second cadre glisse aussi',
+	'/work/seenit/',
+	{
+		width: 1440,
+		height: 1800,
+		init: () =>
+			document.addEventListener('DOMContentLoaded', () => {
+				const style = document.createElement('style');
+				style.textContent =
+					'::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation-duration:1500ms!important}';
+				document.head.append(style);
+			}),
+	},
+	async (page) => {
+		await followHere(page, '.back-link', '/work/');
+		await followHere(page, tileTo('/work/chronopotes/'), '/work/chronopotes/');
+		await page.evaluate(() => history.back());
+		await page.waitForFunction(() => location.pathname === '/work/' && document.documentElement.matches(':active-view-transition'));
+		await new Promise((resolve) => setTimeout(resolve, 150));
+		assert.equal(await page.evaluate(() => document.documentElement.matches(':active-view-transition')), true);
+		const seen = await back(page, '/work/seenit/');
+		await glides(page, seen, 'tile seenit', 'cover seenit');
+	},
+);

@@ -88,7 +88,9 @@ quittée en montre un cadre à l'écran, sinon celui du **projet quitté**.
   mémoire, elle s'affiche en haut puis saute. Les pages font moins de 12 Ko compressées, et l'attente
   ne dépasse jamais une demi-seconde. Une page qui ne montre aucun cadre (contact, CV, erreur)
   n'attend rien.
-- Le navigateur peut abandonner une transition : la page s'ouvre sans elle et sans erreur.
+- Le navigateur peut abandonner une transition : la page s'ouvre sans elle et sans erreur, page
+  d'impression du CV comprise. Seul cet abandon est tu : un nom en double reste dans la console.
+- Quitter une page pendant sa propre transition n'empêche pas la suivante de glisser.
 - Un clic pendant les 300 ms est perdu : le navigateur ne donne pas le pointeur à la page pendant
   une transition, et rien en CSS n'y change.
 
