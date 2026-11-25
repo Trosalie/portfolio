@@ -39,3 +39,9 @@ test('les deux boutons du CV existent toujours', () => {
 	assert.ok(page('/cv/').includes('href="/assets/pdf/CV_Thibault_Rosalie_FR.pdf"'));
 	assert.ok(page('/en/cv/').includes('href="/en/cv-print/"'));
 });
+
+test('la page d’impression déclare l’icône du site', () => {
+	for (const r of ['/cv-print/', '/en/cv-print/']) {
+		assert.match(page(r), /<link rel="icon"[^>]*href="\/favicon-32\.png"/, r);
+	}
+});
